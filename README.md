@@ -184,8 +184,10 @@ The server provides detailed error messages for common issues:
 ```
 src/
 ├── index.ts              # Main MCP server entry point
-└── services/
-    └── todoist.ts        # Todoist API service
+├── services/
+│   └── todoist.ts        # Todoist API service
+└── test/
+    └── setup.ts          # Jest test setup
 ```
 
 ### Available Scripts
@@ -193,14 +195,46 @@ src/
 - `npm run build` - Build the project
 - `npm start` - Start production server
 - `npm run clean` - Clean build artifacts
+- `npm test` - Run all tests
+- `npm run test:watch` - Run tests in watch mode
+- `npm run test:coverage` - Run tests with coverage report
+
+## Testing
+
+This project uses Jest for testing with TypeScript support. Tests are located alongside the source code with `.spec.ts` extensions.
+
+### Running Tests
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode (great for TDD)
+npm run test:watch
+
+# Run tests with coverage report
+npm run test:coverage
+```
+
+### Test Structure
+- Tests are co-located with source files (e.g., `todoist.ts` has `todoist.spec.ts`)
+- Test files use `.spec.ts` extension
+- Jest configuration supports ES modules and TypeScript
+- Environment variables are loaded from `env.test` for testing
+
+### Writing Tests
+Follow TDD principles:
+1. Write a failing test first
+2. Write the minimum code to make it pass
+3. Refactor while keeping tests green
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+4. Add tests for new functionality
+5. Ensure all tests pass
+6. Submit a pull request
 
 ## License
 

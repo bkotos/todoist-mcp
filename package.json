@@ -8,7 +8,10 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": ["mcp", "todoist", "api", "tasks"],
   "author": "",
@@ -19,7 +22,10 @@
     "dotenv": "^16.3.1"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.0",
     "@types/node": "^20.8.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.2.0"
   }
