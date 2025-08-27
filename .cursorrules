@@ -1,0 +1,44 @@
+# Todoist MCP Server - Coding Standards
+
+## Architecture
+
+- Use functional programming approach with pure functions
+- Separate concerns: client logic in `client.ts`, business logic in `todoist.ts`
+- Use Jest module mocking for testing (not dependency injection)
+- Keep functions small and focused on single responsibility
+
+## Code Style
+
+- Use 2 spaces for indentation (configured in .editorconfig)
+- Prefer const over let, avoid var
+- Use arrow functions for consistency
+- Use template literals for string interpolation
+- Use destructuring for cleaner code
+
+## Testing
+
+- Write tests first (TDD approach)
+- Use descriptive test names that explain the behavior
+- Mock modules at the top of test files with `jest.mock('./module')`
+- Test both success and error cases
+- Keep tests focused and isolated
+
+## File Organization
+
+- Co-locate tests with source files (`.spec.ts` next to `.ts`)
+- Use clear, descriptive file names
+- Group related functions in the same file
+- Export types for testing when needed
+
+## Error Handling
+
+- Use descriptive error messages
+- Throw errors with context about what failed
+- Handle API errors gracefully with proper error messages
+
+## MCP Server
+
+- Keep tool definitions simple and clear
+- Use descriptive tool names and descriptions
+- Validate required parameters in tool schemas
+- Return structured responses with proper content types

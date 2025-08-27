@@ -6,6 +6,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
+import { listProjects } from './services/todoist.js';
 import { config } from 'dotenv';
 
 // Load environment variables
@@ -19,7 +20,16 @@ const server = new Server({
 // List tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
-    tools: [],
+    tools: [
+      {
+        name: 'list_projects',
+        description: 'List all projects in Todoist',
+        inputSchema: {
+          type: 'object',
+          properties: {},
+        },
+      },
+    ],
   };
 });
 
@@ -29,6 +39,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
   try {
     switch (name) {
+      case 'list_projects':
+        return {
+          content: [
+            {
+              type: 'text',
+              text: await listProjects(),
+            },
+          ],
+        };
+
       default:
         throw new Error(`Unknown tool: ${name}`);
     }
