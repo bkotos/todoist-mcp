@@ -37,14 +37,22 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
 
+  console.error(
+    `Tool called: ${name} with args:`,
+    JSON.stringify(args, null, 2)
+  );
+
   try {
     switch (name) {
       case 'list_projects':
+        console.error('Executing list_projects...');
+        const result = await listProjects();
+        console.error('list_projects completed successfully');
         return {
           content: [
             {
               type: 'text',
-              text: await listProjects(),
+              text: result,
             },
           ],
         };
@@ -53,6 +61,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         throw new Error(`Unknown tool: ${name}`);
     }
   } catch (error) {
+    console.error('Tool execution error:', error);
     return {
       content: [
         {
@@ -71,3 +80,4 @@ const transport = new StdioServerTransport();
 server.connect(transport);
 
 console.error('Todoist MCP server started');
+console.error('Server ready to handle requests...');
