@@ -5,5 +5,5 @@ if [ -f .env ]; then
     export $(cat .env | grep -v '^#' | xargs)
 fi
 
-# Start the MCP server
-node dist/index.js
+# Start the MCP server using tsx (TypeScript execution)
+npx tsx src/index.ts

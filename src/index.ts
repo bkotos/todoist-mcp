@@ -6,7 +6,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { listProjects } from './services/todoist.js';
+import { listProjects } from './services/todoist';
 import { config } from 'dotenv';
 
 // Load environment variables

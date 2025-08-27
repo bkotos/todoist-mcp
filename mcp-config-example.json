@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "todoist": {
-      "command": "/path/to/your/todoist-mcp/start-mcp.sh",
+      "command": "/Users/bkotos/Projects/todoist-mcp/start-mcp.sh",
       "args": [],
       "env": {}
     }

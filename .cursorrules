@@ -23,6 +23,34 @@
 - Test both success and error cases
 - Keep tests focused and isolated
 
+## AAA Test Pattern
+
+**ALWAYS follow this exact structure:**
+
+```typescript
+it('should do something', async () => {
+  // arrange
+  const mockClient = {
+    /* setup */
+  };
+  mockGetTodoistClient.mockReturnValue(mockClient);
+
+  // act
+  const result = await functionName();
+
+  // assert
+  expect(result).toContain('expected');
+});
+```
+
+**Rules:**
+
+- ✅ **Separate blocks**: Always use distinct `// arrange`, `// act`, `// assert` blocks
+- ✅ **No blank lines within blocks**: All statements in each block must be consecutive
+- ✅ **Blank lines between blocks**: Only use blank lines between AAA blocks
+- ❌ **Never combine**: No `// act & assert` - always separate blocks
+- ❌ **No internal spacing**: No blank lines within arrange/act/assert blocks
+
 ## File Organization
 
 - Co-locate tests with source files (`.spec.ts` next to `.ts`)
