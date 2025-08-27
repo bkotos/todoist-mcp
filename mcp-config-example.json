@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "todoist": {
+      "command": "/path/to/your/todoist-mcp/start-mcp.sh",
+      "args": [],
+      "env": {}
+    }
+  }
+}
+
