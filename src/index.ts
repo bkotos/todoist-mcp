@@ -64,8 +64,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return {
           content: [
             {
-              type: 'json',
-              json: result,
+              type: 'text',
+              text: JSON.stringify(result, null, 2),
             },
           ],
         };
@@ -77,8 +77,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return {
           content: [
             {
-              type: 'json',
-              json: inboxResult,
+              type: 'text',
+              text: JSON.stringify(inboxResult, null, 2),
             },
           ],
         };
