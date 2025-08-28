@@ -5,8 +5,9 @@
 **ALWAYS write tests first:**
 
 1. **Red** - Write a failing test
-2. **Green** - Write minimal code to make it pass
-3. **Refactor** - Improve code while keeping tests green
+2. **PAUSE** - Ask user to pause and read the tests before proceeding to green
+3. **Green** - Write minimal code to make it pass
+4. **Refactor** - Improve code while keeping tests green
 
 ## Architecture
 
