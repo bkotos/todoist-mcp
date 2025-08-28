@@ -6,13 +6,17 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import {
-  listProjects,
-  listInboxProjects,
-  listTasksInProject,
-  getTaskComments,
-} from './services/todoist';
 import { config } from 'dotenv';
+import {
+  listProjectsSchema,
+  listProjectsHandler,
+  listInboxProjectsSchema,
+  listInboxProjectsHandler,
+  listTasksInProjectSchema,
+  listTasksInProjectHandler,
+  getTaskCommentsSchema,
+  getTaskCommentsHandler,
+} from './tools';
 
 // Load environment variables
 config();
@@ -29,54 +33,10 @@ const server = new Server({
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [
-      {
-        name: 'list_projects',
-        description:
-          'List all projects in Todoist. Returns structured JSON data with project details including id, name, url, is_favorite, and is_inbox status.',
-        inputSchema: {
-          type: 'object',
-          properties: {},
-        },
-      },
-      {
-        name: 'list_inbox_projects',
-        description:
-          'List inbox projects in Todoist that are named either "Inbox", "Brian inbox - per Becky", or "Becky inbox - per Brian". Returns structured JSON data with project details including id, name, url, is_favorite, and is_inbox status.',
-        inputSchema: {
-          type: 'object',
-          properties: {},
-        },
-      },
-      {
-        name: 'list_tasks_in_project',
-        description:
-          'List all tasks in a specific Todoist project. Returns structured JSON data with task details including id, content, description, completion status, labels, priority, due date, and comment count.',
-        inputSchema: {
-          type: 'object',
-          properties: {
-            project_id: {
-              type: 'string',
-              description: 'The ID of the project to list tasks from',
-            },
-          },
-          required: ['project_id'],
-        },
-      },
-      {
-        name: 'get_task_comments',
-        description:
-          'Get all comments for a specific Todoist task. Returns structured JSON data with comment details including id, content, posted date, user ID, and any attachments.',
-        inputSchema: {
-          type: 'object',
-          properties: {
-            task_id: {
-              type: 'string',
-              description: 'The ID of the task to get comments for',
-            },
-          },
-          required: ['task_id'],
-        },
-      },
+      listProjectsSchema,
+      listInboxProjectsSchema,
+      listTasksInProjectSchema,
+      getTaskCommentsSchema,
     ],
   };
 });
@@ -93,64 +53,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
     switch (name) {
       case 'list_projects':
-        console.error('Executing list_projects...');
-        const result = await listProjects();
-        console.error('list_projects completed successfully');
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
+        return await listProjectsHandler();
 
       case 'list_inbox_projects':
-        console.error('Executing list_inbox_projects...');
-        const inboxResult = await listInboxProjects();
-        console.error('list_inbox_projects completed successfully');
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(inboxResult, null, 2),
-            },
-          ],
-        };
+        return await listInboxProjectsHandler();
 
       case 'list_tasks_in_project':
-        console.error('Executing list_tasks_in_project...');
-        const { project_id } = args as { project_id: string };
-        if (!project_id) {
-          throw new Error('project_id is required');
-        }
-        const tasksResult = await listTasksInProject(project_id);
-        console.error('list_tasks_in_project completed successfully');
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(tasksResult, null, 2),
-            },
-          ],
-        };
+        return await listTasksInProjectHandler(args as { project_id: string });
 
       case 'get_task_comments':
-        console.error('Executing get_task_comments...');
-        const { task_id } = args as { task_id: string };
-        if (!task_id) {
-          throw new Error('task_id is required');
-        }
-        const commentsResult = await getTaskComments(task_id);
-        console.error('get_task_comments completed successfully');
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(commentsResult, null, 2),
-            },
-          ],
-        };
+        return await getTaskCommentsHandler(args as { task_id: string });
 
       default:
         throw new Error(`Unknown tool: ${name}`);
