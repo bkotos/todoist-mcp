@@ -58,11 +58,25 @@ describe('Todoist Functions', () => {
       const result = await listProjects();
 
       // assert
-      expect(result).toContain('Found 2 project(s)');
-      expect(result).toContain('Personal');
-      expect(result).toContain('Work');
-      expect(result).toContain('📥'); // Inbox indicator for Personal project
-      expect(result).toContain('⭐'); // Favorite indicator for Work project
+      expect(result).toEqual({
+        projects: [
+          {
+            id: 1,
+            name: 'Personal',
+            url: 'https://todoist.com/project/1',
+            is_favorite: false,
+            is_inbox: true,
+          },
+          {
+            id: 2,
+            name: 'Work',
+            url: 'https://todoist.com/project/2',
+            is_favorite: true,
+            is_inbox: false,
+          },
+        ],
+        total_count: 2,
+      });
       expect(mockClient.get).toHaveBeenCalledWith('/projects');
     });
 
@@ -77,7 +91,10 @@ describe('Todoist Functions', () => {
       const result = await listProjects();
 
       // assert
-      expect(result).toBe('No projects found.');
+      expect(result).toEqual({
+        projects: [],
+        total_count: 0,
+      });
     });
 
     it('should handle API errors gracefully', async () => {

@@ -26,7 +26,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     tools: [
       {
         name: 'list_projects',
-        description: 'List all projects in Todoist',
+        description:
+          'List all projects in Todoist. Returns structured JSON data with project details including id, name, url, is_favorite, and is_inbox status.',
         inputSchema: {
           type: 'object',
           properties: {},
@@ -54,8 +55,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return {
           content: [
             {
-              type: 'text',
-              text: result,
+              type: 'json',
+              json: result,
             },
           ],
         };

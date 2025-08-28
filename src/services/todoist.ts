@@ -18,7 +18,18 @@ interface TodoistProject {
   updated_at: string;
 }
 
-// Format projects list
+interface ProjectsResponse {
+  projects: Array<{
+    id: number;
+    name: string;
+    url: string;
+    is_favorite: boolean;
+    is_inbox: boolean;
+  }>;
+  total_count: number;
+}
+
+// Format projects list (keeping for backward compatibility if needed)
 function formatProjectsList(projects: TodoistProject[]): string {
   if (projects.length === 0) {
     return 'No projects found.';
@@ -43,17 +54,28 @@ function getErrorMessage(error: any): string {
   return error instanceof Error ? error.message : 'Unknown error';
 }
 
-// List projects function
-export async function listProjects(): Promise<string> {
+// List projects function - returns structured data
+export async function listProjects(): Promise<ProjectsResponse> {
   const todoistClient = getTodoistClient();
 
   try {
     const response = await todoistClient.get<TodoistProject[]>('/projects');
-    return formatProjectsList(response.data);
+    const projects = response.data.map((project) => ({
+      id: parseInt(project.id),
+      name: project.name,
+      url: project.url,
+      is_favorite: project.is_favorite,
+      is_inbox: project.is_inbox_project,
+    }));
+
+    return {
+      projects,
+      total_count: projects.length,
+    };
   } catch (error) {
     throw new Error(`Failed to list projects: ${getErrorMessage(error)}`);
   }
 }
 
 // Export types for testing
-export type { TodoistProject };
+export type { TodoistProject, ProjectsResponse };
