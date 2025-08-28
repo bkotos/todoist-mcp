@@ -10,6 +10,7 @@ import {
   listProjects,
   listInboxProjects,
   listTasksInProject,
+  getTaskComments,
 } from './services/todoist';
 import { config } from 'dotenv';
 
@@ -59,6 +60,21 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
           },
           required: ['project_id'],
+        },
+      },
+      {
+        name: 'get_task_comments',
+        description:
+          'Get all comments for a specific Todoist task. Returns structured JSON data with comment details including id, content, posted date, user ID, and any attachments.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            task_id: {
+              type: 'string',
+              description: 'The ID of the task to get comments for',
+            },
+          },
+          required: ['task_id'],
         },
       },
     ],
@@ -115,6 +131,23 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             {
               type: 'text',
               text: JSON.stringify(tasksResult, null, 2),
+            },
+          ],
+        };
+
+      case 'get_task_comments':
+        console.error('Executing get_task_comments...');
+        const { task_id } = args as { task_id: string };
+        if (!task_id) {
+          throw new Error('task_id is required');
+        }
+        const commentsResult = await getTaskComments(task_id);
+        console.error('get_task_comments completed successfully');
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(commentsResult, null, 2),
             },
           ],
         };
