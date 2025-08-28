@@ -15,6 +15,9 @@ config();
 const server = new Server({
   name: 'todoist-mcp',
   version: '1.0.0',
+  capabilities: {
+    tools: {},
+  },
 });
 
 // List tools
@@ -76,8 +79,35 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 });
 
 // Start the server
+console.error('Creating transport...');
 const transport = new StdioServerTransport();
+console.error('Connecting server to transport...');
 server.connect(transport);
 
 console.error('Todoist MCP server started');
 console.error('Server ready to handle requests...');
+
+// Keep the server alive by preventing stdin from closing
+process.stdin.resume();
+
+// Keep the process alive
+process.on('SIGINT', () => {
+  console.error('Received SIGINT, shutting down...');
+  process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+  console.error('Received SIGTERM, shutting down...');
+  process.exit(0);
+});
+
+// Add global error handling
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught exception:', error);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled rejection at:', promise, 'reason:', reason);
+  process.exit(1);
+});
