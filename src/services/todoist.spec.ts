@@ -1,4 +1,4 @@
-import { listProjects, listInboxProjects } from './todoist';
+import { listProjects, listInboxProjects, listTasksInProject } from './todoist';
 import { getTodoistClient } from './client';
 
 // Mock the client module
@@ -290,6 +290,177 @@ describe('Todoist Functions', () => {
 
       // act
       const promise = listInboxProjects();
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'TODOIST_API_TOKEN environment variable is required'
+      );
+    });
+  });
+
+  describe('listTasksInProject', () => {
+    it('should list tasks in a project successfully', async () => {
+      // arrange
+      const mockTasks = [
+        {
+          id: '1',
+          project_id: '123',
+          content: 'Complete project setup',
+          description: 'Set up the initial project structure',
+          is_completed: false,
+          labels: ['setup', 'important'],
+          priority: 3,
+          due: {
+            date: '2023-12-31',
+            string: 'Dec 31',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/showTask?id=1',
+          comment_count: 2,
+          created_at: '2023-01-01T00:00:00Z',
+          updated_at: '2023-01-01T00:00:00Z',
+        },
+        {
+          id: '2',
+          project_id: '123',
+          content: 'Review documentation',
+          description: 'Go through the project documentation',
+          is_completed: true,
+          labels: ['review'],
+          priority: 2,
+          due: null,
+          url: 'https://todoist.com/showTask?id=2',
+          comment_count: 0,
+          created_at: '2023-01-01T00:00:00Z',
+          updated_at: '2023-01-01T00:00:00Z',
+        },
+      ];
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await listTasksInProject('123');
+
+      // assert
+      expect(result).toEqual({
+        tasks: [
+          {
+            id: 1,
+            content: 'Complete project setup',
+            description: 'Set up the initial project structure',
+            is_completed: false,
+            labels: ['setup', 'important'],
+            priority: 3,
+            due_date: '2023-12-31',
+            url: 'https://todoist.com/showTask?id=1',
+            comment_count: 2,
+          },
+          {
+            id: 2,
+            content: 'Review documentation',
+            description: 'Go through the project documentation',
+            is_completed: true,
+            labels: ['review'],
+            priority: 2,
+            due_date: null,
+            url: 'https://todoist.com/showTask?id=2',
+            comment_count: 0,
+          },
+        ],
+        total_count: 2,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/tasks?project_id=123');
+    });
+
+    it('should handle empty tasks list', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: [] }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await listTasksInProject('123');
+
+      // assert
+      expect(result).toEqual({
+        tasks: [],
+        total_count: 0,
+      });
+    });
+
+    it('should handle tasks without optional fields', async () => {
+      // arrange
+      const mockTasks = [
+        {
+          id: '1',
+          project_id: '123',
+          content: 'Simple task',
+          description: '',
+          is_completed: false,
+          labels: [],
+          priority: 1,
+          due: null,
+          url: 'https://todoist.com/showTask?id=1',
+          comment_count: 0,
+          created_at: '2023-01-01T00:00:00Z',
+          updated_at: '2023-01-01T00:00:00Z',
+        },
+      ];
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await listTasksInProject('123');
+
+      // assert
+      expect(result).toEqual({
+        tasks: [
+          {
+            id: 1,
+            content: 'Simple task',
+            description: '',
+            is_completed: false,
+            labels: [],
+            priority: 1,
+            due_date: null,
+            url: 'https://todoist.com/showTask?id=1',
+            comment_count: 0,
+          },
+        ],
+        total_count: 1,
+      });
+    });
+
+    it('should handle API errors gracefully', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn().mockRejectedValue(new Error('API Error')),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const promise = listTasksInProject('123');
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'Failed to list tasks in project: API Error'
+      );
+    });
+
+    it('should throw error when client creation fails', async () => {
+      // arrange
+      mockGetTodoistClient.mockImplementation(() => {
+        throw new Error('TODOIST_API_TOKEN environment variable is required');
+      });
+
+      // act
+      const promise = listTasksInProject('123');
 
       // assert
       await expect(promise).rejects.toThrow(
