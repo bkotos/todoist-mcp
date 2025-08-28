@@ -1,4 +1,12 @@
-# Todoist MCP Server - Coding Standards
+# Todoist MCP Server - Development Standards
+
+## TDD Approach
+
+**ALWAYS write tests first:**
+
+1. **Red** - Write a failing test
+2. **Green** - Write minimal code to make it pass
+3. **Refactor** - Improve code while keeping tests green
 
 ## Architecture
 
@@ -31,7 +39,7 @@
 it('should do something', async () => {
   // arrange
   const mockClient = {
-    /* setup */
+    get: jest.fn().mockResolvedValue({ data: mockData }),
   };
   mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -39,7 +47,8 @@ it('should do something', async () => {
   const result = await functionName();
 
   // assert
-  expect(result).toContain('expected');
+  expect(result).toContain('expected output');
+  expect(mockClient.get).toHaveBeenCalledWith('/endpoint');
 });
 ```
 
@@ -50,6 +59,130 @@ it('should do something', async () => {
 - ✅ **Blank lines between blocks**: Only use blank lines between AAA blocks
 - ❌ **Never combine**: No `// act & assert` - always separate blocks
 - ❌ **No internal spacing**: No blank lines within arrange/act/assert blocks
+
+## Adding New Tools
+
+### Step 1: Write Tests First
+
+Create or update `src/services/todoist.spec.ts`:
+
+```typescript
+describe('newTool', () => {
+  it('should handle success case', async () => {
+    // arrange
+    const mockClient = {
+      get: jest.fn().mockResolvedValue({ data: mockData }),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const result = await newTool();
+
+    // assert
+    expect(result).toContain('expected output');
+    expect(mockClient.get).toHaveBeenCalledWith('/endpoint');
+  });
+
+  it('should handle error case', async () => {
+    // arrange
+    const mockClient = {
+      get: jest.fn().mockRejectedValue(new Error('API Error')),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const promise = newTool();
+
+    // assert
+    await expect(promise).rejects.toThrow('Failed to...');
+  });
+});
+```
+
+### Step 2: Implement Function
+
+Add to `src/services/todoist.ts`:
+
+```typescript
+export async function newTool(): Promise<string> {
+  const client = getTodoistClient();
+
+  try {
+    const response = await client.get<ResponseType[]>('/endpoint');
+    return formatResponse(response.data);
+  } catch (error) {
+    throw new Error(`Failed to newTool: ${getErrorMessage(error)}`);
+  }
+}
+```
+
+### Step 3: Add to MCP Server
+
+Update `src/index.ts`:
+
+```typescript
+// Add to tools array
+{
+  name: 'new_tool',
+  description: 'Clear description of what this tool does',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      param1: {
+        type: 'string',
+        description: 'Description of parameter'
+      }
+    },
+    required: ['param1']
+  }
+}
+
+// Add to switch statement
+case 'new_tool':
+  return {
+    content: [
+      {
+        type: 'text',
+        text: await newTool()
+      }
+    ]
+  };
+```
+
+## Common Patterns
+
+### Error Handling Pattern
+
+```typescript
+function getErrorMessage(error: any): string {
+  if (axios.isAxiosError(error)) {
+    return error.response?.data?.error || error.message;
+  }
+  return error instanceof Error ? error.message : 'Unknown error';
+}
+```
+
+### Formatting Pattern
+
+```typescript
+function formatList(items: any[], itemName: string): string {
+  if (items.length === 0) {
+    return `No ${itemName} found.`;
+  }
+
+  const formattedItems = items.map((item) => formatItem(item)).join('\n\n');
+
+  return `Found ${items.length} ${itemName}(s):\n\n${formattedItems}`;
+}
+```
+
+## Common Todoist API Endpoints
+
+- `GET /projects` - List all projects
+- `GET /tasks` - List all tasks
+- `POST /tasks` - Create a new task
+- `POST /tasks/{id}` - Update a task
+- `POST /tasks/{id}/close` - Close a task
 
 ## File Organization
 
@@ -70,3 +203,10 @@ it('should do something', async () => {
 - Use descriptive tool names and descriptions
 - Validate required parameters in tool schemas
 - Return structured responses with proper content types
+
+## Git Workflow
+
+1. Write tests first
+2. Implement functionality
+3. Ensure all tests pass
+4. Update documentation
