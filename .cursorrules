@@ -30,6 +30,11 @@
 - Mock modules at the top of test files with `jest.mock('./module')`
 - Test both success and error cases
 - Keep tests focused and isolated
+- **Tests are sufficient validation - do NOT start/run the project manually**
+- **Running `npm test` is the only validation needed for new features**
+- **Do NOT use `npm run dev`, `npx tsx src/index.ts`, or any server startup commands**
+- **Do NOT check server logs or verify server is running**
+- **Focus on test coverage and test results only**
 
 ## AAA Test Pattern
 
