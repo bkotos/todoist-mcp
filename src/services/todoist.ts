@@ -77,5 +77,36 @@ export async function listProjects(): Promise<ProjectsResponse> {
   }
 }
 
+// List inbox projects function - returns structured data for specific inbox projects
+export async function listInboxProjects(): Promise<ProjectsResponse> {
+  const todoistClient = getTodoistClient();
+
+  try {
+    const response = await todoistClient.get<TodoistProject[]>('/projects');
+    const inboxProjectNames = [
+      'Inbox',
+      'Brian inbox - per Becky',
+      'Becky inbox - per Brian',
+    ];
+
+    const inboxProjects = response.data
+      .filter((project) => inboxProjectNames.includes(project.name))
+      .map((project) => ({
+        id: parseInt(project.id),
+        name: project.name,
+        url: project.url,
+        is_favorite: project.is_favorite,
+        is_inbox: project.is_inbox_project,
+      }));
+
+    return {
+      projects: inboxProjects,
+      total_count: inboxProjects.length,
+    };
+  } catch (error) {
+    throw new Error(`Failed to list inbox projects: ${getErrorMessage(error)}`);
+  }
+}
+
 // Export types for testing
 export type { TodoistProject, ProjectsResponse };

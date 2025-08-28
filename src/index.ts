@@ -6,7 +6,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { listProjects } from './services/todoist';
+import { listProjects, listInboxProjects } from './services/todoist';
 import { config } from 'dotenv';
 
 // Load environment variables
@@ -28,6 +28,15 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         name: 'list_projects',
         description:
           'List all projects in Todoist. Returns structured JSON data with project details including id, name, url, is_favorite, and is_inbox status.',
+        inputSchema: {
+          type: 'object',
+          properties: {},
+        },
+      },
+      {
+        name: 'list_inbox_projects',
+        description:
+          'List inbox projects in Todoist that are named either "Inbox", "Brian inbox - per Becky", or "Becky inbox - per Brian". Returns structured JSON data with project details including id, name, url, is_favorite, and is_inbox status.',
         inputSchema: {
           type: 'object',
           properties: {},
@@ -57,6 +66,19 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             {
               type: 'json',
               json: result,
+            },
+          ],
+        };
+
+      case 'list_inbox_projects':
+        console.error('Executing list_inbox_projects...');
+        const inboxResult = await listInboxProjects();
+        console.error('list_inbox_projects completed successfully');
+        return {
+          content: [
+            {
+              type: 'json',
+              json: inboxResult,
             },
           ],
         };
