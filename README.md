@@ -32,8 +32,8 @@ cp env.example .env
 
 Edit your Claude Desktop configuration file:
 
-**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows:** `%APPDATA%/Claude/claude_desktop_config.json`
+- **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows:** `%APPDATA%/Claude/claude_desktop_config.json`
 
 #### 2. Add MCP Server Configuration
 
