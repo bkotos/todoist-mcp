@@ -148,76 +148,12 @@ export async function listProjects(): Promise<ProjectsResponse> {
   }
 }
 
-// List inbox projects function - returns structured data for specific inbox projects
-export async function listInboxProjects(): Promise<ProjectsResponse> {
+// List personal inbox tasks function - returns structured data for personal inbox tasks
+export async function listPersonalInboxTasks(): Promise<TasksResponse> {
   const todoistClient = getTodoistClient();
 
   try {
-    const response = await todoistClient.get<TodoistProject[]>('/projects');
-    const inboxProjectNames = [
-      'Inbox',
-      'Brian inbox - per Becky',
-      'Becky inbox - per Brian',
-    ];
-
-    const inboxProjects = response.data
-      .filter((project) => inboxProjectNames.includes(project.name))
-      .map((project) => ({
-        id: parseInt(project.id),
-        name: project.name,
-        url: project.url,
-        is_favorite: project.is_favorite,
-        is_inbox: project.is_inbox_project,
-      }));
-
-    return {
-      projects: inboxProjects,
-      total_count: inboxProjects.length,
-    };
-  } catch (error) {
-    throw new Error(`Failed to list inbox projects: ${getErrorMessage(error)}`);
-  }
-}
-
-// List tasks in project function - returns structured data for tasks in a specific project
-export async function listTasksInProject(
-  projectId: string
-): Promise<TasksResponse> {
-  const todoistClient = getTodoistClient();
-
-  try {
-    const response = await todoistClient.get<TodoistTask[]>(
-      `/tasks?project_id=${projectId}`
-    );
-    const tasks = response.data.map((task) => ({
-      id: parseInt(task.id),
-      content: task.content,
-      description: task.description,
-      is_completed: task.is_completed,
-      labels: task.labels,
-      priority: task.priority,
-      due_date: task.due?.date || null,
-      url: task.url,
-      comment_count: task.comment_count,
-    }));
-
-    return {
-      tasks,
-      total_count: tasks.length,
-    };
-  } catch (error) {
-    throw new Error(
-      `Failed to list tasks in project: ${getErrorMessage(error)}`
-    );
-  }
-}
-
-// List inbox tasks function - returns structured data for inbox tasks using filter
-export async function listInboxTasks(): Promise<TasksResponse> {
-  const todoistClient = getTodoistClient();
-
-  try {
-    const filter = '(##Inbox | ##Brian inbox - per Becky) & !subtask';
+    const filter = '##Inbox & !subtask';
     const response = await todoistClient.get<TodoistTask[]>(
       `/tasks?filter=${encodeURIComponent(filter)}`
     );
@@ -238,7 +174,73 @@ export async function listInboxTasks(): Promise<TasksResponse> {
       total_count: tasks.length,
     };
   } catch (error) {
-    throw new Error(`Failed to list inbox tasks: ${getErrorMessage(error)}`);
+    throw new Error(
+      `Failed to list personal inbox tasks: ${getErrorMessage(error)}`
+    );
+  }
+}
+
+// List Brian inbox per Becky tasks function - returns structured data for Brian inbox per Becky tasks
+export async function listBrianInboxPerBeckyTasks(): Promise<TasksResponse> {
+  const todoistClient = getTodoistClient();
+
+  try {
+    const filter = '##Brian inbox - per Becky & !subtask';
+    const response = await todoistClient.get<TodoistTask[]>(
+      `/tasks?filter=${encodeURIComponent(filter)}`
+    );
+    const tasks = response.data.map((task) => ({
+      id: parseInt(task.id),
+      content: task.content,
+      description: task.description,
+      is_completed: task.is_completed,
+      labels: task.labels,
+      priority: task.priority,
+      due_date: task.due?.date || null,
+      url: task.url,
+      comment_count: task.comment_count,
+    }));
+
+    return {
+      tasks,
+      total_count: tasks.length,
+    };
+  } catch (error) {
+    throw new Error(
+      `Failed to list Brian inbox per Becky tasks: ${getErrorMessage(error)}`
+    );
+  }
+}
+
+// List Becky inbox per Brian tasks function - returns structured data for Becky inbox per Brian tasks
+export async function listBeckyInboxPerBrianTasks(): Promise<TasksResponse> {
+  const todoistClient = getTodoistClient();
+
+  try {
+    const filter = '##Becky inbox - per Brian & !subtask';
+    const response = await todoistClient.get<TodoistTask[]>(
+      `/tasks?filter=${encodeURIComponent(filter)}`
+    );
+    const tasks = response.data.map((task) => ({
+      id: parseInt(task.id),
+      content: task.content,
+      description: task.description,
+      is_completed: task.is_completed,
+      labels: task.labels,
+      priority: task.priority,
+      due_date: task.due?.date || null,
+      url: task.url,
+      comment_count: task.comment_count,
+    }));
+
+    return {
+      tasks,
+      total_count: tasks.length,
+    };
+  } catch (error) {
+    throw new Error(
+      `Failed to list Becky inbox per Brian tasks: ${getErrorMessage(error)}`
+    );
   }
 }
 

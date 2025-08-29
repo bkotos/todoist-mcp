@@ -1,9 +1,9 @@
 import {
   listProjects,
-  listInboxProjects,
-  listTasksInProject,
   getTaskComments,
-  listInboxTasks,
+  listPersonalInboxTasks,
+  listBrianInboxPerBeckyTasks,
+  listBeckyInboxPerBrianTasks,
 } from './todoist';
 import { getTodoistClient } from './client';
 
@@ -127,346 +127,6 @@ describe('Todoist Functions', () => {
 
       // act
       const promise = listProjects();
-
-      // assert
-      await expect(promise).rejects.toThrow(
-        'TODOIST_API_TOKEN environment variable is required'
-      );
-    });
-  });
-
-  describe('listInboxProjects', () => {
-    it('should list inbox projects successfully', async () => {
-      // arrange
-      const mockProjects = [
-        {
-          id: '1',
-          name: 'Inbox',
-          color: 'charcoal',
-          order: 1,
-          comment_count: 0,
-          is_shared: false,
-          is_favorite: false,
-          is_inbox_project: true,
-          is_team_inbox: false,
-          view_style: 'list',
-          url: 'https://todoist.com/project/1',
-          created_at: '2023-01-01T00:00:00Z',
-          updated_at: '2023-01-01T00:00:00Z',
-        },
-        {
-          id: '2',
-          name: 'Brian inbox - per Becky',
-          color: 'blue',
-          order: 2,
-          comment_count: 0,
-          is_shared: false,
-          is_favorite: true,
-          is_inbox_project: false,
-          is_team_inbox: false,
-          view_style: 'list',
-          url: 'https://todoist.com/project/2',
-          created_at: '2023-01-01T00:00:00Z',
-          updated_at: '2023-01-01T00:00:00Z',
-        },
-        {
-          id: '3',
-          name: 'Becky inbox - per Brian',
-          color: 'green',
-          order: 3,
-          comment_count: 0,
-          is_shared: false,
-          is_favorite: false,
-          is_inbox_project: false,
-          is_team_inbox: false,
-          view_style: 'list',
-          url: 'https://todoist.com/project/3',
-          created_at: '2023-01-01T00:00:00Z',
-          updated_at: '2023-01-01T00:00:00Z',
-        },
-        {
-          id: '4',
-          name: 'Work Project',
-          color: 'red',
-          order: 4,
-          comment_count: 0,
-          is_shared: false,
-          is_favorite: false,
-          is_inbox_project: false,
-          is_team_inbox: false,
-          view_style: 'list',
-          url: 'https://todoist.com/project/4',
-          created_at: '2023-01-01T00:00:00Z',
-          updated_at: '2023-01-01T00:00:00Z',
-        },
-      ];
-      const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockProjects }),
-      };
-      mockGetTodoistClient.mockReturnValue(mockClient);
-
-      // act
-      const result = await listInboxProjects();
-
-      // assert
-      expect(result).toEqual({
-        projects: [
-          {
-            id: 1,
-            name: 'Inbox',
-            url: 'https://todoist.com/project/1',
-            is_favorite: false,
-            is_inbox: true,
-          },
-          {
-            id: 2,
-            name: 'Brian inbox - per Becky',
-            url: 'https://todoist.com/project/2',
-            is_favorite: true,
-            is_inbox: false,
-          },
-          {
-            id: 3,
-            name: 'Becky inbox - per Brian',
-            url: 'https://todoist.com/project/3',
-            is_favorite: false,
-            is_inbox: false,
-          },
-        ],
-        total_count: 3,
-      });
-      expect(mockClient.get).toHaveBeenCalledWith('/projects');
-    });
-
-    it('should handle empty inbox projects list', async () => {
-      // arrange
-      const mockProjects = [
-        {
-          id: '1',
-          name: 'Work Project',
-          color: 'red',
-          order: 1,
-          comment_count: 0,
-          is_shared: false,
-          is_favorite: false,
-          is_inbox_project: false,
-          is_team_inbox: false,
-          view_style: 'list',
-          url: 'https://todoist.com/project/1',
-          created_at: '2023-01-01T00:00:00Z',
-          updated_at: '2023-01-01T00:00:00Z',
-        },
-      ];
-      const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockProjects }),
-      };
-      mockGetTodoistClient.mockReturnValue(mockClient);
-
-      // act
-      const result = await listInboxProjects();
-
-      // assert
-      expect(result).toEqual({
-        projects: [],
-        total_count: 0,
-      });
-    });
-
-    it('should handle API errors gracefully', async () => {
-      // arrange
-      const mockClient = {
-        get: jest.fn().mockRejectedValue(new Error('API Error')),
-      };
-      mockGetTodoistClient.mockReturnValue(mockClient);
-
-      // act
-      const promise = listInboxProjects();
-
-      // assert
-      await expect(promise).rejects.toThrow(
-        'Failed to list inbox projects: API Error'
-      );
-    });
-
-    it('should throw error when client creation fails', async () => {
-      // arrange
-      mockGetTodoistClient.mockImplementation(() => {
-        throw new Error('TODOIST_API_TOKEN environment variable is required');
-      });
-
-      // act
-      const promise = listInboxProjects();
-
-      // assert
-      await expect(promise).rejects.toThrow(
-        'TODOIST_API_TOKEN environment variable is required'
-      );
-    });
-  });
-
-  describe('listTasksInProject', () => {
-    it('should list tasks in a project successfully', async () => {
-      // arrange
-      const mockTasks = [
-        {
-          id: '1',
-          project_id: '123',
-          content: 'Complete project setup',
-          description: 'Set up the initial project structure',
-          is_completed: false,
-          labels: ['setup', 'important'],
-          priority: 3,
-          due: {
-            date: '2023-12-31',
-            string: 'Dec 31',
-            lang: 'en',
-            is_recurring: false,
-          },
-          url: 'https://todoist.com/showTask?id=1',
-          comment_count: 2,
-          created_at: '2023-01-01T00:00:00Z',
-          updated_at: '2023-01-01T00:00:00Z',
-        },
-        {
-          id: '2',
-          project_id: '123',
-          content: 'Review documentation',
-          description: 'Go through the project documentation',
-          is_completed: true,
-          labels: ['review'],
-          priority: 2,
-          due: null,
-          url: 'https://todoist.com/showTask?id=2',
-          comment_count: 0,
-          created_at: '2023-01-01T00:00:00Z',
-          updated_at: '2023-01-01T00:00:00Z',
-        },
-      ];
-      const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockTasks }),
-      };
-      mockGetTodoistClient.mockReturnValue(mockClient);
-
-      // act
-      const result = await listTasksInProject('123');
-
-      // assert
-      expect(result).toEqual({
-        tasks: [
-          {
-            id: 1,
-            content: 'Complete project setup',
-            description: 'Set up the initial project structure',
-            is_completed: false,
-            labels: ['setup', 'important'],
-            priority: 3,
-            due_date: '2023-12-31',
-            url: 'https://todoist.com/showTask?id=1',
-            comment_count: 2,
-          },
-          {
-            id: 2,
-            content: 'Review documentation',
-            description: 'Go through the project documentation',
-            is_completed: true,
-            labels: ['review'],
-            priority: 2,
-            due_date: null,
-            url: 'https://todoist.com/showTask?id=2',
-            comment_count: 0,
-          },
-        ],
-        total_count: 2,
-      });
-      expect(mockClient.get).toHaveBeenCalledWith('/tasks?project_id=123');
-    });
-
-    it('should handle empty tasks list', async () => {
-      // arrange
-      const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: [] }),
-      };
-      mockGetTodoistClient.mockReturnValue(mockClient);
-
-      // act
-      const result = await listTasksInProject('123');
-
-      // assert
-      expect(result).toEqual({
-        tasks: [],
-        total_count: 0,
-      });
-    });
-
-    it('should handle tasks without optional fields', async () => {
-      // arrange
-      const mockTasks = [
-        {
-          id: '1',
-          project_id: '123',
-          content: 'Simple task',
-          description: '',
-          is_completed: false,
-          labels: [],
-          priority: 1,
-          due: null,
-          url: 'https://todoist.com/showTask?id=1',
-          comment_count: 0,
-          created_at: '2023-01-01T00:00:00Z',
-          updated_at: '2023-01-01T00:00:00Z',
-        },
-      ];
-      const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockTasks }),
-      };
-      mockGetTodoistClient.mockReturnValue(mockClient);
-
-      // act
-      const result = await listTasksInProject('123');
-
-      // assert
-      expect(result).toEqual({
-        tasks: [
-          {
-            id: 1,
-            content: 'Simple task',
-            description: '',
-            is_completed: false,
-            labels: [],
-            priority: 1,
-            due_date: null,
-            url: 'https://todoist.com/showTask?id=1',
-            comment_count: 0,
-          },
-        ],
-        total_count: 1,
-      });
-    });
-
-    it('should handle API errors gracefully', async () => {
-      // arrange
-      const mockClient = {
-        get: jest.fn().mockRejectedValue(new Error('API Error')),
-      };
-      mockGetTodoistClient.mockReturnValue(mockClient);
-
-      // act
-      const promise = listTasksInProject('123');
-
-      // assert
-      await expect(promise).rejects.toThrow(
-        'Failed to list tasks in project: API Error'
-      );
-    });
-
-    it('should throw error when client creation fails', async () => {
-      // arrange
-      mockGetTodoistClient.mockImplementation(() => {
-        throw new Error('TODOIST_API_TOKEN environment variable is required');
-      });
-
-      // act
-      const promise = listTasksInProject('123');
 
       // assert
       await expect(promise).rejects.toThrow(
@@ -635,14 +295,14 @@ describe('Todoist Functions', () => {
     });
   });
 
-  describe('listInboxTasks', () => {
-    it('should return inbox tasks when API call succeeds', async () => {
+  describe('listPersonalInboxTasks', () => {
+    it('should return personal inbox tasks when API call succeeds', async () => {
       // arrange
       const mockTasks = [
         {
           id: '1',
           project_id: '123',
-          content: 'Test inbox task',
+          content: 'Test personal inbox task',
           description: 'Test description',
           is_completed: false,
           labels: ['label1'],
@@ -665,15 +325,15 @@ describe('Todoist Functions', () => {
       mockGetTodoistClient.mockReturnValue(mockClient);
 
       // act
-      const result = await listInboxTasks();
+      const result = await listPersonalInboxTasks();
 
       // assert
       expect(result.tasks).toHaveLength(1);
       expect(result.tasks[0].id).toBe(1);
-      expect(result.tasks[0].content).toBe('Test inbox task');
+      expect(result.tasks[0].content).toBe('Test personal inbox task');
       expect(result.total_count).toBe(1);
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/tasks?filter=(%23%23Inbox%20%7C%20%23%23Brian%20inbox%20-%20per%20Becky)%20%26%20!subtask'
+        '/tasks?filter=%23%23Inbox%20%26%20!subtask'
       );
     });
 
@@ -685,13 +345,13 @@ describe('Todoist Functions', () => {
       mockGetTodoistClient.mockReturnValue(mockClient);
 
       // act
-      const result = await listInboxTasks();
+      const result = await listPersonalInboxTasks();
 
       // assert
       expect(result.tasks).toHaveLength(0);
       expect(result.total_count).toBe(0);
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/tasks?filter=(%23%23Inbox%20%7C%20%23%23Brian%20inbox%20-%20per%20Becky)%20%26%20!subtask'
+        '/tasks?filter=%23%23Inbox%20%26%20!subtask'
       );
     });
 
@@ -703,14 +363,174 @@ describe('Todoist Functions', () => {
       mockGetTodoistClient.mockReturnValue(mockClient);
 
       // act
-      const promise = listInboxTasks();
+      const promise = listPersonalInboxTasks();
 
       // assert
       await expect(promise).rejects.toThrow(
-        'Failed to list inbox tasks: API Error'
+        'Failed to list personal inbox tasks: API Error'
       );
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/tasks?filter=(%23%23Inbox%20%7C%20%23%23Brian%20inbox%20-%20per%20Becky)%20%26%20!subtask'
+        '/tasks?filter=%23%23Inbox%20%26%20!subtask'
+      );
+    });
+  });
+
+  describe('listBrianInboxPerBeckyTasks', () => {
+    it('should return Brian inbox per Becky tasks when API call succeeds', async () => {
+      // arrange
+      const mockTasks = [
+        {
+          id: '1',
+          project_id: '123',
+          content: 'Test Brian inbox per Becky task',
+          description: 'Test description',
+          is_completed: false,
+          labels: ['label1'],
+          priority: 1,
+          due: {
+            date: '2024-01-01',
+            string: 'Jan 1',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/task/1',
+          comment_count: 2,
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await listBrianInboxPerBeckyTasks();
+
+      // assert
+      expect(result.tasks).toHaveLength(1);
+      expect(result.tasks[0].id).toBe(1);
+      expect(result.tasks[0].content).toBe('Test Brian inbox per Becky task');
+      expect(result.total_count).toBe(1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=%23%23Brian%20inbox%20-%20per%20Becky%20%26%20!subtask'
+      );
+    });
+
+    it('should handle empty response', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: [] }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await listBrianInboxPerBeckyTasks();
+
+      // assert
+      expect(result.tasks).toHaveLength(0);
+      expect(result.total_count).toBe(0);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=%23%23Brian%20inbox%20-%20per%20Becky%20%26%20!subtask'
+      );
+    });
+
+    it('should handle API errors', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn().mockRejectedValue(new Error('API Error')),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const promise = listBrianInboxPerBeckyTasks();
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'Failed to list Brian inbox per Becky tasks: API Error'
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=%23%23Brian%20inbox%20-%20per%20Becky%20%26%20!subtask'
+      );
+    });
+  });
+
+  describe('listBeckyInboxPerBrianTasks', () => {
+    it('should return Becky inbox per Brian tasks when API call succeeds', async () => {
+      // arrange
+      const mockTasks = [
+        {
+          id: '1',
+          project_id: '123',
+          content: 'Test Becky inbox per Brian task',
+          description: 'Test description',
+          is_completed: false,
+          labels: ['label1'],
+          priority: 1,
+          due: {
+            date: '2024-01-01',
+            string: 'Jan 1',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/task/1',
+          comment_count: 2,
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await listBeckyInboxPerBrianTasks();
+
+      // assert
+      expect(result.tasks).toHaveLength(1);
+      expect(result.tasks[0].id).toBe(1);
+      expect(result.tasks[0].content).toBe('Test Becky inbox per Brian task');
+      expect(result.total_count).toBe(1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=%23%23Becky%20inbox%20-%20per%20Brian%20%26%20!subtask'
+      );
+    });
+
+    it('should handle empty response', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: [] }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await listBeckyInboxPerBrianTasks();
+
+      // assert
+      expect(result.tasks).toHaveLength(0);
+      expect(result.total_count).toBe(0);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=%23%23Becky%20inbox%20-%20per%20Brian%20%26%20!subtask'
+      );
+    });
+
+    it('should handle API errors', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn().mockRejectedValue(new Error('API Error')),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const promise = listBeckyInboxPerBrianTasks();
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'Failed to list Becky inbox per Brian tasks: API Error'
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=%23%23Becky%20inbox%20-%20per%20Brian%20%26%20!subtask'
       );
     });
   });

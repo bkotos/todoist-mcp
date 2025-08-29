@@ -10,14 +10,14 @@ import { config } from 'dotenv';
 import {
   listProjectsSchema,
   listProjectsHandler,
-  listInboxProjectsSchema,
-  listInboxProjectsHandler,
-  listTasksInProjectSchema,
-  listTasksInProjectHandler,
   getTaskCommentsSchema,
   getTaskCommentsHandler,
-  listInboxTasksSchema,
-  listInboxTasksHandler,
+  listPersonalInboxTasksSchema,
+  listPersonalInboxTasksHandler,
+  listBrianInboxPerBeckyTasksSchema,
+  listBrianInboxPerBeckyTasksHandler,
+  listBeckyInboxPerBrianTasksSchema,
+  listBeckyInboxPerBrianTasksHandler,
 } from './tools';
 
 // Load environment variables
@@ -36,10 +36,10 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [
       listProjectsSchema,
-      listInboxProjectsSchema,
-      listTasksInProjectSchema,
       getTaskCommentsSchema,
-      listInboxTasksSchema,
+      listPersonalInboxTasksSchema,
+      listBrianInboxPerBeckyTasksSchema,
+      listBeckyInboxPerBrianTasksSchema,
     ],
   };
 });
@@ -58,17 +58,17 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case 'list_projects':
         return await listProjectsHandler();
 
-      case 'list_inbox_projects':
-        return await listInboxProjectsHandler();
-
-      case 'list_tasks_in_project':
-        return await listTasksInProjectHandler(args as { project_id: string });
-
       case 'get_task_comments':
         return await getTaskCommentsHandler(args as { task_id: string });
 
-      case 'list_inbox_tasks':
-        return await listInboxTasksHandler();
+      case 'list_personal_inbox_tasks':
+        return await listPersonalInboxTasksHandler();
+
+      case 'list_brian_inbox_per_becky_tasks':
+        return await listBrianInboxPerBeckyTasksHandler();
+
+      case 'list_becky_inbox_per_brian_tasks':
+        return await listBeckyInboxPerBrianTasksHandler();
 
       default:
         throw new Error(`Unknown tool: ${name}`);
