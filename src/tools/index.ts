@@ -11,3 +11,7 @@ export {
   getTaskCommentsSchema,
   getTaskCommentsHandler,
 } from './get-task-comments';
+export {
+  listInboxTasksSchema,
+  listInboxTasksHandler,
+} from './list-inbox-tasks';

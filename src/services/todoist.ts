@@ -212,6 +212,36 @@ export async function listTasksInProject(
   }
 }
 
+// List inbox tasks function - returns structured data for inbox tasks using filter
+export async function listInboxTasks(): Promise<TasksResponse> {
+  const todoistClient = getTodoistClient();
+
+  try {
+    const filter = '(##Inbox | ##Brian inbox - per Becky) & !subtask';
+    const response = await todoistClient.get<TodoistTask[]>(
+      `/tasks?filter=${encodeURIComponent(filter)}`
+    );
+    const tasks = response.data.map((task) => ({
+      id: parseInt(task.id),
+      content: task.content,
+      description: task.description,
+      is_completed: task.is_completed,
+      labels: task.labels,
+      priority: task.priority,
+      due_date: task.due?.date || null,
+      url: task.url,
+      comment_count: task.comment_count,
+    }));
+
+    return {
+      tasks,
+      total_count: tasks.length,
+    };
+  } catch (error) {
+    throw new Error(`Failed to list inbox tasks: ${getErrorMessage(error)}`);
+  }
+}
+
 // Get task comments function - returns structured data for comments on a specific task
 export async function getTaskComments(
   taskId: string

@@ -16,6 +16,8 @@ import {
   listTasksInProjectHandler,
   getTaskCommentsSchema,
   getTaskCommentsHandler,
+  listInboxTasksSchema,
+  listInboxTasksHandler,
 } from './tools';
 
 // Load environment variables
@@ -37,6 +39,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       listInboxProjectsSchema,
       listTasksInProjectSchema,
       getTaskCommentsSchema,
+      listInboxTasksSchema,
     ],
   };
 });
@@ -63,6 +66,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'get_task_comments':
         return await getTaskCommentsHandler(args as { task_id: string });
+
+      case 'list_inbox_tasks':
+        return await listInboxTasksHandler();
 
       default:
         throw new Error(`Unknown tool: ${name}`);
