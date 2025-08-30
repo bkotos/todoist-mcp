@@ -76,5 +76,30 @@ export async function getProjectLabels(): Promise<LabelsResponse> {
   }
 }
 
+// Get context labels function - returns structured data for labels that start with "context:"
+export async function getContextLabels(): Promise<LabelsResponse> {
+  const todoistClient = getTodoistClient();
+
+  try {
+    const response = await todoistClient.get<TodoistLabel[]>('/labels');
+    const contextLabels = response.data
+      .filter((label) => label.name.startsWith('context:'))
+      .map((label) => ({
+        id: parseInt(label.id),
+        name: label.name,
+        color: label.color,
+        order: label.order,
+        is_favorite: label.is_favorite,
+      }));
+
+    return {
+      labels: contextLabels,
+      total_count: contextLabels.length,
+    };
+  } catch (error) {
+    throw new Error(`Failed to get context labels: ${getErrorMessage(error)}`);
+  }
+}
+
 // Export types for testing
 export type { TodoistLabel, LabelsResponse };
