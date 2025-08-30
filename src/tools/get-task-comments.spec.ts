@@ -1,8 +1,8 @@
 import { getTaskCommentsHandler } from './get-task-comments';
-import { getTaskComments } from '../services/todoist';
+import { getTaskComments } from '../services/comments';
 
 // Mock the services
-jest.mock('../services/todoist');
+jest.mock('../services/comments');
 
 const mockGetTaskComments = getTaskComments as jest.MockedFunction<
   typeof getTaskComments
