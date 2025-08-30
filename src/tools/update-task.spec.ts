@@ -35,6 +35,7 @@ describe('updateTask Tool', () => {
       expect(properties.labels).toBeDefined();
       expect(properties.priority).toBeDefined();
       expect(properties.due_date).toBeDefined();
+      expect(properties.project_id).toBeDefined();
     });
 
     it('should have correct property types', () => {
@@ -48,6 +49,7 @@ describe('updateTask Tool', () => {
       expect(properties.labels.type).toBe('array');
       expect(properties.priority.type).toBe('number');
       expect(properties.due_date.type).toBe('string');
+      expect(properties.project_id.type).toBe('string');
     });
   });
 
@@ -157,6 +159,27 @@ describe('updateTask Tool', () => {
       });
     });
 
+    it('should update task project successfully', async () => {
+      // arrange
+      const args = {
+        task_id: '123',
+        project_id: '456',
+      };
+      mockUpdateTask.mockResolvedValue('Task updated successfully');
+
+      // act
+      const result = await updateTaskHandler(args);
+
+      // assert
+      expect(result.content).toHaveLength(1);
+      expect(result.content[0].type).toBe('text');
+      expect(result.content[0].text).toContain('Task updated successfully');
+      expect(mockUpdateTask).toHaveBeenCalledWith({
+        taskId: '123',
+        projectId: '456',
+      });
+    });
+
     it('should update multiple fields successfully', async () => {
       // arrange
       const args = {
@@ -166,6 +189,7 @@ describe('updateTask Tool', () => {
         priority: 2,
         labels: ['work'],
         due_date: '2024-01-15',
+        project_id: '456',
       };
       mockUpdateTask.mockResolvedValue('Task updated successfully');
 
@@ -183,6 +207,7 @@ describe('updateTask Tool', () => {
         priority: 2,
         labels: ['work'],
         dueDate: '2024-01-15',
+        projectId: '456',
       });
     });
 

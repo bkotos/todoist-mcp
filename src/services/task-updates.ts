@@ -8,6 +8,7 @@ export interface UpdateTaskParams {
   labels?: string[];
   priority?: number;
   dueDate?: string;
+  projectId?: string;
 }
 
 // Get error message helper function
@@ -43,6 +44,10 @@ export async function updateTask(params: UpdateTaskParams): Promise<string> {
 
     if (params.dueDate !== undefined) {
       updatePayload.due_date = params.dueDate;
+    }
+
+    if (params.projectId !== undefined) {
+      updatePayload.project_id = params.projectId;
     }
 
     if (!client.post) {

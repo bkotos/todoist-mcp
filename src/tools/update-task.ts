@@ -3,7 +3,7 @@ import { updateTask } from '../services/task-updates';
 export const updateTaskSchema = {
   name: 'update_task',
   description:
-    'Update a Todoist task with new title, description, labels, priority, or due date. All fields are optional - only provided fields will be updated.',
+    'Update a Todoist task with new title, description, labels, priority, due date, or project. All fields are optional - only provided fields will be updated.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -34,6 +34,10 @@ export const updateTaskSchema = {
         type: 'string',
         description: 'Due date in YYYY-MM-DD format',
       },
+      project_id: {
+        type: 'string',
+        description: 'The ID of the project to move the task to',
+      },
     },
     required: ['task_id'],
   },
@@ -46,6 +50,7 @@ export const updateTaskHandler = async (args: {
   labels?: string[];
   priority?: number;
   due_date?: string;
+  project_id?: string;
 }): Promise<{
   content: Array<{
     type: 'text';
@@ -53,7 +58,15 @@ export const updateTaskHandler = async (args: {
   }>;
 }> => {
   console.error('Executing update_task...');
-  const { task_id, title, description, labels, priority, due_date } = args;
+  const {
+    task_id,
+    title,
+    description,
+    labels,
+    priority,
+    due_date,
+    project_id,
+  } = args;
 
   if (!task_id) {
     throw new Error('task_id is required');
@@ -83,6 +96,10 @@ export const updateTaskHandler = async (args: {
 
     if (due_date !== undefined) {
       serviceParams.dueDate = due_date;
+    }
+
+    if (project_id !== undefined) {
+      serviceParams.projectId = project_id;
     }
 
     const result = await updateTask(serviceParams);

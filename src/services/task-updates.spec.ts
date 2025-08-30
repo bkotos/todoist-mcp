@@ -126,6 +126,29 @@ describe('updateTask', () => {
     });
   });
 
+  it('should update task project successfully', async () => {
+    // arrange
+    const mockClient = {
+      get: jest.fn(),
+      post: jest.fn().mockResolvedValue({
+        data: { id: '123', project_id: '456' },
+      }),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const result = await updateTask({
+      taskId: '123',
+      projectId: '456',
+    });
+
+    // assert
+    expect(result).toContain('Task updated successfully');
+    expect(mockClient.post).toHaveBeenCalledWith('/tasks/123', {
+      project_id: '456',
+    });
+  });
+
   it('should update multiple fields successfully', async () => {
     // arrange
     const mockClient = {
@@ -136,6 +159,7 @@ describe('updateTask', () => {
           content: 'Updated Title',
           description: 'Updated description',
           priority: 2,
+          project_id: '456',
         },
       }),
     };
@@ -147,6 +171,7 @@ describe('updateTask', () => {
       title: 'Updated Title',
       description: 'Updated description',
       priority: 2,
+      projectId: '456',
     });
 
     // assert
@@ -155,6 +180,7 @@ describe('updateTask', () => {
       content: 'Updated Title',
       description: 'Updated description',
       priority: 2,
+      project_id: '456',
     });
   });
 
