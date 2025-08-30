@@ -1,4 +1,4 @@
-import { listProjects } from '../services/todoist';
+import { listProjects } from '../services/projects';
 
 export const listProjectsSchema = {
   name: 'list_projects',

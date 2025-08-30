@@ -1,8 +1,8 @@
 import { listProjectsHandler } from './list-projects';
-import { listProjects } from '../services/todoist';
+import { listProjects } from '../services/projects';
 
 // Mock the services
-jest.mock('../services/todoist');
+jest.mock('../services/projects');
 
 const mockListProjects = listProjects as jest.MockedFunction<
   typeof listProjects
@@ -28,6 +28,7 @@ describe('list-projects Tool', () => {
           },
         ],
         total_count: 1,
+        cached_at: '2023-01-01T00:00:00Z',
       };
       mockListProjects.mockResolvedValue(mockProjectsData);
 
@@ -62,6 +63,7 @@ describe('list-projects Tool', () => {
           },
         ],
         total_count: 2,
+        cached_at: '2023-01-01T00:00:00Z',
       };
       mockListProjects.mockResolvedValue(mockProjectsData);
 
@@ -83,6 +85,7 @@ describe('list-projects Tool', () => {
       const mockEmptyData = {
         projects: [],
         total_count: 0,
+        cached_at: '2023-01-01T00:00:00Z',
       };
       mockListProjects.mockResolvedValue(mockEmptyData);
 
