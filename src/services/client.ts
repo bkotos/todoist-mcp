@@ -2,6 +2,7 @@ import axios from 'axios';
 
 export interface TodoistClient {
   get: <T>(url: string) => Promise<{ data: T }>;
+  post?: <T>(url: string, data?: any) => Promise<{ data: T }>;
 }
 
 // Create axios client

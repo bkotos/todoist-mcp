@@ -61,6 +61,7 @@ describe('Projects Service', () => {
       ];
       const mockClient = {
         get: jest.fn().mockResolvedValue({ data: mockProjects }),
+        post: jest.fn(),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
       mockFs.existsSync.mockReturnValue(false);

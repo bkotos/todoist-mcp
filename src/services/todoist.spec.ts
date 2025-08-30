@@ -63,6 +63,7 @@ describe('Todoist Functions', () => {
       ];
       const mockClient = {
         get: jest.fn().mockResolvedValue({ data: mockComments }),
+        post: jest.fn(),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -102,6 +103,7 @@ describe('Todoist Functions', () => {
       // arrange
       const mockClient = {
         get: jest.fn().mockResolvedValue({ data: [] }),
+        post: jest.fn(),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
