@@ -51,5 +51,30 @@ export async function getAllLabels(): Promise<LabelsResponse> {
   }
 }
 
+// Get project labels function - returns structured data for labels that start with "PROJECT:"
+export async function getProjectLabels(): Promise<LabelsResponse> {
+  const todoistClient = getTodoistClient();
+
+  try {
+    const response = await todoistClient.get<TodoistLabel[]>('/labels');
+    const projectLabels = response.data
+      .filter((label) => label.name.startsWith('PROJECT:'))
+      .map((label) => ({
+        id: parseInt(label.id),
+        name: label.name,
+        color: label.color,
+        order: label.order,
+        is_favorite: label.is_favorite,
+      }));
+
+    return {
+      labels: projectLabels,
+      total_count: projectLabels.length,
+    };
+  } catch (error) {
+    throw new Error(`Failed to get project labels: ${getErrorMessage(error)}`);
+  }
+}
+
 // Export types for testing
 export type { TodoistLabel, LabelsResponse };
