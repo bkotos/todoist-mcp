@@ -18,6 +18,12 @@ import {
   listBrianInboxPerBeckyTasksHandler,
   listBeckyInboxPerBrianTasksSchema,
   listBeckyInboxPerBrianTasksHandler,
+  getBrianOnlyProjectsSchema,
+  getBrianOnlyProjectsHandler,
+  getBrianSharedProjectsSchema,
+  getBrianSharedProjectsHandler,
+  getBeckySharedProjectsSchema,
+  getBeckySharedProjectsHandler,
 } from './tools';
 
 // Load environment variables
@@ -40,6 +46,9 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       listPersonalInboxTasksSchema,
       listBrianInboxPerBeckyTasksSchema,
       listBeckyInboxPerBrianTasksSchema,
+      getBrianOnlyProjectsSchema,
+      getBrianSharedProjectsSchema,
+      getBeckySharedProjectsSchema,
     ],
   };
 });
@@ -69,6 +78,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'list_becky_inbox_per_brian_tasks':
         return await listBeckyInboxPerBrianTasksHandler();
+
+      case 'get_brian_only_projects':
+        return await getBrianOnlyProjectsHandler();
+
+      case 'get_brian_shared_projects':
+        return await getBrianSharedProjectsHandler();
+
+      case 'get_becky_shared_projects':
+        return await getBeckySharedProjectsHandler();
 
       default:
         throw new Error(`Unknown tool: ${name}`);
