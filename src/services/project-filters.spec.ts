@@ -2,6 +2,7 @@ import {
   getBrianOnlyProjects,
   getBrianSharedProjects,
   getBeckySharedProjects,
+  getInboxProjects,
 } from './project-filters';
 import { getTodoistClient } from './client';
 
@@ -486,6 +487,56 @@ describe('Project Filters', () => {
       // assert
       await expect(promise).rejects.toThrow(
         'Failed to get Becky shared projects: API Error'
+      );
+    });
+  });
+
+  describe('getInboxProjects', () => {
+    it('should return only the three inbox projects', async () => {
+      // arrange
+      const expectedProjects = [
+        {
+          id: 2,
+          name: 'Inbox',
+          url: 'https://todoist.com/project/2',
+          is_favorite: false,
+          is_inbox: true,
+        },
+        {
+          id: 16,
+          name: 'Brian inbox - per Becky',
+          url: 'https://todoist.com/project/16',
+          is_favorite: false,
+          is_inbox: false,
+        },
+        {
+          id: 24,
+          name: 'Becky inbox - per Brian',
+          url: 'https://todoist.com/project/24',
+          is_favorite: false,
+          is_inbox: false,
+        },
+      ];
+
+      // act
+      const result = await getInboxProjects();
+
+      // assert
+      expect(result.projects).toEqual(expectedProjects);
+      expect(result.total_count).toBe(3);
+      expect(mockListProjects).toHaveBeenCalledTimes(1);
+    });
+
+    it('should handle error when projects service fails', async () => {
+      // arrange
+      mockListProjects.mockRejectedValue(new Error('API Error'));
+
+      // act
+      const promise = getInboxProjects();
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'Failed to get inbox projects: API Error'
       );
     });
   });

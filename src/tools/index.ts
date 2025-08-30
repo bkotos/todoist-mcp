@@ -26,3 +26,7 @@ export {
   getBeckySharedProjectsSchema,
   getBeckySharedProjectsHandler,
 } from './get-becky-shared-projects';
+export {
+  getInboxProjectsSchema,
+  getInboxProjectsHandler,
+} from './get-inbox-projects';

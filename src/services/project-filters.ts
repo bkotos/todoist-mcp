@@ -115,3 +115,27 @@ export async function getBeckySharedProjects(): Promise<ProjectsResponse> {
     );
   }
 }
+
+// Get inbox projects (the three inbox-related projects)
+export async function getInboxProjects(): Promise<ProjectsResponse> {
+  try {
+    const allProjects = await listProjects();
+
+    const inboxProjectNames = [
+      'Inbox',
+      'Brian inbox - per Becky',
+      'Becky inbox - per Brian',
+    ];
+
+    const filteredProjects = allProjects.projects.filter((project) =>
+      inboxProjectNames.includes(project.name)
+    );
+
+    return {
+      projects: filteredProjects,
+      total_count: filteredProjects.length,
+    };
+  } catch (error) {
+    throw new Error(`Failed to get inbox projects: ${getErrorMessage(error)}`);
+  }
+}

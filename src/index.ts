@@ -22,6 +22,8 @@ import {
   getBrianSharedProjectsHandler,
   getBeckySharedProjectsSchema,
   getBeckySharedProjectsHandler,
+  getInboxProjectsSchema,
+  getInboxProjectsHandler,
 } from './tools';
 
 // Load environment variables
@@ -46,6 +48,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       getBrianOnlyProjectsSchema,
       getBrianSharedProjectsSchema,
       getBeckySharedProjectsSchema,
+      getInboxProjectsSchema,
     ],
   };
 });
@@ -81,6 +84,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'get_becky_shared_projects':
         return await getBeckySharedProjectsHandler();
+
+      case 'get_inbox_projects':
+        return await getInboxProjectsHandler();
 
       default:
         throw new Error(`Unknown tool: ${name}`);
