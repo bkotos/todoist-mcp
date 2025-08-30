@@ -30,3 +30,7 @@ export {
   getInboxProjectsSchema,
   getInboxProjectsHandler,
 } from './get-inbox-projects';
+export {
+  createProjectLabelSchema,
+  createProjectLabelHandler,
+} from './create-project-label';

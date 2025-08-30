@@ -145,5 +145,44 @@ export async function getContextLabels(): Promise<LabelsResponse> {
   }
 }
 
+// Create project label function - creates a new label with "PROJECT: " prefix
+export async function createProjectLabel(projectName: string): Promise<{
+  id: number;
+  name: string;
+  color: string;
+  order: number;
+  is_favorite: boolean;
+}> {
+  const todoistClient = getTodoistClient();
+
+  try {
+    // Validate that the project name starts with "PROJECT: "
+    if (!projectName.startsWith('PROJECT: ')) {
+      throw new Error('Project label name must start with "PROJECT: "');
+    }
+
+    if (!todoistClient.post) {
+      throw new Error('POST method not available on Todoist client');
+    }
+
+    const response = await todoistClient.post<TodoistLabel>('/labels', {
+      name: projectName,
+      color: 'charcoal',
+    });
+
+    return {
+      id: parseInt(response.data.id),
+      name: response.data.name,
+      color: response.data.color,
+      order: response.data.order,
+      is_favorite: response.data.is_favorite,
+    };
+  } catch (error) {
+    throw new Error(
+      `Failed to create project label: ${getErrorMessage(error)}`
+    );
+  }
+}
+
 // Export types for testing
 export type { TodoistLabel, LabelsResponse };

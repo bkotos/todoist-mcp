@@ -1,4 +1,9 @@
-import { getAllLabels, getProjectLabels, getContextLabels } from './labels';
+import {
+  getAllLabels,
+  getProjectLabels,
+  getContextLabels,
+  createProjectLabel,
+} from './labels';
 import { getTodoistClient } from './client';
 import fs from 'fs';
 import path from 'path';
@@ -615,6 +620,118 @@ describe('Labels Functions', () => {
         'Failed to get context labels: API Error'
       );
       expect(mockClient.get).toHaveBeenCalledWith('/labels');
+    });
+  });
+
+  describe('createProjectLabel', () => {
+    it('should create a project label successfully', async () => {
+      // arrange
+      const mockCreatedLabel = {
+        id: '123',
+        name: 'PROJECT: New Website',
+        color: 'charcoal',
+        order: 1,
+        is_favorite: false,
+      };
+      const mockClient = {
+        get: jest.fn(),
+        post: jest.fn().mockResolvedValue({ data: mockCreatedLabel }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await createProjectLabel('PROJECT: New Website');
+
+      // assert
+      expect(result).toEqual({
+        id: 123,
+        name: 'PROJECT: New Website',
+        color: 'charcoal',
+        order: 1,
+        is_favorite: false,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/labels', {
+        name: 'PROJECT: New Website',
+        color: 'charcoal',
+      });
+    });
+
+    it('should reject input without PROJECT: prefix', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn(),
+        post: jest.fn(),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const promise = createProjectLabel('New Website');
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'Project label name must start with "PROJECT: "'
+      );
+      expect(mockClient.post).not.toHaveBeenCalled();
+    });
+
+    it('should reject input with PROJECT: prefix but no space', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn(),
+        post: jest.fn(),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const promise = createProjectLabel('PROJECT:New Website');
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'Project label name must start with "PROJECT: "'
+      );
+      expect(mockClient.post).not.toHaveBeenCalled();
+    });
+
+    it('should handle API errors', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn(),
+        post: jest.fn().mockRejectedValue(new Error('API Error')),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const promise = createProjectLabel('PROJECT: Test Project');
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'Failed to create project label: API Error'
+      );
+      expect(mockClient.post).toHaveBeenCalledWith('/labels', {
+        name: 'PROJECT: Test Project',
+        color: 'charcoal',
+      });
+    });
+
+    it('should handle empty project name', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn(),
+        post: jest.fn().mockRejectedValue(new Error('Invalid name')),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const promise = createProjectLabel('PROJECT: ');
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'Failed to create project label: Invalid name'
+      );
+      expect(mockClient.post).toHaveBeenCalledWith('/labels', {
+        name: 'PROJECT: ',
+        color: 'charcoal',
+      });
     });
   });
 });
