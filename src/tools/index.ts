@@ -1,4 +1,3 @@
-export { listProjectsSchema, listProjectsHandler } from './list-projects';
 export {
   getTaskCommentsSchema,
   getTaskCommentsHandler,

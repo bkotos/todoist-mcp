@@ -8,8 +8,6 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { config } from 'dotenv';
 import {
-  listProjectsSchema,
-  listProjectsHandler,
   getTaskCommentsSchema,
   getTaskCommentsHandler,
   listPersonalInboxTasksSchema,
@@ -41,7 +39,6 @@ const server = new Server({
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [
-      listProjectsSchema,
       getTaskCommentsSchema,
       listPersonalInboxTasksSchema,
       listBrianInboxPerBeckyTasksSchema,
@@ -64,9 +61,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
   try {
     switch (name) {
-      case 'list_projects':
-        return await listProjectsHandler();
-
       case 'get_task_comments':
         return await getTaskCommentsHandler(args as { task_id: string });
 
