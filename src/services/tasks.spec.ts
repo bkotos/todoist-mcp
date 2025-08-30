@@ -2,7 +2,7 @@ import {
   listPersonalInboxTasks,
   listBrianInboxPerBeckyTasks,
   listBeckyInboxPerBrianTasks,
-} from './todoist';
+} from './tasks';
 import { getTodoistClient } from './client';
 import fs from 'fs';
 import path from 'path';
@@ -19,7 +19,7 @@ const mockGetTodoistClient = getTodoistClient as jest.MockedFunction<
 const mockFs = fs as jest.Mocked<typeof fs>;
 const mockPath = path as jest.Mocked<typeof path>;
 
-describe('Todoist Functions', () => {
+describe('Tasks Functions', () => {
   beforeEach(() => {
     // Clear all mocks
     jest.clearAllMocks();

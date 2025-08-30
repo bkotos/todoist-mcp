@@ -1,7 +1,5 @@
 import axios from 'axios';
-import { getTodoistClient, TodoistClient } from './client';
-import fs from 'fs';
-import path from 'path';
+import { getTodoistClient } from './client';
 
 interface TodoistTask {
   id: string;

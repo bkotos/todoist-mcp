@@ -1,4 +1,4 @@
-import { listBrianInboxPerBeckyTasks } from '../services/todoist';
+import { listBrianInboxPerBeckyTasks } from '../services/tasks';
 
 export const listBrianInboxPerBeckyTasksSchema = {
   name: 'list_brian_inbox_per_becky_tasks',
