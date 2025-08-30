@@ -1,17 +1,27 @@
 import { getAllLabels, getProjectLabels, getContextLabels } from './labels';
 import { getTodoistClient } from './client';
+import fs from 'fs';
+import path from 'path';
 
 // Mock the client module
 jest.mock('./client');
+// Mock fs module
+jest.mock('fs');
+jest.mock('path');
 
 const mockGetTodoistClient = getTodoistClient as jest.MockedFunction<
   typeof getTodoistClient
 >;
+const mockFs = fs as jest.Mocked<typeof fs>;
+const mockPath = path as jest.Mocked<typeof path>;
 
 describe('Labels Functions', () => {
   beforeEach(() => {
     // Clear all mocks
     jest.clearAllMocks();
+    // Reset path mock
+    mockPath.join.mockReturnValue('.cache/labels.json');
+    mockPath.dirname.mockReturnValue('.cache');
   });
 
   describe('getAllLabels', () => {
@@ -90,6 +100,257 @@ describe('Labels Functions', () => {
         'Failed to get all labels: API Error'
       );
       expect(mockClient.get).toHaveBeenCalledWith('/labels');
+    });
+
+    it('should return cached labels when cache is fresh', async () => {
+      // arrange
+      const cachedLabels = {
+        labels: [
+          {
+            id: 1,
+            name: 'Work',
+            color: 'charcoal',
+            order: 1,
+            is_favorite: false,
+          },
+          {
+            id: 2,
+            name: 'Personal',
+            color: 'blue',
+            order: 2,
+            is_favorite: true,
+          },
+        ],
+        total_count: 2,
+        cached_at: '2024-01-01T00:00:00Z',
+      };
+      mockFs.existsSync.mockReturnValue(true);
+      mockFs.statSync.mockReturnValue({
+        mtime: new Date(),
+        isFile: () => true,
+      } as any);
+      mockFs.readFileSync.mockReturnValue(JSON.stringify(cachedLabels));
+
+      // act
+      const result = await getAllLabels();
+
+      // assert
+      expect(result).toEqual(cachedLabels);
+      expect(mockFs.readFileSync).toHaveBeenCalledWith(
+        '.cache/labels.json',
+        'utf8'
+      );
+    });
+
+    it('should fetch from API and cache when cache is stale', async () => {
+      // arrange
+      const mockLabels = [
+        {
+          id: '1',
+          name: 'Work',
+          color: 'charcoal',
+          order: 1,
+          is_favorite: false,
+        },
+        {
+          id: '2',
+          name: 'Personal',
+          color: 'blue',
+          order: 2,
+          is_favorite: true,
+        },
+      ];
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: mockLabels }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+      mockFs.existsSync.mockReturnValue(true);
+      mockFs.statSync.mockReturnValue({
+        mtime: new Date(Date.now() - 25 * 60 * 60 * 1000), // 25 hours old
+        isFile: () => true,
+      } as any);
+      mockFs.writeFileSync.mockImplementation(() => undefined);
+
+      // act
+      const result = await getAllLabels();
+
+      // assert
+      expect(result).toEqual({
+        labels: [
+          {
+            id: 1,
+            name: 'Work',
+            color: 'charcoal',
+            order: 1,
+            is_favorite: false,
+          },
+          {
+            id: 2,
+            name: 'Personal',
+            color: 'blue',
+            order: 2,
+            is_favorite: true,
+          },
+        ],
+        total_count: 2,
+        cached_at: expect.any(String),
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/labels');
+      expect(mockFs.writeFileSync).toHaveBeenCalledWith(
+        '.cache/labels.json',
+        expect.stringContaining('"cached_at"')
+      );
+    });
+
+    it('should create cache directory if it does not exist', async () => {
+      // arrange
+      const mockLabels = [
+        {
+          id: '1',
+          name: 'Work',
+          color: 'charcoal',
+          order: 1,
+          is_favorite: false,
+        },
+      ];
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: mockLabels }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+      mockFs.existsSync.mockReturnValue(false);
+      mockFs.mkdirSync.mockImplementation(() => undefined);
+      mockFs.writeFileSync.mockImplementation(() => undefined);
+
+      // act
+      const result = await getAllLabels();
+
+      // assert
+      expect(mockFs.mkdirSync).toHaveBeenCalledWith('.cache', {
+        recursive: true,
+      });
+      expect(result).toEqual({
+        labels: [
+          {
+            id: 1,
+            name: 'Work',
+            color: 'charcoal',
+            order: 1,
+            is_favorite: false,
+          },
+        ],
+        total_count: 1,
+        cached_at: expect.any(String),
+      });
+    });
+
+    it('should handle cache file read errors by falling back to API', async () => {
+      // arrange
+      const mockLabels = [
+        {
+          id: '1',
+          name: 'Work',
+          color: 'charcoal',
+          order: 1,
+          is_favorite: false,
+        },
+      ];
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: mockLabels }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+      mockFs.existsSync.mockReturnValue(true);
+      mockFs.statSync.mockReturnValue({
+        mtime: new Date(),
+        isFile: () => true,
+      } as any);
+      mockFs.readFileSync.mockImplementation(() => {
+        throw new Error('File read error');
+      });
+      mockFs.writeFileSync.mockImplementation(() => undefined);
+
+      // act
+      const result = await getAllLabels();
+
+      // assert
+      expect(result).toEqual({
+        labels: [
+          {
+            id: 1,
+            name: 'Work',
+            color: 'charcoal',
+            order: 1,
+            is_favorite: false,
+          },
+        ],
+        total_count: 1,
+        cached_at: expect.any(String),
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/labels');
+    });
+
+    it('should handle invalid JSON in cache file by falling back to API', async () => {
+      // arrange
+      const mockLabels = [
+        {
+          id: '1',
+          name: 'Work',
+          color: 'charcoal',
+          order: 1,
+          is_favorite: false,
+        },
+      ];
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: mockLabels }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+      mockFs.existsSync.mockReturnValue(true);
+      mockFs.statSync.mockReturnValue({
+        mtime: new Date(),
+        isFile: () => true,
+      } as any);
+      mockFs.readFileSync.mockReturnValue('invalid json content');
+      mockFs.writeFileSync.mockImplementation(() => undefined);
+
+      // act
+      const result = await getAllLabels();
+
+      // assert
+      expect(result).toEqual({
+        labels: [
+          {
+            id: 1,
+            name: 'Work',
+            color: 'charcoal',
+            order: 1,
+            is_favorite: false,
+          },
+        ],
+        total_count: 1,
+        cached_at: expect.any(String),
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/labels');
+    });
+
+    it('should handle API errors when cache is invalid', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn().mockRejectedValue(new Error('API Error')),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+      mockFs.existsSync.mockReturnValue(true);
+      mockFs.statSync.mockReturnValue({
+        mtime: new Date(),
+        isFile: () => true,
+      } as any);
+      mockFs.readFileSync.mockReturnValue('invalid json content');
+
+      // act
+      const promise = getAllLabels();
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'Failed to get all labels: API Error'
+      );
     });
   });
 

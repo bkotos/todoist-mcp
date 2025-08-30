@@ -1,4 +1,6 @@
 import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
 import { getTodoistClient } from './client';
 
 interface TodoistLabel {
@@ -28,11 +30,43 @@ function getErrorMessage(error: any): string {
   return error instanceof Error ? error.message : 'Unknown error';
 }
 
-// Get all labels function - returns structured data for all labels
-export async function getAllLabels(): Promise<LabelsResponse> {
-  const todoistClient = getTodoistClient();
-
+// Get all labels function with caching - returns structured data
+export async function getAllLabels(): Promise<
+  LabelsResponse & { cached_at?: string }
+> {
   try {
+    // Cache configuration
+    const CACHE_DIR = '.cache';
+    const CACHE_FILE = path.join(CACHE_DIR, 'labels.json');
+    const CACHE_DURATION_MS = 24 * 60 * 60 * 1000; // 1 day
+
+    // Ensure cache directory exists
+    if (!fs.existsSync(CACHE_DIR)) {
+      fs.mkdirSync(CACHE_DIR, { recursive: true });
+    }
+
+    // Check if cache is fresh
+    let isCacheFresh = false;
+    if (fs.existsSync(CACHE_FILE)) {
+      const fileStats = fs.statSync(CACHE_FILE);
+      isCacheFresh = Date.now() - fileStats.mtime.getTime() < CACHE_DURATION_MS;
+    }
+
+    // Try to read from cache if fresh
+    if (isCacheFresh) {
+      try {
+        const cachedData = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
+        return cachedData;
+      } catch (cacheError) {
+        console.warn(
+          'Failed to read cache file, falling back to API:',
+          cacheError
+        );
+      }
+    }
+
+    // Fetch from API
+    const todoistClient = getTodoistClient();
     const response = await todoistClient.get<TodoistLabel[]>('/labels');
     const labels = response.data.map((label) => ({
       id: parseInt(label.id),
@@ -42,10 +76,20 @@ export async function getAllLabels(): Promise<LabelsResponse> {
       is_favorite: label.is_favorite,
     }));
 
-    return {
+    const labelsData = {
       labels,
       total_count: labels.length,
     };
+
+    // Create result with cache timestamp
+    const result = {
+      ...labelsData,
+      cached_at: new Date().toISOString(),
+    };
+
+    // Write to cache
+    fs.writeFileSync(CACHE_FILE, JSON.stringify(result, null, 2));
+    return result;
   } catch (error) {
     throw new Error(`Failed to get all labels: ${getErrorMessage(error)}`);
   }
