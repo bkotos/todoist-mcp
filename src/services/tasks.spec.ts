@@ -7,6 +7,7 @@ import {
   listNextActions,
   getTaskById,
 } from './tasks';
+import * as taskCache from './task-cache';
 import fs from 'fs';
 import path from 'path';
 
@@ -15,10 +16,13 @@ jest.mock('./client');
 // Mock fs module
 jest.mock('fs');
 jest.mock('path');
+// Mock task-cache module
+jest.mock('./task-cache');
 
 const mockGetTodoistClient = getTodoistClient as jest.MockedFunction<
   typeof getTodoistClient
 >;
+const mockTaskCache = taskCache as jest.Mocked<typeof taskCache>;
 const mockFs = fs as jest.Mocked<typeof fs>;
 const mockPath = path as jest.Mocked<typeof path>;
 
@@ -184,6 +188,63 @@ describe('Tasks Functions', () => {
       );
       expect(mockClient.get).toHaveBeenCalledWith(
         '/tasks?filter=%23%23Brian%20inbox%20-%20per%20Becky%20%26%20!subtask'
+      );
+    });
+
+    it('should store task names in cache when fetching Brian inbox per Becky tasks', async () => {
+      // arrange
+      const mockTasks = [
+        {
+          id: '1',
+          project_id: '123',
+          content: 'Test Brian inbox per Becky task 1',
+          description: 'Test description 1',
+          is_completed: false,
+          labels: ['label1'],
+          priority: 1,
+          due: {
+            date: '2024-01-01',
+            string: 'Jan 1',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/task/1',
+          comment_count: 2,
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+        {
+          id: '2',
+          project_id: '456',
+          content: 'Test Brian inbox per Becky task 2',
+          description: 'Test description 2',
+          is_completed: false,
+          labels: ['label2'],
+          priority: 2,
+          due: null,
+          url: 'https://todoist.com/task/2',
+          comment_count: 0,
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+      mockTaskCache.setTaskName = jest.fn();
+
+      // act
+      await listBrianInboxPerBeckyTasks();
+
+      // assert
+      expect(mockTaskCache.setTaskName).toHaveBeenCalledWith(
+        '1',
+        'Test Brian inbox per Becky task 1'
+      );
+      expect(mockTaskCache.setTaskName).toHaveBeenCalledWith(
+        '2',
+        'Test Brian inbox per Becky task 2'
       );
     });
   });

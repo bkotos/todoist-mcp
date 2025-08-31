@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getTodoistClient } from './client';
+import { setTaskName } from './task-cache';
 
 interface TodoistTask {
   id: string;
@@ -61,6 +62,11 @@ async function fetchTasksByFilter(filter: string): Promise<TasksResponse> {
     url: task.url,
     comment_count: task.comment_count,
   }));
+
+  // Store task names in cache
+  tasks.forEach((task) => {
+    setTaskName(task.id.toString(), task.content);
+  });
 
   return {
     tasks,
