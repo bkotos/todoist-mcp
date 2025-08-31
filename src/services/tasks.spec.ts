@@ -1,10 +1,12 @@
+import axios from 'axios';
+import { getTodoistClient } from './client';
 import {
   listPersonalInboxTasks,
   listBrianInboxPerBeckyTasks,
   listBeckyInboxPerBrianTasks,
   listNextActions,
+  getTaskById,
 } from './tasks';
-import { getTodoistClient } from './client';
 import fs from 'fs';
 import path from 'path';
 
@@ -344,5 +346,75 @@ describe('Tasks Functions', () => {
         '/tasks?filter=(%23%23Next%20actions%20%7C%20%23%23Brian%20acknowledged)%20%26%20!subtask'
       );
     });
+  });
+});
+
+describe('getTaskById', () => {
+  it('should fetch task by id successfully', async () => {
+    // arrange
+    const mockClient = {
+      get: jest.fn().mockResolvedValue({
+        data: {
+          id: '123',
+          content: 'Test Task',
+          description: 'Test Description',
+          is_completed: false,
+          labels: ['label1'],
+          priority: 1,
+          due: {
+            date: '2024-01-01',
+            string: 'Jan 1',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/task/123',
+          comment_count: 0,
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      }),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const result = await getTaskById('123');
+
+    // assert
+    expect(result).toEqual({
+      id: '123',
+      content: 'Test Task',
+      description: 'Test Description',
+      is_completed: false,
+      labels: ['label1'],
+      priority: 1,
+      due: {
+        date: '2024-01-01',
+        string: 'Jan 1',
+        lang: 'en',
+        is_recurring: false,
+      },
+      url: 'https://todoist.com/task/123',
+      comment_count: 0,
+      created_at: '2024-01-01T00:00:00Z',
+      updated_at: '2024-01-01T00:00:00Z',
+    });
+    expect(mockClient.get).toHaveBeenCalledWith('/tasks/123');
+  });
+
+  it('should handle API error when task not found', async () => {
+    // arrange
+    const mockClient = {
+      get: jest.fn().mockRejectedValue(new Error('Task not found')),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const promise = getTaskById('999');
+
+    // assert
+    await expect(promise).rejects.toThrow(
+      'Failed to get task by id: Task not found'
+    );
+    expect(mockClient.get).toHaveBeenCalledWith('/tasks/999');
   });
 });

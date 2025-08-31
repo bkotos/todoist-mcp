@@ -112,5 +112,17 @@ export async function listNextActions(): Promise<TasksResponse> {
   }
 }
 
+// Get task by id function - returns a single task by its ID
+export async function getTaskById(taskId: string): Promise<TodoistTask> {
+  const todoistClient = getTodoistClient();
+
+  try {
+    const response = await todoistClient.get<TodoistTask>(`/tasks/${taskId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(`Failed to get task by id: ${getErrorMessage(error)}`);
+  }
+}
+
 // Export types for testing
 export type { TodoistTask, TasksResponse };
