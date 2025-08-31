@@ -1,4 +1,8 @@
-import { getTaskComments, createTaskComment } from './comments';
+import {
+  getTaskComments,
+  createTaskComment,
+  addTaskRenameComment,
+} from './comments';
 import { getTodoistClient } from './client';
 
 jest.mock('./client');
@@ -176,6 +180,101 @@ describe('createTaskComment', () => {
     // assert
     await expect(promise).rejects.toThrow(
       'Failed to create task comment: API Error'
+    );
+  });
+});
+
+describe('addTaskRenameComment', () => {
+  it('should create a comment noting the task was renamed with old and new titles', async () => {
+    // arrange
+    const mockTaskId = '123';
+    const mockOldTitle = 'Old Task Title';
+    const mockNewTitle = 'New Task Title';
+    const expectedContent = `Task renamed from \`${mockOldTitle}\` to \`${mockNewTitle}\`\n\n*(renamed using Claude)*`;
+    const mockResponse = {
+      id: '789',
+      task_id: '123',
+      project_id: '456',
+      posted: '2024-01-04T13:00:00Z',
+      content: expectedContent,
+      attachment: null,
+      posted_uid: 'user1',
+      uids_to_notify: [],
+      is_rtl: false,
+      reactions: {},
+    };
+
+    const mockClient = {
+      get: jest.fn(),
+      post: jest.fn().mockResolvedValue({ data: mockResponse }),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const result = await addTaskRenameComment(
+      mockTaskId,
+      mockOldTitle,
+      mockNewTitle
+    );
+
+    // assert
+    expect(result).toEqual({
+      id: 789,
+      content: expectedContent,
+      posted: '2024-01-04T13:00:00Z',
+      posted_uid: 'user1',
+      attachment: null,
+    });
+    expect(mockClient.post).toHaveBeenCalledWith('/comments', {
+      task_id: mockTaskId,
+      content: expectedContent,
+    });
+  });
+
+  it('should handle API error when creating rename comment', async () => {
+    // arrange
+    const mockTaskId = '123';
+    const mockOldTitle = 'Old Task Title';
+    const mockNewTitle = 'New Task Title';
+    const mockClient = {
+      get: jest.fn(),
+      post: jest.fn().mockRejectedValue(new Error('API Error')),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const promise = addTaskRenameComment(
+      mockTaskId,
+      mockOldTitle,
+      mockNewTitle
+    );
+
+    // assert
+    await expect(promise).rejects.toThrow(
+      'Failed to add task rename comment: API Error'
+    );
+  });
+
+  it('should handle client without post method', async () => {
+    // arrange
+    const mockTaskId = '123';
+    const mockOldTitle = 'Old Task Title';
+    const mockNewTitle = 'New Task Title';
+    const mockClient = {
+      get: jest.fn(),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const promise = addTaskRenameComment(
+      mockTaskId,
+      mockOldTitle,
+      mockNewTitle
+    );
+
+    // assert
+    await expect(promise).rejects.toThrow(
+      'Failed to add task rename comment: POST method not available on client'
     );
   });
 });

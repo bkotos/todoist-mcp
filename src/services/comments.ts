@@ -115,5 +115,51 @@ export async function createTaskComment(
   }
 }
 
+// Add task rename comment function - creates a comment noting the task was renamed
+export async function addTaskRenameComment(
+  taskId: string,
+  oldTitle: string,
+  newTitle: string
+): Promise<{
+  id: number;
+  content: string;
+  posted: string;
+  posted_uid: string;
+  attachment: {
+    resource_type: string;
+    file_name: string;
+    file_size: number;
+    file_url: string;
+    upload_state: string;
+  } | null;
+}> {
+  const todoistClient = getTodoistClient();
+
+  try {
+    const commentContent = `Task renamed from \`${oldTitle}\` to \`${newTitle}\`\n\n*(renamed using Claude)*`;
+
+    if (!todoistClient.post) {
+      throw new Error('POST method not available on client');
+    }
+
+    const response = await todoistClient.post<TodoistComment>('/comments', {
+      task_id: taskId,
+      content: commentContent,
+    });
+
+    return {
+      id: parseInt(response.data.id),
+      content: response.data.content,
+      posted: response.data.posted,
+      posted_uid: response.data.posted_uid,
+      attachment: response.data.attachment,
+    };
+  } catch (error) {
+    throw new Error(
+      `Failed to add task rename comment: ${getErrorMessage(error)}`
+    );
+  }
+}
+
 // Export types for testing
 export type { TodoistComment, CommentsResponse };
