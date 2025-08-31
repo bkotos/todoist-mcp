@@ -38,3 +38,7 @@ export {
   createProjectLabelSchema,
   createProjectLabelHandler,
 } from './create-project-label';
+export {
+  createTaskCommentSchema,
+  createTaskCommentHandler,
+} from './create-task-comment';

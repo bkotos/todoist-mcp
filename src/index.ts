@@ -28,6 +28,8 @@ import {
   getInboxProjectsHandler,
   createProjectLabelSchema,
   createProjectLabelHandler,
+  createTaskCommentSchema,
+  createTaskCommentHandler,
 } from './tools';
 
 // Load environment variables
@@ -55,6 +57,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       getBeckySharedProjectsSchema,
       getInboxProjectsSchema,
       createProjectLabelSchema,
+      createTaskCommentSchema,
     ],
   };
 });
@@ -100,6 +103,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case 'create_project_label':
         return await createProjectLabelHandler(
           args as { project_name: string }
+        );
+
+      case 'create_task_comment':
+        return await createTaskCommentHandler(
+          args as { task_id: string; content: string }
         );
 
       default:
