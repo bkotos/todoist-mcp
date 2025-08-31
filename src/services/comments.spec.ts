@@ -1,4 +1,4 @@
-import { getTaskComments } from './comments';
+import { getTaskComments, createTaskComment } from './comments';
 import { getTodoistClient } from './client';
 
 jest.mock('./client');
@@ -113,6 +113,69 @@ describe('getTaskComments', () => {
     // assert
     await expect(promise).rejects.toThrow(
       'Failed to get task comments: API Error'
+    );
+  });
+});
+
+describe('createTaskComment', () => {
+  it('should create a new comment on a task successfully', async () => {
+    // arrange
+    const mockTaskId = '123';
+    const mockContent = 'This is a new comment';
+    const expectedContent =
+      'This is a new comment\n\n*(commented using Claude)*';
+    const mockResponse = {
+      id: '456',
+      task_id: '123',
+      project_id: '789',
+      posted: '2024-01-03T12:00:00Z',
+      content: expectedContent,
+      attachment: null,
+      posted_uid: 'user1',
+      uids_to_notify: [],
+      is_rtl: false,
+      reactions: {},
+    };
+
+    const mockClient = {
+      get: jest.fn(),
+      post: jest.fn().mockResolvedValue({ data: mockResponse }),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const result = await createTaskComment(mockTaskId, mockContent);
+
+    // assert
+    expect(result).toEqual({
+      id: 456,
+      content: expectedContent,
+      posted: '2024-01-03T12:00:00Z',
+      posted_uid: 'user1',
+      attachment: null,
+    });
+    expect(mockClient.post).toHaveBeenCalledWith('/comments', {
+      task_id: mockTaskId,
+      content: expectedContent,
+    });
+  });
+
+  it('should handle API error when creating comment', async () => {
+    // arrange
+    const mockTaskId = '123';
+    const mockContent = 'This is a new comment';
+    const mockClient = {
+      get: jest.fn(),
+      post: jest.fn().mockRejectedValue(new Error('API Error')),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const promise = createTaskComment(mockTaskId, mockContent);
+
+    // assert
+    await expect(promise).rejects.toThrow(
+      'Failed to create task comment: API Error'
     );
   });
 });
