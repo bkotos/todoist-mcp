@@ -1,11 +1,20 @@
 import { updateTask } from './task-updates';
 import { getTodoistClient } from './client';
+import { getTaskName, setTaskName } from './task-cache';
+import { addTaskRenameComment } from './comments';
 
 // Mock the client module
 jest.mock('./client');
+jest.mock('./task-cache');
+jest.mock('./comments');
 
 const mockGetTodoistClient = getTodoistClient as jest.MockedFunction<
   typeof getTodoistClient
+>;
+const mockGetTaskName = getTaskName as jest.MockedFunction<typeof getTaskName>;
+const mockSetTaskName = setTaskName as jest.MockedFunction<typeof setTaskName>;
+const mockAddTaskRenameComment = addTaskRenameComment as jest.MockedFunction<
+  typeof addTaskRenameComment
 >;
 
 describe('updateTask', () => {
@@ -234,5 +243,155 @@ describe('updateTask', () => {
         due_date: undefined,
       })
     );
+  });
+
+  describe('when updating task title', () => {
+    it('should fetch old title from cache when updating title', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn(),
+        post: jest.fn().mockResolvedValue({
+          data: { id: '123', content: 'New Task Title' },
+        }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+      mockGetTaskName.mockResolvedValue('Old Task Title');
+
+      // act
+      const result = await updateTask({
+        taskId: '123',
+        title: 'New Task Title',
+      });
+
+      // assert
+      expect(mockGetTaskName).toHaveBeenCalledWith('123');
+    });
+
+    it('should create rename comment when title is updated', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn(),
+        post: jest.fn().mockResolvedValue({
+          data: { id: '123', content: 'New Task Title' },
+        }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+      mockGetTaskName.mockResolvedValue('Old Task Title');
+      mockAddTaskRenameComment.mockResolvedValue({
+        id: 1,
+        content: 'Task renamed from `Old Task Title` to `New Task Title`',
+        posted: '2024-01-01T00:00:00Z',
+        posted_uid: 'user123',
+        attachment: null,
+      });
+
+      // act
+      const result = await updateTask({
+        taskId: '123',
+        title: 'New Task Title',
+      });
+
+      // assert
+      expect(mockAddTaskRenameComment).toHaveBeenCalledWith(
+        '123',
+        'Old Task Title',
+        'New Task Title'
+      );
+    });
+
+    it('should update task cache with new title after successful update', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn(),
+        post: jest.fn().mockResolvedValue({
+          data: { id: '123', content: 'New Task Title' },
+        }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+      mockGetTaskName.mockResolvedValue('Old Task Title');
+      mockAddTaskRenameComment.mockResolvedValue({
+        id: 1,
+        content: 'Task renamed from `Old Task Title` to `New Task Title`',
+        posted: '2024-01-01T00:00:00Z',
+        posted_uid: 'user123',
+        attachment: null,
+      });
+
+      // act
+      const result = await updateTask({
+        taskId: '123',
+        title: 'New Task Title',
+      });
+
+      // assert
+      expect(mockSetTaskName).toHaveBeenCalledWith('123', 'New Task Title');
+    });
+
+    it('should not create rename comment when title is not being updated', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn(),
+        post: jest.fn().mockResolvedValue({
+          data: { id: '123', description: 'Updated description' },
+        }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await updateTask({
+        taskId: '123',
+        description: 'Updated description',
+      });
+
+      // assert
+      expect(mockAddTaskRenameComment).not.toHaveBeenCalled();
+      expect(mockGetTaskName).not.toHaveBeenCalled();
+      expect(mockSetTaskName).not.toHaveBeenCalled();
+    });
+
+    it('should handle cache fetch error gracefully when updating title', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn(),
+        post: jest.fn().mockResolvedValue({
+          data: { id: '123', content: 'New Task Title' },
+        }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+      mockGetTaskName.mockRejectedValue(new Error('Cache error'));
+
+      // act
+      const promise = updateTask({
+        taskId: '123',
+        title: 'New Task Title',
+      });
+
+      // assert
+      await expect(promise).rejects.toThrow('Failed to update task');
+    });
+
+    it('should handle comment creation error gracefully when updating title', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn(),
+        post: jest.fn().mockResolvedValue({
+          data: { id: '123', content: 'New Task Title' },
+        }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+      mockGetTaskName.mockResolvedValue('Old Task Title');
+      mockAddTaskRenameComment.mockRejectedValue(
+        new Error('Comment creation failed')
+      );
+
+      // act
+      const promise = updateTask({
+        taskId: '123',
+        title: 'New Task Title',
+      });
+
+      // assert
+      await expect(promise).rejects.toThrow('Failed to update task');
+    });
   });
 });

@@ -1,5 +1,7 @@
 import { getTodoistClient } from './client';
 import axios from 'axios';
+import { getTaskName, setTaskName } from './task-cache';
+import { addTaskRenameComment } from './comments';
 
 export interface UpdateTaskParams {
   taskId: string;
@@ -23,6 +25,18 @@ export async function updateTask(params: UpdateTaskParams): Promise<string> {
   const client = getTodoistClient();
 
   try {
+    // If title is being updated, get the old title from cache first
+    let oldTitle: string | undefined;
+    if (params.title !== undefined) {
+      try {
+        oldTitle = await getTaskName(params.taskId);
+      } catch (error) {
+        throw new Error(
+          `Failed to get old task title: ${getErrorMessage(error)}`
+        );
+      }
+    }
+
     // Build update payload with only provided fields
     const updatePayload: any = {};
 
@@ -55,6 +69,18 @@ export async function updateTask(params: UpdateTaskParams): Promise<string> {
     }
 
     await client.post(`/tasks/${params.taskId}`, updatePayload);
+
+    // If title was updated, create a rename comment and update cache
+    if (params.title !== undefined && oldTitle) {
+      try {
+        await addTaskRenameComment(params.taskId, oldTitle, params.title);
+        setTaskName(params.taskId, params.title);
+      } catch (error) {
+        throw new Error(
+          `Failed to create rename comment: ${getErrorMessage(error)}`
+        );
+      }
+    }
 
     return 'Task updated successfully';
   } catch (error) {
