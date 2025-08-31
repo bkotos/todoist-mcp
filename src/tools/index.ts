@@ -15,6 +15,10 @@ export {
   listBeckyInboxPerBrianTasksHandler,
 } from './list-becky-inbox-per-brian-tasks';
 export {
+  listNextActionsSchema,
+  listNextActionsHandler,
+} from './list-next-actions';
+export {
   getBrianOnlyProjectsSchema,
   getBrianOnlyProjectsHandler,
 } from './get-brian-only-projects';

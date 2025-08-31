@@ -2,6 +2,7 @@ import {
   listPersonalInboxTasks,
   listBrianInboxPerBeckyTasks,
   listBeckyInboxPerBrianTasks,
+  listNextActions,
 } from './tasks';
 import { getTodoistClient } from './client';
 import fs from 'fs';
@@ -261,6 +262,86 @@ describe('Tasks Functions', () => {
       );
       expect(mockClient.get).toHaveBeenCalledWith(
         '/tasks?filter=%23%23Becky%20inbox%20-%20per%20Brian%20%26%20!subtask'
+      );
+    });
+  });
+
+  describe('listNextActions', () => {
+    it('should return next actions tasks when API call succeeds', async () => {
+      // arrange
+      const mockTasks = [
+        {
+          id: '1',
+          project_id: '123',
+          content: 'Test next action task',
+          description: 'Test description',
+          is_completed: false,
+          labels: ['label1'],
+          priority: 1,
+          due: {
+            date: '2024-01-01',
+            string: 'Jan 1',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/task/1',
+          comment_count: 2,
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await listNextActions();
+
+      // assert
+      expect(result.tasks).toHaveLength(1);
+      expect(result.tasks[0].id).toBe(1);
+      expect(result.tasks[0].content).toBe('Test next action task');
+      expect(result.total_count).toBe(1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=(%23%23Next%20actions%20%7C%20%23%23Brian%20acknowledged)%20%26%20!subtask'
+      );
+    });
+
+    it('should handle empty response', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: [] }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await listNextActions();
+
+      // assert
+      expect(result.tasks).toHaveLength(0);
+      expect(result.total_count).toBe(0);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=(%23%23Next%20actions%20%7C%20%23%23Brian%20acknowledged)%20%26%20!subtask'
+      );
+    });
+
+    it('should handle API errors', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn().mockRejectedValue(new Error('API Error')),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const promise = listNextActions();
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'Failed to list next actions: API Error'
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=(%23%23Next%20actions%20%7C%20%23%23Brian%20acknowledged)%20%26%20!subtask'
       );
     });
   });

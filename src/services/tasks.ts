@@ -101,5 +101,16 @@ export async function listBeckyInboxPerBrianTasks(): Promise<TasksResponse> {
   }
 }
 
+// List next actions function - returns structured data for next actions tasks
+export async function listNextActions(): Promise<TasksResponse> {
+  try {
+    return await fetchTasksByFilter(
+      '(##Next actions | ##Brian acknowledged) & !subtask'
+    );
+  } catch (error) {
+    throw new Error(`Failed to list next actions: ${getErrorMessage(error)}`);
+  }
+}
+
 // Export types for testing
 export type { TodoistTask, TasksResponse };

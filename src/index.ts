@@ -16,6 +16,8 @@ import {
   listBrianInboxPerBeckyTasksHandler,
   listBeckyInboxPerBrianTasksSchema,
   listBeckyInboxPerBrianTasksHandler,
+  listNextActionsSchema,
+  listNextActionsHandler,
   getBrianOnlyProjectsSchema,
   getBrianOnlyProjectsHandler,
   getBrianSharedProjectsSchema,
@@ -47,6 +49,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       listPersonalInboxTasksSchema,
       listBrianInboxPerBeckyTasksSchema,
       listBeckyInboxPerBrianTasksSchema,
+      listNextActionsSchema,
       getBrianOnlyProjectsSchema,
       getBrianSharedProjectsSchema,
       getBeckySharedProjectsSchema,
@@ -78,6 +81,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'list_becky_inbox_per_brian_tasks':
         return await listBeckyInboxPerBrianTasksHandler();
+
+      case 'list_next_actions':
+        return await listNextActionsHandler();
 
       case 'get_brian_only_projects':
         return await getBrianOnlyProjectsHandler();
