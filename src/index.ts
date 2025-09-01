@@ -62,6 +62,8 @@ import {
   getWaitingTasksHandler,
   getRecentMediaSchema,
   getRecentMediaHandler,
+  getAreasOfFocusSchema,
+  getAreasOfFocusHandler,
 } from './tools';
 import { join } from 'path';
 import { dirname } from 'path';
@@ -126,6 +128,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       getGtdProjectsSchema,
       getWaitingTasksSchema,
       getRecentMediaSchema,
+      getAreasOfFocusSchema,
     ],
   };
 });
@@ -252,6 +255,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'get_recent_media':
         return await getRecentMediaHandler();
+
+      case 'get_areas_of_focus':
+        return await getAreasOfFocusHandler();
 
       default:
         throw new Error(`Unknown tool: ${name}`);
