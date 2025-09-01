@@ -38,6 +38,7 @@ import {
   getRecentMediaSchema,
   getAreasOfFocusSchema,
   getShoppingListSchema,
+  completeBeckyTaskSchema,
 } from './tools';
 import { handleToolRequest } from './handlers';
 import { join } from 'path';
@@ -106,6 +107,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       getRecentMediaSchema,
       getAreasOfFocusSchema,
       getShoppingListSchema,
+      completeBeckyTaskSchema,
     ],
   };
 });

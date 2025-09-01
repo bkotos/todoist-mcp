@@ -104,3 +104,7 @@ export {
   getShoppingListSchema,
   getShoppingListHandler,
 } from './get-shopping-list';
+export {
+  completeBeckyTaskSchema,
+  completeBeckyTaskHandler,
+} from './complete-becky-task';

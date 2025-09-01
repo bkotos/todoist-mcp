@@ -35,6 +35,7 @@ vi.mock('../tools', () => ({
   getRecentMediaHandler: vi.fn(),
   getAreasOfFocusHandler: vi.fn(),
   getShoppingListHandler: vi.fn(),
+  completeBeckyTaskHandler: vi.fn(),
 }));
 
 // Import mocked functions
@@ -69,6 +70,7 @@ import {
   getRecentMediaHandler,
   getAreasOfFocusHandler,
   getShoppingListHandler,
+  completeBeckyTaskHandler,
 } from '../tools';
 
 // Test configuration for all tools
@@ -172,6 +174,12 @@ const toolTestConfig = [
     handler: searchTasksUsingOrHandler,
     args: { search_terms: ['term1', 'term2'] },
     expectedCall: { search_terms: ['term1', 'term2'] },
+  },
+  {
+    toolName: 'complete_becky_task',
+    handler: completeBeckyTaskHandler,
+    args: { task_id: '123' },
+    expectedCall: { task_id: '123' },
   },
 ];
 

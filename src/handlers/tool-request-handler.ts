@@ -30,6 +30,7 @@ import {
   getRecentMediaHandler,
   getAreasOfFocusHandler,
   getShoppingListHandler,
+  completeBeckyTaskHandler,
 } from '../tools';
 
 export interface ToolRequestArgs {
@@ -61,6 +62,7 @@ const toolsWithArgs: Record<string, ToolHandlerWithArgs> = {
   search_tasks: searchTasksHandler,
   search_tasks_using_and: searchTasksUsingAndHandler,
   search_tasks_using_or: searchTasksUsingOrHandler,
+  complete_becky_task: completeBeckyTaskHandler,
 };
 
 const toolsWithoutArgs: Record<string, ToolHandlerWithoutArgs> = {
