@@ -54,6 +54,7 @@ export {
   getTasksWithLabelHandler,
 } from './get-tasks-with-label';
 export { completeTaskSchema, completeTaskHandler } from './complete-task';
+export { uncompleteTaskSchema, uncompleteTaskHandler } from './uncomplete-task';
 export { searchTasksSchema, searchTasksHandler } from './search-tasks';
 export {
   searchTasksUsingAndSchema,

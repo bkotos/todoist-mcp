@@ -22,6 +22,7 @@ vi.mock('../tools', () => ({
   getContextLabelsHandler: vi.fn(),
   getTasksWithLabelHandler: vi.fn(),
   completeTaskHandler: vi.fn(),
+  uncompleteTaskHandler: vi.fn(),
   searchTasksHandler: vi.fn(),
   searchTasksUsingAndHandler: vi.fn(),
   searchTasksUsingOrHandler: vi.fn(),
@@ -55,6 +56,7 @@ import {
   getContextLabelsHandler,
   getTasksWithLabelHandler,
   completeTaskHandler,
+  uncompleteTaskHandler,
   searchTasksHandler,
   searchTasksUsingAndHandler,
   searchTasksUsingOrHandler,
@@ -144,6 +146,12 @@ const toolTestConfig = [
   {
     toolName: 'complete_task',
     handler: completeTaskHandler,
+    args: { task_id: '123' },
+    expectedCall: { task_id: '123' },
+  },
+  {
+    toolName: 'uncomplete_task',
+    handler: uncompleteTaskHandler,
     args: { task_id: '123' },
     expectedCall: { task_id: '123' },
   },
