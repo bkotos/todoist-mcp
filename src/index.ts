@@ -128,7 +128,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             labels?: string[];
             priority?: number;
             due_date?: string;
-            project_id?: string;
           }
         );
 
