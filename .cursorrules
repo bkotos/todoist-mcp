@@ -231,6 +231,40 @@ export async function getChoresDueToday(): Promise<string> {
 - Formatting can be handled at the presentation layer
 - Allows the LLM using the MCP server to use raw JSON and format it how it likes, rather than us guessing on how the data should be presented in the LLM's response to the user
 
+### Tool Handler Pattern
+
+**Tool handlers should return text with JSON strings for MCP compatibility:**
+
+```typescript
+// ✅ Good - tool handler returns text with JSON string
+export const getChoresDueTodayHandler = async () => {
+  console.error('Executing get_chores_due_today...');
+  const result = await getChoresDueToday();
+  console.error('get_chores_due_today completed successfully');
+  return {
+    content: [
+      {
+        type: 'text',
+        text: JSON.stringify(result, null, 2),
+      },
+    ],
+  };
+};
+
+// ❌ Bad - tool handler returns raw data
+export const getChoresDueTodayHandler = async () => {
+  const result = await getChoresDueToday();
+  return result; // This breaks MCP server expectations
+};
+```
+
+**Why this pattern:**
+
+- MCP server expects content with text type
+- JSON.stringify preserves data structure while making it text
+- LLM can still parse the JSON and format as needed
+- Maintains compatibility with MCP protocol
+
 ### Formatting Pattern
 
 ```typescript
