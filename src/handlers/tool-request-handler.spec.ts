@@ -29,7 +29,7 @@ vi.mock('../tools', () => ({
   getTasksDueTomorrowHandler: vi.fn(),
   getTasksDueThisWeekHandler: vi.fn(),
   getTicklerTasksHandler: vi.fn(),
-  getGtdProjectsHandler: vi.fn(),
+  listGtdProjectsHandler: vi.fn(),
   getWaitingTasksHandler: vi.fn(),
   getRecentMediaHandler: vi.fn(),
   getAreasOfFocusHandler: vi.fn(),
@@ -62,7 +62,7 @@ import {
   getTasksDueTomorrowHandler,
   getTasksDueThisWeekHandler,
   getTicklerTasksHandler,
-  getGtdProjectsHandler,
+  listGtdProjectsHandler,
   getWaitingTasksHandler,
   getRecentMediaHandler,
   getAreasOfFocusHandler,
@@ -222,8 +222,8 @@ const noParamToolTestConfig = [
     handler: getTicklerTasksHandler,
   },
   {
-    toolName: 'get_gtd_projects',
-    handler: getGtdProjectsHandler,
+    toolName: 'list_gtd_projects',
+    handler: listGtdProjectsHandler,
   },
   {
     toolName: 'get_waiting_tasks',

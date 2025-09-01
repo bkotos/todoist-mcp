@@ -5,6 +5,7 @@ import {
   listBrianInboxPerBeckyTasks,
   listBeckyInboxPerBrianTasks,
   listNextActions,
+  listGtdProjects,
   getTaskById,
   getTasksWithLabel,
   getAreasOfFocus,
@@ -409,6 +410,86 @@ describe('Tasks Functions', () => {
       );
       expect(mockClient.get).toHaveBeenCalledWith(
         '/tasks?filter=(%23%23Next%20actions%20%7C%20%23%23Brian%20acknowledged)%20%26%20!subtask'
+      );
+    });
+  });
+
+  describe('listGtdProjects', () => {
+    it('should return GTD projects tasks when API call succeeds', async () => {
+      // arrange
+      const mockTasks = [
+        {
+          id: '1',
+          project_id: '123',
+          content: 'Test GTD project task',
+          description: 'Test description',
+          is_completed: false,
+          labels: ['label1'],
+          priority: 1,
+          due: {
+            date: '2024-01-01',
+            string: 'Jan 1',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/task/1',
+          comment_count: 2,
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+      const mockClient = {
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await listGtdProjects();
+
+      // assert
+      expect(result.tasks).toHaveLength(1);
+      expect(result.tasks[0].id).toBe(1);
+      expect(result.tasks[0].content).toBe('Test GTD project task');
+      expect(result.total_count).toBe(1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=(%23Projects%20%7C%20%23Brian%20projects%20%7C%20%23Ansonia%20Projects)%20%26%20!subtask%20%26%20(!%23%23BABY%20%26%20!%23%23%23BrianBabyFocus%20%26%20!%23%23Home%20Preparation%20%26%20!%23%23Cards%20%26%20!%23%23Hospital%20Preparation%20%26%20!%23%23Baby%20Care%20Book%20%26%20!%23%23To%20Pack%20%26%20!%23%23Hospital%20Stay%20%26%20!%23%23Post%20Partum%20%26%20!%23%23Questions%20and%20Concerns%20%26%20!%23%23Research%20%26%20!%23%23BabyClassNotes%20%26%20!%23%23CarPreparation%20%26%20!%23%23Food%20%26%20!%23%23Before%20Hospital%20Stay)'
+      );
+    });
+
+    it('should handle empty response', async () => {
+      // arrange
+      const mockClient = {
+        get: vi.fn().mockResolvedValue({ data: [] }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await listGtdProjects();
+
+      // assert
+      expect(result.tasks).toHaveLength(0);
+      expect(result.total_count).toBe(0);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=(%23Projects%20%7C%20%23Brian%20projects%20%7C%20%23Ansonia%20Projects)%20%26%20!subtask%20%26%20(!%23%23BABY%20%26%20!%23%23%23BrianBabyFocus%20%26%20!%23%23Home%20Preparation%20%26%20!%23%23Cards%20%26%20!%23%23Hospital%20Preparation%20%26%20!%23%23Baby%20Care%20Book%20%26%20!%23%23To%20Pack%20%26%20!%23%23Hospital%20Stay%20%26%20!%23%23Post%20Partum%20%26%20!%23%23Questions%20and%20Concerns%20%26%20!%23%23Research%20%26%20!%23%23BabyClassNotes%20%26%20!%23%23CarPreparation%20%26%20!%23%23Food%20%26%20!%23%23Before%20Hospital%20Stay)'
+      );
+    });
+
+    it('should handle API errors', async () => {
+      // arrange
+      const mockClient = {
+        get: vi.fn().mockRejectedValue(new Error('API Error')),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const promise = listGtdProjects();
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'Failed to list GTD projects: API Error'
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=(%23Projects%20%7C%20%23Brian%20projects%20%7C%20%23Ansonia%20Projects)%20%26%20!subtask%20%26%20(!%23%23BABY%20%26%20!%23%23%23BrianBabyFocus%20%26%20!%23%23Home%20Preparation%20%26%20!%23%23Cards%20%26%20!%23%23Hospital%20Preparation%20%26%20!%23%23Baby%20Care%20Book%20%26%20!%23%23To%20Pack%20%26%20!%23%23Hospital%20Stay%20%26%20!%23%23Post%20Partum%20%26%20!%23%23Questions%20and%20Concerns%20%26%20!%23%23Research%20%26%20!%23%23BabyClassNotes%20%26%20!%23%23CarPreparation%20%26%20!%23%23Food%20%26%20!%23%23Before%20Hospital%20Stay)'
       );
     });
   });

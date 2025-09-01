@@ -84,9 +84,9 @@ export {
   getTicklerTasksHandler,
 } from './get-tickler-tasks';
 export {
-  getGtdProjectsSchema,
-  getGtdProjectsHandler,
-} from './get-gtd-projects';
+  listGtdProjectsSchema,
+  listGtdProjectsHandler,
+} from './list-gtd-projects';
 export {
   getWaitingTasksSchema,
   getWaitingTasksHandler,

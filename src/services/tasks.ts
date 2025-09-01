@@ -118,6 +118,17 @@ export async function listNextActions(): Promise<TasksResponse> {
   }
 }
 
+// List GTD projects function - returns structured data for GTD projects tasks
+export async function listGtdProjects(): Promise<TasksResponse> {
+  try {
+    return await fetchTasksByFilter(
+      '(#Projects | #Brian projects | #Ansonia Projects) & !subtask & (!##BABY & !###BrianBabyFocus & !##Home Preparation & !##Cards & !##Hospital Preparation & !##Baby Care Book & !##To Pack & !##Hospital Stay & !##Post Partum & !##Questions and Concerns & !##Research & !##BabyClassNotes & !##CarPreparation & !##Food & !##Before Hospital Stay)'
+    );
+  } catch (error) {
+    throw new Error(`Failed to list GTD projects: ${getErrorMessage(error)}`);
+  }
+}
+
 // Get task by id function - returns a single task by its ID
 export async function getTaskById(taskId: string): Promise<TodoistTask> {
   const todoistClient = getTodoistClient();
