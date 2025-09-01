@@ -48,6 +48,8 @@ import {
   searchTasksUsingAndHandler,
   searchTasksUsingOrSchema,
   searchTasksUsingOrHandler,
+  getChoresDueTodaySchema,
+  getChoresDueTodayHandler,
 } from './tools';
 import { join } from 'path';
 import { dirname } from 'path';
@@ -105,6 +107,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       searchTasksSchema,
       searchTasksUsingAndSchema,
       searchTasksUsingOrSchema,
+      getChoresDueTodaySchema,
     ],
   };
 });
@@ -210,6 +213,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return await searchTasksUsingOrHandler(
           args as { search_terms: string[] }
         );
+
+      case 'get_chores_due_today':
+        return await getChoresDueTodayHandler();
 
       default:
         throw new Error(`Unknown tool: ${name}`);

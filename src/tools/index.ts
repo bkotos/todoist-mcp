@@ -67,3 +67,7 @@ export {
   getTasksDueTodaySchema,
   getTasksDueTodayHandler,
 } from './get-tasks-due-today';
+export {
+  getChoresDueTodaySchema,
+  getChoresDueTodayHandler,
+} from './get-chores-due-today';
