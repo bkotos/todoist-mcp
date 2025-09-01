@@ -3,7 +3,7 @@ import { searchTasks } from '../services/search-tasks';
 export const searchTasksSchema = {
   name: 'search_tasks',
   description:
-    'Search for tasks in Todoist using the search filter. Supports basic search, wildcards, and exact phrases. Returns structured JSON data with task details including id, content, description, completion status, labels, priority, due date, and comment count.',
+    'Search for tasks in Todoist using the search filter. This is one of three search tools: basic search (single term), AND search (all terms must match), and OR search (any term can match). Supports three search syntax options: basic text search (meeting), wildcard search (*report*), and exact phrase search ("buy groceries"). Returns structured JSON data with task details including id, content, description, completion status, labels, priority, due date, and comment count.',
   inputSchema: {
     type: 'object',
     properties: {

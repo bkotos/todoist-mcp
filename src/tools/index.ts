@@ -55,3 +55,11 @@ export {
 } from './get-tasks-with-label';
 export { completeTaskSchema, completeTaskHandler } from './complete-task';
 export { searchTasksSchema, searchTasksHandler } from './search-tasks';
+export {
+  searchTasksUsingAndSchema,
+  searchTasksUsingAndHandler,
+} from './search-tasks-using-and';
+export {
+  searchTasksUsingOrSchema,
+  searchTasksUsingOrHandler,
+} from './search-tasks-using-or';
