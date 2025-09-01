@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { getTodoistClient } from './client';
-import { searchTasks } from './search-tasks';
+import {
+  searchTasks,
+  searchTasksUsingAnd,
+  searchTasksUsingOr,
+} from './search-tasks';
 import * as taskCache from './task-cache';
 
 // Mock the client module
@@ -309,7 +313,7 @@ describe('Search Tasks', () => {
       const emptyTerms: string[] = [];
 
       // act
-      const promise = andSearch(emptyTerms);
+      const promise = searchTasksUsingAnd(emptyTerms);
 
       // assert
       await expect(promise).rejects.toThrow(
@@ -322,7 +326,7 @@ describe('Search Tasks', () => {
       const termsWithEmpty = ['meeting', '', 'team'];
 
       // act
-      const promise = andSearch(termsWithEmpty);
+      const promise = searchTasksUsingAnd(termsWithEmpty);
 
       // assert
       await expect(promise).rejects.toThrow(
@@ -335,7 +339,7 @@ describe('Search Tasks', () => {
       const termsWithWhitespace = ['meeting', '   ', 'team'];
 
       // act
-      const promise = andSearch(termsWithWhitespace);
+      const promise = searchTasksUsingAnd(termsWithWhitespace);
 
       // assert
       await expect(promise).rejects.toThrow(
@@ -367,7 +371,7 @@ describe('Search Tasks', () => {
       mockGetTodoistClient.mockReturnValue(mockClient);
 
       // act
-      const result = await andSearch(['single']);
+      const result = await searchTasksUsingAnd(['single']);
 
       // assert
       expect(result.tasks).toHaveLength(1);
@@ -385,7 +389,7 @@ describe('Search Tasks', () => {
       mockGetTodoistClient.mockReturnValue(mockClient);
 
       // act
-      const promise = andSearch(['meeting', 'team']);
+      const promise = searchTasksUsingAnd(['meeting', 'team']);
 
       // assert
       await expect(promise).rejects.toThrow(
@@ -417,7 +421,7 @@ describe('Search Tasks', () => {
       mockGetTodoistClient.mockReturnValue(mockClient);
 
       // act
-      await andSearch(['cached', 'search']);
+      await searchTasksUsingAnd(['cached', 'search']);
 
       // assert
       expect(mockTaskCache.setTaskName).toHaveBeenCalledWith(
