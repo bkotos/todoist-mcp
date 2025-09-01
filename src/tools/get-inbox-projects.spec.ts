@@ -1,14 +1,15 @@
 import { getInboxProjects } from '../services/project-filters';
+import type { MockedFunction } from "vitest";
 
 // Mock the project-filters service
-jest.mock('../services/project-filters');
-const mockGetInboxProjects = getInboxProjects as jest.MockedFunction<
+vi.mock('../services/project-filters');
+const mockGetInboxProjects = getInboxProjects as MockedFunction<
   typeof getInboxProjects
 >;
 
 describe('get-inbox-projects tool', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should return inbox projects data', async () => {

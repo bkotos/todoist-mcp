@@ -1,14 +1,15 @@
 import { getBrianOnlyProjects } from '../services/project-filters';
+import type { MockedFunction } from "vitest";
 
 // Mock the project-filters service
-jest.mock('../services/project-filters');
-const mockGetBrianOnlyProjects = getBrianOnlyProjects as jest.MockedFunction<
+vi.mock('../services/project-filters');
+const mockGetBrianOnlyProjects = getBrianOnlyProjects as MockedFunction<
   typeof getBrianOnlyProjects
 >;
 
 describe('get-brian-only-projects tool', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should return Brian-only projects data', async () => {

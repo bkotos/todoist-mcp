@@ -1,9 +1,10 @@
 import { createTaskHandler } from './create-task';
+import type { MockedFunction } from "vitest";
 import { createTask } from '../services/create-task';
 
-jest.mock('../services/create-task');
+vi.mock('../services/create-task');
 
-const mockCreateTask = createTask as jest.MockedFunction<typeof createTask>;
+const mockCreateTask = createTask as MockedFunction<typeof createTask>;
 
 describe('createTaskHandler', () => {
   it('should create a task successfully with all parameters', async () => {

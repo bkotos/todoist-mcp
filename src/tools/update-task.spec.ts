@@ -1,14 +1,15 @@
 import { updateTaskSchema, updateTaskHandler } from './update-task';
+import type { MockedFunction } from "vitest";
 import { updateTask } from '../services/task-updates';
 
 // Mock the service module
-jest.mock('../services/task-updates');
+vi.mock('../services/task-updates');
 
-const mockUpdateTask = updateTask as jest.MockedFunction<typeof updateTask>;
+const mockUpdateTask = updateTask as MockedFunction<typeof updateTask>;
 
 describe('updateTask Tool', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('updateTaskSchema', () => {

@@ -1,13 +1,14 @@
 import axios from 'axios';
 import { createTodoistClient, getTodoistClient } from './client';
+import type { Mocked } from 'vitest';
 
 // Mock axios
-jest.mock('axios');
-const mockAxios = axios as jest.Mocked<typeof axios>;
+vi.mock('axios');
+const mockAxios = axios as Mocked<typeof axios>;
 
 describe('client', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // Reset environment variable
     delete process.env.TODOIST_API_TOKEN;
   });
@@ -16,7 +17,7 @@ describe('client', () => {
     it('should create axios client with correct configuration', () => {
       // arrange
       const apiToken = 'test-token-123';
-      const mockAxiosCreate = jest.fn().mockReturnValue({});
+      const mockAxiosCreate = vi.fn().mockReturnValue({});
       mockAxios.create = mockAxiosCreate;
 
       // act
@@ -35,8 +36,8 @@ describe('client', () => {
     it('should return the created axios client', () => {
       // arrange
       const apiToken = 'test-token-123';
-      const mockClient = { get: jest.fn() };
-      mockAxios.create = jest.fn().mockReturnValue(mockClient);
+      const mockClient = { get: vi.fn() };
+      mockAxios.create = vi.fn().mockReturnValue(mockClient);
 
       // act
       const result = createTodoistClient(apiToken);
@@ -51,8 +52,8 @@ describe('client', () => {
       // arrange
       const apiToken = 'test-token-123';
       process.env.TODOIST_API_TOKEN = apiToken;
-      const mockClient = { get: jest.fn() };
-      mockAxios.create = jest.fn().mockReturnValue(mockClient);
+      const mockClient = { get: vi.fn() };
+      mockAxios.create = vi.fn().mockReturnValue(mockClient);
 
       // act
       const result = getTodoistClient();

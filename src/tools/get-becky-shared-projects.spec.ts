@@ -1,13 +1,14 @@
 import { getBeckySharedProjects } from '../services/project-filters';
+import type { MockedFunction } from "vitest";
 
 // Mock the project-filters service
-jest.mock('../services/project-filters');
+vi.mock('../services/project-filters');
 const mockGetBeckySharedProjects =
-  getBeckySharedProjects as jest.MockedFunction<typeof getBeckySharedProjects>;
+  getBeckySharedProjects as MockedFunction<typeof getBeckySharedProjects>;
 
 describe('get-becky-shared-projects tool', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should return Becky shared projects data', async () => {

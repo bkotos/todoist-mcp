@@ -1,9 +1,10 @@
 import { completeTask } from './complete-task';
+import type { MockedFunction } from "vitest";
 import { getTodoistClient } from './client';
 
-jest.mock('./client');
+vi.mock('./client');
 
-const mockGetTodoistClient = getTodoistClient as jest.MockedFunction<
+const mockGetTodoistClient = getTodoistClient as MockedFunction<
   typeof getTodoistClient
 >;
 
@@ -11,8 +12,8 @@ describe('completeTask', () => {
   it('should complete a task successfully', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockResolvedValue({ data: { ok: true } }),
+      get: vi.fn(),
+      post: vi.fn().mockResolvedValue({ data: { ok: true } }),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -27,8 +28,8 @@ describe('completeTask', () => {
   it('should handle API error when completing task', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockRejectedValue(new Error('API Error')),
+      get: vi.fn(),
+      post: vi.fn().mockRejectedValue(new Error('API Error')),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -42,7 +43,7 @@ describe('completeTask', () => {
   it('should handle client without post method', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
+      get: vi.fn(),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 

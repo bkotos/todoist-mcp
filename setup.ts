@@ -1,11 +1,12 @@
-// Test setup file for Jest
+// Test setup file for Vitest
 import { config } from 'dotenv';
+import { vi, beforeAll, afterAll } from 'vitest';
 
 // Load environment variables for tests
 config({ path: 'env.test' });
 
 // Global test timeout
-jest.setTimeout(10000);
+vi.setConfig({ testTimeout: 10000 });
 
 // Mock console.error to reduce noise in tests
 const originalError = console.error;

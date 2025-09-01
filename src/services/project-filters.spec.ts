@@ -1,3 +1,4 @@
+import type { MockedFunction } from 'vitest';
 import {
   getBrianOnlyProjects,
   getBrianSharedProjects,
@@ -7,17 +8,12 @@ import {
 import { getTodoistClient } from './client';
 
 // Mock the client module
-jest.mock('./client');
-const mockGetTodoistClient = getTodoistClient as jest.MockedFunction<
-  typeof getTodoistClient
->;
+vi.mock('./client');
 
 // Mock the projects service
-jest.mock('./projects');
-const mockListProjects = require('./projects')
-  .listProjects as jest.MockedFunction<
-  typeof import('./projects').listProjects
->;
+vi.mock('./projects');
+import { listProjects } from './projects';
+const mockListProjects = listProjects as any;
 
 describe('Project Filters', () => {
   // Shared test data with all projects
@@ -214,7 +210,7 @@ describe('Project Filters', () => {
   ];
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockListProjects.mockResolvedValue({
       projects: allProjects,
       total_count: allProjects.length,

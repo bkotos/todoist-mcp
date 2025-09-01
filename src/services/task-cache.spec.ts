@@ -1,17 +1,18 @@
 import { getTaskName, setTaskName, clearCache } from './task-cache';
+import type { MockedFunction } from 'vitest';
 import * as tasksService from './tasks';
 
 // Mock the tasks service
-jest.mock('./tasks');
+vi.mock('./tasks');
 
-const mockGetTaskById = tasksService.getTaskById as jest.MockedFunction<
+const mockGetTaskById = tasksService.getTaskById as MockedFunction<
   typeof tasksService.getTaskById
 >;
 
 describe('task-cache', () => {
   beforeEach(() => {
     clearCache();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('setTaskName', () => {

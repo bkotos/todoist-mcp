@@ -1,16 +1,17 @@
 import { getContextLabelsHandler } from './get-context-labels';
+import type { MockedFunction } from "vitest";
 import { getContextLabels } from '../services/labels';
 
 // Mock the labels service
-jest.mock('../services/labels');
+vi.mock('../services/labels');
 
-const mockGetContextLabels = getContextLabels as jest.MockedFunction<
+const mockGetContextLabels = getContextLabels as MockedFunction<
   typeof getContextLabels
 >;
 
 describe('getContextLabelsHandler', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should return context labels when API call succeeds', async () => {

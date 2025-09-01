@@ -1,16 +1,17 @@
 import { createProjectLabelHandler } from './create-project-label';
+import type { MockedFunction } from "vitest";
 import { createProjectLabel } from '../services/labels';
 
 // Mock the labels service
-jest.mock('../services/labels');
+vi.mock('../services/labels');
 
-const mockCreateProjectLabel = createProjectLabel as jest.MockedFunction<
+const mockCreateProjectLabel = createProjectLabel as MockedFunction<
   typeof createProjectLabel
 >;
 
 describe('create-project-label tool', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('createProjectLabelHandler', () => {

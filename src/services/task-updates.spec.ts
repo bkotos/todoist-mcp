@@ -1,32 +1,33 @@
 import { updateTask } from './task-updates';
+import type { MockedFunction } from "vitest";
 import { getTodoistClient } from './client';
 import { getTaskName, setTaskName } from './task-cache';
 import { addTaskRenameComment } from './comments';
 
 // Mock the client module
-jest.mock('./client');
-jest.mock('./task-cache');
-jest.mock('./comments');
+vi.mock('./client');
+vi.mock('./task-cache');
+vi.mock('./comments');
 
-const mockGetTodoistClient = getTodoistClient as jest.MockedFunction<
+const mockGetTodoistClient = getTodoistClient as MockedFunction<
   typeof getTodoistClient
 >;
-const mockGetTaskName = getTaskName as jest.MockedFunction<typeof getTaskName>;
-const mockSetTaskName = setTaskName as jest.MockedFunction<typeof setTaskName>;
-const mockAddTaskRenameComment = addTaskRenameComment as jest.MockedFunction<
+const mockGetTaskName = getTaskName as MockedFunction<typeof getTaskName>;
+const mockSetTaskName = setTaskName as MockedFunction<typeof setTaskName>;
+const mockAddTaskRenameComment = addTaskRenameComment as MockedFunction<
   typeof addTaskRenameComment
 >;
 
 describe('updateTask', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should update task title successfully', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockResolvedValue({
+      get: vi.fn(),
+      post: vi.fn().mockResolvedValue({
         data: { id: '123', content: 'Updated Task Title' },
       }),
     };
@@ -48,8 +49,8 @@ describe('updateTask', () => {
   it('should update task description successfully', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockResolvedValue({
+      get: vi.fn(),
+      post: vi.fn().mockResolvedValue({
         data: { id: '123', description: 'Updated description' },
       }),
     };
@@ -71,8 +72,8 @@ describe('updateTask', () => {
   it('should update task labels successfully', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
-      post: jest
+      get: vi.fn(),
+      post: vi
         .fn()
         .mockResolvedValue({ data: { id: '123', labels: ['work', 'urgent'] } }),
     };
@@ -94,8 +95,8 @@ describe('updateTask', () => {
   it('should update task priority successfully', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockResolvedValue({ data: { id: '123', priority: 3 } }),
+      get: vi.fn(),
+      post: vi.fn().mockResolvedValue({ data: { id: '123', priority: 3 } }),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -115,8 +116,8 @@ describe('updateTask', () => {
   it('should update task due date successfully', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockResolvedValue({
+      get: vi.fn(),
+      post: vi.fn().mockResolvedValue({
         data: { id: '123', due: { date: '2024-01-15' } },
       }),
     };
@@ -138,8 +139,8 @@ describe('updateTask', () => {
   it('should update multiple fields successfully', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockResolvedValue({
+      get: vi.fn(),
+      post: vi.fn().mockResolvedValue({
         data: {
           id: '123',
           content: 'Updated Title',
@@ -170,8 +171,8 @@ describe('updateTask', () => {
   it('should handle API error gracefully', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockRejectedValue(new Error('API Error')),
+      get: vi.fn(),
+      post: vi.fn().mockRejectedValue(new Error('API Error')),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -188,8 +189,8 @@ describe('updateTask', () => {
   it('should only include provided fields in the update request', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
-      post: jest
+      get: vi.fn(),
+      post: vi
         .fn()
         .mockResolvedValue({ data: { id: '123', content: 'Updated Title' } }),
     };
@@ -223,8 +224,8 @@ describe('updateTask', () => {
     it('should fetch old title from cache when updating title', async () => {
       // arrange
       const mockClient = {
-        get: jest.fn(),
-        post: jest.fn().mockResolvedValue({
+        get: vi.fn(),
+        post: vi.fn().mockResolvedValue({
           data: { id: '123', content: 'New Task Title' },
         }),
       };
@@ -244,8 +245,8 @@ describe('updateTask', () => {
     it('should create rename comment when title is updated', async () => {
       // arrange
       const mockClient = {
-        get: jest.fn(),
-        post: jest.fn().mockResolvedValue({
+        get: vi.fn(),
+        post: vi.fn().mockResolvedValue({
           data: { id: '123', content: 'New Task Title' },
         }),
       };
@@ -276,8 +277,8 @@ describe('updateTask', () => {
     it('should update task cache with new title after successful update', async () => {
       // arrange
       const mockClient = {
-        get: jest.fn(),
-        post: jest.fn().mockResolvedValue({
+        get: vi.fn(),
+        post: vi.fn().mockResolvedValue({
           data: { id: '123', content: 'New Task Title' },
         }),
       };
@@ -304,8 +305,8 @@ describe('updateTask', () => {
     it('should not create rename comment when title is not being updated', async () => {
       // arrange
       const mockClient = {
-        get: jest.fn(),
-        post: jest.fn().mockResolvedValue({
+        get: vi.fn(),
+        post: vi.fn().mockResolvedValue({
           data: { id: '123', description: 'Updated description' },
         }),
       };
@@ -326,8 +327,8 @@ describe('updateTask', () => {
     it('should handle cache fetch error gracefully when updating title', async () => {
       // arrange
       const mockClient = {
-        get: jest.fn(),
-        post: jest.fn().mockResolvedValue({
+        get: vi.fn(),
+        post: vi.fn().mockResolvedValue({
           data: { id: '123', content: 'New Task Title' },
         }),
       };
@@ -347,8 +348,8 @@ describe('updateTask', () => {
     it('should handle comment creation error gracefully when updating title', async () => {
       // arrange
       const mockClient = {
-        get: jest.fn(),
-        post: jest.fn().mockResolvedValue({
+        get: vi.fn(),
+        post: vi.fn().mockResolvedValue({
           data: { id: '123', content: 'New Task Title' },
         }),
       };

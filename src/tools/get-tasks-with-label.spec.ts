@@ -1,15 +1,16 @@
 import { getTasksWithLabelHandler } from './get-tasks-with-label';
+import type { MockedFunction } from "vitest";
 import { getTasksWithLabel } from '../services/tasks';
 
 // Mock the tasks service
-jest.mock('../services/tasks');
-const mockGetTasksWithLabel = getTasksWithLabel as jest.MockedFunction<
+vi.mock('../services/tasks');
+const mockGetTasksWithLabel = getTasksWithLabel as MockedFunction<
   typeof getTasksWithLabel
 >;
 
 describe('getTasksWithLabelHandler', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should return JSON formatted tasks with label when API call succeeds', async () => {

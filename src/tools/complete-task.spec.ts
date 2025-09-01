@@ -1,9 +1,10 @@
 import { completeTaskHandler } from './complete-task';
+import type { MockedFunction } from "vitest";
 import { completeTask } from '../services/complete-task';
 
-jest.mock('../services/complete-task');
+vi.mock('../services/complete-task');
 
-const mockCompleteTask = completeTask as jest.MockedFunction<
+const mockCompleteTask = completeTask as MockedFunction<
   typeof completeTask
 >;
 

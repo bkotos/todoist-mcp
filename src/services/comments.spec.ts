@@ -1,3 +1,4 @@
+import type { MockedFunction } from 'vitest';
 import {
   getTaskComments,
   createTaskComment,
@@ -5,9 +6,9 @@ import {
 } from './comments';
 import { getTodoistClient } from './client';
 
-jest.mock('./client');
+vi.mock('./client');
 
-const mockGetTodoistClient = getTodoistClient as jest.MockedFunction<
+const mockGetTodoistClient = getTodoistClient as MockedFunction<
   typeof getTodoistClient
 >;
 
@@ -49,7 +50,7 @@ describe('getTaskComments', () => {
     ];
 
     const mockClient = {
-      get: jest.fn().mockResolvedValue({ data: mockComments }),
+      get: vi.fn().mockResolvedValue({ data: mockComments }),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -88,7 +89,7 @@ describe('getTaskComments', () => {
     // arrange
     const mockTaskId = '123';
     const mockClient = {
-      get: jest.fn().mockResolvedValue({ data: [] }),
+      get: vi.fn().mockResolvedValue({ data: [] }),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -107,7 +108,7 @@ describe('getTaskComments', () => {
     // arrange
     const mockTaskId = '123';
     const mockClient = {
-      get: jest.fn().mockRejectedValue(new Error('API Error')),
+      get: vi.fn().mockRejectedValue(new Error('API Error')),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -142,8 +143,8 @@ describe('createTaskComment', () => {
     };
 
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockResolvedValue({ data: mockResponse }),
+      get: vi.fn(),
+      post: vi.fn().mockResolvedValue({ data: mockResponse }),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -169,8 +170,8 @@ describe('createTaskComment', () => {
     const mockTaskId = '123';
     const mockContent = 'This is a new comment';
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockRejectedValue(new Error('API Error')),
+      get: vi.fn(),
+      post: vi.fn().mockRejectedValue(new Error('API Error')),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -205,8 +206,8 @@ describe('addTaskRenameComment', () => {
     };
 
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockResolvedValue({ data: mockResponse }),
+      get: vi.fn(),
+      post: vi.fn().mockResolvedValue({ data: mockResponse }),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -237,8 +238,8 @@ describe('addTaskRenameComment', () => {
     const mockOldTitle = 'Old Task Title';
     const mockNewTitle = 'New Task Title';
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockRejectedValue(new Error('API Error')),
+      get: vi.fn(),
+      post: vi.fn().mockRejectedValue(new Error('API Error')),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -261,7 +262,7 @@ describe('addTaskRenameComment', () => {
     const mockOldTitle = 'Old Task Title';
     const mockNewTitle = 'New Task Title';
     const mockClient = {
-      get: jest.fn(),
+      get: vi.fn(),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 

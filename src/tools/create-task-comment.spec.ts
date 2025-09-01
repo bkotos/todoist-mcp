@@ -1,9 +1,10 @@
 import { createTaskCommentHandler } from './create-task-comment';
+import type { MockedFunction } from "vitest";
 import { createTaskComment } from '../services/comments';
 
-jest.mock('../services/comments');
+vi.mock('../services/comments');
 
-const mockCreateTaskComment = createTaskComment as jest.MockedFunction<
+const mockCreateTaskComment = createTaskComment as MockedFunction<
   typeof createTaskComment
 >;
 

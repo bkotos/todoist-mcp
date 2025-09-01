@@ -1,17 +1,18 @@
 import { getTaskCommentsHandler } from './get-task-comments';
+import type { MockedFunction } from "vitest";
 import { getTaskComments } from '../services/comments';
 
 // Mock the services
-jest.mock('../services/comments');
+vi.mock('../services/comments');
 
-const mockGetTaskComments = getTaskComments as jest.MockedFunction<
+const mockGetTaskComments = getTaskComments as MockedFunction<
   typeof getTaskComments
 >;
 
 describe('get-task-comments Tool', () => {
   beforeEach(() => {
     // Clear all mocks
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('getTaskCommentsHandler', () => {

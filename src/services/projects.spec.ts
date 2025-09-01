@@ -1,24 +1,25 @@
 import { listProjects } from './projects';
+import type { MockedFunction, Mocked } from 'vitest';
 import { getTodoistClient } from './client';
 import fs from 'fs';
 import path from 'path';
 
 // Mock the client module
-jest.mock('./client');
+vi.mock('./client');
 // Mock fs module
-jest.mock('fs');
-jest.mock('path');
+vi.mock('fs');
+vi.mock('path');
 
-const mockGetTodoistClient = getTodoistClient as jest.MockedFunction<
+const mockGetTodoistClient = getTodoistClient as MockedFunction<
   typeof getTodoistClient
 >;
-const mockFs = fs as jest.Mocked<typeof fs>;
-const mockPath = path as jest.Mocked<typeof path>;
+const mockFs = fs as Mocked<typeof fs>;
+const mockPath = path as Mocked<typeof path>;
 
 describe('Projects Service', () => {
   beforeEach(() => {
     // Clear all mocks
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // Reset path mock
     mockPath.join.mockReturnValue('.cache/projects.json');
     mockPath.dirname.mockReturnValue('.cache');
@@ -60,8 +61,8 @@ describe('Projects Service', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockProjects }),
-        post: jest.fn(),
+        get: vi.fn().mockResolvedValue({ data: mockProjects }),
+        post: vi.fn(),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
       mockFs.existsSync.mockReturnValue(false);
@@ -98,7 +99,7 @@ describe('Projects Service', () => {
     it('should handle empty projects list', async () => {
       // arrange
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: [] }),
+        get: vi.fn().mockResolvedValue({ data: [] }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
       mockFs.existsSync.mockReturnValue(false);
@@ -119,7 +120,7 @@ describe('Projects Service', () => {
     it('should handle API errors gracefully', async () => {
       // arrange
       const mockClient = {
-        get: jest.fn().mockRejectedValue(new Error('API Error')),
+        get: vi.fn().mockRejectedValue(new Error('API Error')),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
       mockFs.existsSync.mockReturnValue(false);
@@ -170,7 +171,7 @@ describe('Projects Service', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockProjects }),
+        get: vi.fn().mockResolvedValue({ data: mockProjects }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
       mockFs.existsSync.mockReturnValue(false);
@@ -258,7 +259,7 @@ describe('Projects Service', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockProjects }),
+        get: vi.fn().mockResolvedValue({ data: mockProjects }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
       mockFs.existsSync.mockReturnValue(true);
@@ -312,7 +313,7 @@ describe('Projects Service', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockProjects }),
+        get: vi.fn().mockResolvedValue({ data: mockProjects }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
       mockFs.existsSync.mockReturnValue(true);
@@ -365,7 +366,7 @@ describe('Projects Service', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockProjects }),
+        get: vi.fn().mockResolvedValue({ data: mockProjects }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
       mockFs.existsSync.mockReturnValue(true);
@@ -399,7 +400,7 @@ describe('Projects Service', () => {
     it('should handle API errors when cache is invalid', async () => {
       // arrange
       const mockClient = {
-        get: jest.fn().mockRejectedValue(new Error('API Error')),
+        get: vi.fn().mockRejectedValue(new Error('API Error')),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
       mockFs.existsSync.mockReturnValue(true);

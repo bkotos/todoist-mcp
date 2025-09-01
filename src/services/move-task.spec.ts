@@ -1,21 +1,19 @@
 import axios from 'axios';
+import type { MockedFunction } from 'vitest';
 import { getTodoistClient, getTodoistV1Client } from './client';
 import { moveTask } from './move-task';
 
 // Mock the client module
-jest.mock('./client');
+vi.mock('./client');
 
-const mockGetTodoistClient = getTodoistClient as jest.MockedFunction<
-  typeof getTodoistClient
->;
-const mockGetTodoistV1Client = getTodoistV1Client as jest.MockedFunction<
+const mockGetTodoistV1Client = getTodoistV1Client as MockedFunction<
   typeof getTodoistV1Client
 >;
 
 describe('Move Task Functions', () => {
   beforeEach(() => {
     // Clear all mocks
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('moveTask', () => {
@@ -26,11 +24,11 @@ describe('Move Task Functions', () => {
       const mockMoveResponse = { success: true };
 
       const mockV1Client = {
-        get: jest
+        get: vi
           .fn()
           .mockResolvedValueOnce({ data: mockTaskIdMapping })
           .mockResolvedValueOnce({ data: mockProjectIdMapping }),
-        post: jest.fn().mockResolvedValue({ data: mockMoveResponse }),
+        post: vi.fn().mockResolvedValue({ data: mockMoveResponse }),
       };
       mockGetTodoistV1Client.mockReturnValue(mockV1Client);
 
@@ -56,8 +54,8 @@ describe('Move Task Functions', () => {
     it('should handle task ID mapping error', async () => {
       // arrange
       const mockV1Client = {
-        get: jest.fn().mockRejectedValue(new Error('Task not found')),
-        post: jest.fn(),
+        get: vi.fn().mockRejectedValue(new Error('Task not found')),
+        post: vi.fn(),
       };
       mockGetTodoistV1Client.mockReturnValue(mockV1Client);
 
@@ -77,11 +75,11 @@ describe('Move Task Functions', () => {
       // arrange
       const mockTaskIdMapping = { id: 'v1_task_id_123' };
       const mockV1Client = {
-        get: jest
+        get: vi
           .fn()
           .mockResolvedValueOnce({ data: mockTaskIdMapping })
           .mockRejectedValueOnce(new Error('Project not found')),
-        post: jest.fn(),
+        post: vi.fn(),
       };
       mockGetTodoistV1Client.mockReturnValue(mockV1Client);
 
@@ -105,11 +103,11 @@ describe('Move Task Functions', () => {
       const mockTaskIdMapping = { id: 'v1_task_id_123' };
       const mockProjectIdMapping = { id: 'v1_project_id_456' };
       const mockV1Client = {
-        get: jest
+        get: vi
           .fn()
           .mockResolvedValueOnce({ data: mockTaskIdMapping })
           .mockResolvedValueOnce({ data: mockProjectIdMapping }),
-        post: jest.fn().mockRejectedValue(new Error('Move operation failed')),
+        post: vi.fn().mockRejectedValue(new Error('Move operation failed')),
       };
       mockGetTodoistV1Client.mockReturnValue(mockV1Client);
 
@@ -146,8 +144,8 @@ describe('Move Task Functions', () => {
       };
 
       const mockV1Client = {
-        get: jest.fn().mockRejectedValue(axiosError),
-        post: jest.fn(),
+        get: vi.fn().mockRejectedValue(axiosError),
+        post: vi.fn(),
       };
       mockGetTodoistV1Client.mockReturnValue(mockV1Client);
 

@@ -1,17 +1,18 @@
 import { moveTaskHandler } from './move-task';
+import type { MockedFunction } from "vitest";
 import * as moveTaskService from '../services/move-task';
 
 // Mock the move-task service
-jest.mock('../services/move-task');
+vi.mock('../services/move-task');
 
-const mockMoveTask = moveTaskService.moveTask as jest.MockedFunction<
+const mockMoveTask = moveTaskService.moveTask as MockedFunction<
   typeof moveTaskService.moveTask
 >;
 
 describe('Move Task Tool', () => {
   beforeEach(() => {
     // Clear all mocks
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('moveTaskHandler', () => {

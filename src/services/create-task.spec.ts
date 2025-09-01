@@ -1,9 +1,10 @@
 import { createTask } from './create-task';
+import type { MockedFunction } from "vitest";
 import { getTodoistClient } from './client';
 
-jest.mock('./client');
+vi.mock('./client');
 
-const mockGetTodoistClient = getTodoistClient as jest.MockedFunction<
+const mockGetTodoistClient = getTodoistClient as MockedFunction<
   typeof getTodoistClient
 >;
 
@@ -11,8 +12,8 @@ describe('createTask', () => {
   it('should create a task successfully with all parameters', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockResolvedValue({
+      get: vi.fn(),
+      post: vi.fn().mockResolvedValue({
         data: {
           id: '12345',
           content: 'Test task',
@@ -52,8 +53,8 @@ describe('createTask', () => {
   it('should create a task with minimal required parameters', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockResolvedValue({
+      get: vi.fn(),
+      post: vi.fn().mockResolvedValue({
         data: {
           id: '12345',
           content: 'Simple task',
@@ -78,8 +79,8 @@ describe('createTask', () => {
   it('should handle API errors gracefully', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockRejectedValue(new Error('API Error')),
+      get: vi.fn(),
+      post: vi.fn().mockRejectedValue(new Error('API Error')),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -104,8 +105,8 @@ describe('createTask', () => {
       message: 'Request failed',
     };
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockRejectedValue(axiosError),
+      get: vi.fn(),
+      post: vi.fn().mockRejectedValue(axiosError),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -124,8 +125,8 @@ describe('createTask', () => {
   it('should handle unknown errors', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn(),
-      post: jest.fn().mockRejectedValue('Unknown error'),
+      get: vi.fn(),
+      post: vi.fn().mockRejectedValue('Unknown error'),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 

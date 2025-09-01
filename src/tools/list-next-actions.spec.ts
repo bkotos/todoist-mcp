@@ -1,15 +1,16 @@
 import { listNextActionsHandler } from './list-next-actions';
+import type { MockedFunction } from "vitest";
 import { listNextActions } from '../services/tasks';
 
 // Mock the tasks service
-jest.mock('../services/tasks');
-const mockListNextActions = listNextActions as jest.MockedFunction<
+vi.mock('../services/tasks');
+const mockListNextActions = listNextActions as MockedFunction<
   typeof listNextActions
 >;
 
 describe('listNextActionsHandler', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should return JSON formatted next actions when API call succeeds', async () => {

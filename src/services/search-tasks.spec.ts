@@ -6,20 +6,21 @@ import {
   searchTasksUsingOr,
 } from './search-tasks';
 import * as taskCache from './task-cache';
+import type { MockedFunction } from 'vitest';
 
 // Mock the client module
-jest.mock('./client');
+vi.mock('./client');
 // Mock task-cache module
-jest.mock('./task-cache');
+vi.mock('./task-cache');
 
-const mockGetTodoistClient = getTodoistClient as jest.MockedFunction<
+const mockGetTodoistClient = getTodoistClient as MockedFunction<
   typeof getTodoistClient
 >;
-const mockTaskCache = taskCache as jest.Mocked<typeof taskCache>;
+const mockTaskCache = taskCache as any;
 
 describe('Search Tasks', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('searchTasks', () => {
@@ -47,7 +48,7 @@ describe('Search Tasks', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -94,7 +95,7 @@ describe('Search Tasks', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -128,7 +129,7 @@ describe('Search Tasks', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -146,7 +147,7 @@ describe('Search Tasks', () => {
     it('should handle empty search results', async () => {
       // arrange
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: [] }),
+        get: vi.fn().mockResolvedValue({ data: [] }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -164,7 +165,7 @@ describe('Search Tasks', () => {
     it('should handle API errors', async () => {
       // arrange
       const mockClient = {
-        get: jest.fn().mockRejectedValue(new Error('API Error')),
+        get: vi.fn().mockRejectedValue(new Error('API Error')),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -184,7 +185,7 @@ describe('Search Tasks', () => {
       axiosError.response = { data: { error: 'Rate limit exceeded' } };
 
       const mockClient = {
-        get: jest.fn().mockRejectedValue(axiosError),
+        get: vi.fn().mockRejectedValue(axiosError),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -216,7 +217,7 @@ describe('Search Tasks', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -256,7 +257,7 @@ describe('Search Tasks', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -292,7 +293,7 @@ describe('Search Tasks', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -366,7 +367,7 @@ describe('Search Tasks', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -384,7 +385,7 @@ describe('Search Tasks', () => {
     it('should handle API errors', async () => {
       // arrange
       const mockClient = {
-        get: jest.fn().mockRejectedValue(new Error('API Error')),
+        get: vi.fn().mockRejectedValue(new Error('API Error')),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -416,7 +417,7 @@ describe('Search Tasks', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -456,7 +457,7 @@ describe('Search Tasks', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -492,7 +493,7 @@ describe('Search Tasks', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -566,7 +567,7 @@ describe('Search Tasks', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -584,7 +585,7 @@ describe('Search Tasks', () => {
     it('should handle API errors', async () => {
       // arrange
       const mockClient = {
-        get: jest.fn().mockRejectedValue(new Error('API Error')),
+        get: vi.fn().mockRejectedValue(new Error('API Error')),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -616,7 +617,7 @@ describe('Search Tasks', () => {
         },
       ];
       const mockClient = {
-        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
       };
       mockGetTodoistClient.mockReturnValue(mockClient);
 
