@@ -42,7 +42,5 @@ export {
   createTaskCommentSchema,
   createTaskCommentHandler,
 } from './create-task-comment';
-export {
-  updateTaskSchema,
-  updateTaskHandler,
-} from './update-task';
+export { updateTaskSchema, updateTaskHandler } from './update-task';
+export { createTaskSchema, createTaskHandler } from './create-task';

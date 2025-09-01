@@ -32,6 +32,8 @@ import {
   createTaskCommentHandler,
   updateTaskSchema,
   updateTaskHandler,
+  createTaskSchema,
+  createTaskHandler,
 } from './tools';
 
 // Load environment variables
@@ -61,6 +63,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       createProjectLabelSchema,
       createTaskCommentSchema,
       updateTaskSchema,
+      createTaskSchema,
     ],
   };
 });
@@ -123,6 +126,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             priority?: number;
             due_date?: string;
             project_id?: string;
+          }
+        );
+
+      case 'create_task':
+        return await createTaskHandler(
+          args as {
+            title: string;
+            description?: string;
+            project_id?: string;
+            labels?: string[];
+            priority?: number;
+            due_date?: string;
           }
         );
 
