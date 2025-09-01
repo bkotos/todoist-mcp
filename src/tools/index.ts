@@ -45,3 +45,7 @@ export {
 export { updateTaskSchema, updateTaskHandler } from './update-task';
 export { createTaskSchema, createTaskHandler } from './create-task';
 export { moveTaskSchema, moveTaskHandler } from './move-task';
+export {
+  getContextLabelsSchema,
+  getContextLabelsHandler,
+} from './get-context-labels';

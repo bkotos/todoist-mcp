@@ -36,6 +36,8 @@ import {
   createTaskHandler,
   moveTaskSchema,
   moveTaskHandler,
+  getContextLabelsSchema,
+  getContextLabelsHandler,
 } from './tools';
 import { join } from 'path';
 import { dirname } from 'path';
@@ -87,6 +89,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       updateTaskSchema,
       createTaskSchema,
       moveTaskSchema,
+      getContextLabelsSchema,
     ],
   };
 });
@@ -170,6 +173,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             project_id: string;
           }
         );
+
+      case 'get_context_labels':
+        return await getContextLabelsHandler();
 
       default:
         throw new Error(`Unknown tool: ${name}`);
