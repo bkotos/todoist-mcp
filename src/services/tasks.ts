@@ -143,5 +143,18 @@ export async function getTasksWithLabel(label: string): Promise<TasksResponse> {
   }
 }
 
+// Get tasks from Areas of focus project function - returns structured data for Areas of focus tasks
+export async function getAreasOfFocus(): Promise<TasksResponse> {
+  try {
+    return await fetchTasksByFilter('##Areas of focus');
+  } catch (error) {
+    throw new Error(
+      `Failed to get tasks from Areas of focus project: ${getErrorMessage(
+        error
+      )}`
+    );
+  }
+}
+
 // Export types for testing
 export type { TodoistTask, TasksResponse };

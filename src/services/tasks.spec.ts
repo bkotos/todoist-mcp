@@ -7,6 +7,7 @@ import {
   listNextActions,
   getTaskById,
   getTasksWithLabel,
+  getAreasOfFocus,
 } from './tasks';
 import * as taskCache from './task-cache';
 import fs from 'fs';
@@ -562,6 +563,107 @@ describe('getTasksWithLabel', () => {
     const expectedFilter = '@urgent & !##Brian projects & !##Projects';
     expect(mockClient.get).toHaveBeenCalledWith(
       `/tasks?filter=${encodeURIComponent(expectedFilter)}`
+    );
+  });
+});
+
+describe('getAreasOfFocus', () => {
+  it('should return tasks from Areas of focus project', async () => {
+    // arrange
+    const mockTasks = [
+      {
+        id: '1',
+        project_id: '123',
+        content: 'Review quarterly goals',
+        description: 'Strategic planning task',
+        is_completed: false,
+        labels: ['focus'],
+        priority: 1,
+        due: {
+          date: '2024-01-15',
+          string: 'Jan 15',
+          lang: 'en',
+          is_recurring: false,
+        },
+        url: 'https://todoist.com/task/1',
+        comment_count: 0,
+        created_at: '2024-01-01T00:00:00Z',
+        updated_at: '2024-01-01T00:00:00Z',
+      },
+      {
+        id: '2',
+        project_id: '123',
+        content: 'Plan strategic initiatives',
+        description: 'Long-term planning',
+        is_completed: false,
+        labels: ['planning'],
+        priority: 2,
+        due: {
+          date: '2024-01-20',
+          string: 'Jan 20',
+          lang: 'en',
+          is_recurring: false,
+        },
+        url: 'https://todoist.com/task/2',
+        comment_count: 1,
+        created_at: '2024-01-01T00:00:00Z',
+        updated_at: '2024-01-01T00:00:00Z',
+      },
+    ];
+    const mockClient = {
+      get: vi.fn().mockResolvedValue({ data: mockTasks }),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const result = await getAreasOfFocus();
+
+    // assert
+    expect(result.tasks).toHaveLength(2);
+    expect(result.tasks[0].id).toBe(1);
+    expect(result.tasks[0].content).toBe('Review quarterly goals');
+    expect(result.tasks[1].id).toBe(2);
+    expect(result.tasks[1].content).toBe('Plan strategic initiatives');
+    expect(result.total_count).toBe(2);
+    expect(mockClient.get).toHaveBeenCalledWith(
+      `/tasks?filter=${encodeURIComponent('##Areas of focus')}`
+    );
+  });
+
+  it('should handle empty response', async () => {
+    // arrange
+    const mockClient = {
+      get: vi.fn().mockResolvedValue({ data: [] }),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const result = await getAreasOfFocus();
+
+    // assert
+    expect(result.tasks).toHaveLength(0);
+    expect(result.total_count).toBe(0);
+    expect(mockClient.get).toHaveBeenCalledWith(
+      `/tasks?filter=${encodeURIComponent('##Areas of focus')}`
+    );
+  });
+
+  it('should handle API errors', async () => {
+    // arrange
+    const mockClient = {
+      get: vi.fn().mockRejectedValue(new Error('API Error')),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const promise = getAreasOfFocus();
+
+    // assert
+    await expect(promise).rejects.toThrow(
+      'Failed to get tasks from Areas of focus project: API Error'
+    );
+    expect(mockClient.get).toHaveBeenCalledWith(
+      `/tasks?filter=${encodeURIComponent('##Areas of focus')}`
     );
   });
 });

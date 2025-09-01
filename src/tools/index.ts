@@ -95,3 +95,7 @@ export {
   getRecentMediaSchema,
   getRecentMediaHandler,
 } from './get-recent-media';
+export {
+  getAreasOfFocusSchema,
+  getAreasOfFocusHandler,
+} from './get-areas-of-focus';
