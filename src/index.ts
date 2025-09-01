@@ -38,8 +38,21 @@ import {
   moveTaskHandler,
 } from './tools';
 
-// Load environment variables
-config();
+// Load environment variables from .env file
+config({ path: '.env' });
+
+// Validate required environment variables
+const requiredEnvVars = ['TODOIST_API_TOKEN'];
+const missingVars = requiredEnvVars.filter((varName) => !process.env[varName]);
+
+if (missingVars.length > 0) {
+  console.error(
+    'Missing required environment variables:',
+    missingVars.join(', ')
+  );
+  console.error('Please create a .env file with the required variables.');
+  process.exit(1);
+}
 
 const server = new Server({
   name: 'todoist-mcp',
