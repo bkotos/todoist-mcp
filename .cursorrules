@@ -95,7 +95,7 @@ describe('newTool', () => {
     const result = await newTool();
 
     // assert
-    expect(result).toContain('expected output');
+    expect(result).toEqual(mockData);
     expect(mockClient.get).toHaveBeenCalledWith('/endpoint');
   });
 
@@ -120,12 +120,12 @@ describe('newTool', () => {
 Add to `src/services/todoist.ts`:
 
 ```typescript
-export async function newTool(): Promise<string> {
+export async function newTool(): Promise<ResponseType[]> {
   const client = getTodoistClient();
 
   try {
     const response = await client.get<ResponseType[]>('/endpoint');
-    return formatResponse(response.data);
+    return response.data;
   } catch (error) {
     throw new Error(`Failed to newTool: ${getErrorMessage(error)}`);
   }
@@ -193,6 +193,43 @@ expect(mockClient.get).toHaveBeenCalledWith(
 
 // This makes tests more readable and maintainable
 ```
+
+### JSON Return Pattern
+
+**Services should return raw JSON data, not formatted strings:**
+
+```typescript
+// ✅ Good - return raw data
+export async function getChoresDueToday(): Promise<TodoistTask[]> {
+  const client = getTodoistClient();
+
+  try {
+    const filter = '(today | overdue) & ##Chores';
+    const response = await client.get<TodoistTask[]>(
+      `/tasks?filter=${encodeURIComponent(filter)}`
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      `Failed to get chores due today: ${getErrorMessage(error)}`
+    );
+  }
+}
+
+// ❌ Bad - return formatted strings
+export async function getChoresDueToday(): Promise<string> {
+  // ... implementation
+  return `Found ${tasks.length} chore(s):\n\n${formattedTasks}`;
+}
+```
+
+**Benefits:**
+
+- Easier to test and assert
+- More flexible for consumers
+- Follows separation of concerns
+- Formatting can be handled at the presentation layer
+- Allows the LLM using the MCP server to use raw JSON and format it how it likes, rather than us guessing on how the data should be presented in the LLM's response to the user
 
 ### Formatting Pattern
 
