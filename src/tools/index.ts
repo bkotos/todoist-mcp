@@ -75,3 +75,7 @@ export {
   getTasksDueTomorrowSchema,
   getTasksDueTomorrowHandler,
 } from './get-tasks-due-tomorrow';
+export {
+  getTasksDueThisWeekSchema,
+  getTasksDueThisWeekHandler,
+} from './get-tasks-due-this-week';
