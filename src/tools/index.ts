@@ -99,3 +99,7 @@ export {
   getAreasOfFocusSchema,
   getAreasOfFocusHandler,
 } from './get-areas-of-focus';
+export {
+  getShoppingListSchema,
+  getShoppingListHandler,
+} from './get-shopping-list';

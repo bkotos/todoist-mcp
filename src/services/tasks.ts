@@ -156,5 +156,18 @@ export async function getAreasOfFocus(): Promise<TasksResponse> {
   }
 }
 
+// Get tasks from Shopping list project function - returns structured data for Shopping list tasks
+export async function getShoppingList(): Promise<TasksResponse> {
+  try {
+    return await fetchTasksByFilter('##Shopping list');
+  } catch (error) {
+    throw new Error(
+      `Failed to get tasks from Shopping list project: ${getErrorMessage(
+        error
+      )}`
+    );
+  }
+}
+
 // Export types for testing
 export type { TodoistTask, TasksResponse };

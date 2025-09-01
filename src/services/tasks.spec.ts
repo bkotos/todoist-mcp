@@ -8,6 +8,7 @@ import {
   getTaskById,
   getTasksWithLabel,
   getAreasOfFocus,
+  getShoppingList,
 } from './tasks';
 import * as taskCache from './task-cache';
 import fs from 'fs';
@@ -664,6 +665,107 @@ describe('getAreasOfFocus', () => {
     );
     expect(mockClient.get).toHaveBeenCalledWith(
       `/tasks?filter=${encodeURIComponent('##Areas of focus')}`
+    );
+  });
+});
+
+describe('getShoppingList', () => {
+  it('should return tasks from Shopping list project', async () => {
+    // arrange
+    const mockTasks = [
+      {
+        id: '1',
+        project_id: '456',
+        content: 'Milk',
+        description: 'Organic whole milk',
+        is_completed: false,
+        labels: ['dairy'],
+        priority: 1,
+        due: {
+          date: '2024-01-15',
+          string: 'Jan 15',
+          lang: 'en',
+          is_recurring: false,
+        },
+        url: 'https://todoist.com/task/1',
+        comment_count: 0,
+        created_at: '2024-01-01T00:00:00Z',
+        updated_at: '2024-01-01T00:00:00Z',
+      },
+      {
+        id: '2',
+        project_id: '456',
+        content: 'Bread',
+        description: 'Whole grain bread',
+        is_completed: false,
+        labels: ['bakery'],
+        priority: 2,
+        due: {
+          date: '2024-01-15',
+          string: 'Jan 15',
+          lang: 'en',
+          is_recurring: false,
+        },
+        url: 'https://todoist.com/task/2',
+        comment_count: 0,
+        created_at: '2024-01-01T00:00:00Z',
+        updated_at: '2024-01-01T00:00:00Z',
+      },
+    ];
+    const mockClient = {
+      get: vi.fn().mockResolvedValue({ data: mockTasks }),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const result = await getShoppingList();
+
+    // assert
+    expect(result.tasks).toHaveLength(2);
+    expect(result.tasks[0].id).toBe(1);
+    expect(result.tasks[0].content).toBe('Milk');
+    expect(result.tasks[1].id).toBe(2);
+    expect(result.tasks[1].content).toBe('Bread');
+    expect(result.total_count).toBe(2);
+    expect(mockClient.get).toHaveBeenCalledWith(
+      `/tasks?filter=${encodeURIComponent('##Shopping list')}`
+    );
+  });
+
+  it('should handle empty response', async () => {
+    // arrange
+    const mockClient = {
+      get: vi.fn().mockResolvedValue({ data: [] }),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const result = await getShoppingList();
+
+    // assert
+    expect(result.tasks).toHaveLength(0);
+    expect(result.total_count).toBe(0);
+    expect(mockClient.get).toHaveBeenCalledWith(
+      `/tasks?filter=${encodeURIComponent('##Shopping list')}`
+    );
+  });
+
+  it('should handle API errors', async () => {
+    // arrange
+    const mockClient = {
+      get: vi.fn().mockRejectedValue(new Error('API Error')),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const promise = getShoppingList();
+
+    // assert
+    await expect(promise).rejects.toThrow(
+      'Failed to get tasks from Shopping list project: API Error'
+    );
+    expect(mockClient.get).toHaveBeenCalledWith(
+      `/tasks?filter=${encodeURIComponent('##Shopping list')}`
     );
   });
 });

@@ -64,6 +64,8 @@ import {
   getRecentMediaHandler,
   getAreasOfFocusSchema,
   getAreasOfFocusHandler,
+  getShoppingListSchema,
+  getShoppingListHandler,
 } from './tools';
 import { join } from 'path';
 import { dirname } from 'path';
@@ -129,6 +131,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       getWaitingTasksSchema,
       getRecentMediaSchema,
       getAreasOfFocusSchema,
+      getShoppingListSchema,
     ],
   };
 });
@@ -258,6 +261,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'get_areas_of_focus':
         return await getAreasOfFocusHandler();
+
+      case 'get_shopping_list':
+        return await getShoppingListHandler();
 
       default:
         throw new Error(`Unknown tool: ${name}`);
