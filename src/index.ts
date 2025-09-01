@@ -60,6 +60,8 @@ import {
   getGtdProjectsHandler,
   getWaitingTasksSchema,
   getWaitingTasksHandler,
+  getRecentMediaSchema,
+  getRecentMediaHandler,
 } from './tools';
 import { join } from 'path';
 import { dirname } from 'path';
@@ -123,6 +125,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       getTicklerTasksSchema,
       getGtdProjectsSchema,
       getWaitingTasksSchema,
+      getRecentMediaSchema,
     ],
   };
 });
@@ -246,6 +249,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'get_waiting_tasks':
         return await getWaitingTasksHandler();
+
+      case 'get_recent_media':
+        return await getRecentMediaHandler();
 
       default:
         throw new Error(`Unknown tool: ${name}`);

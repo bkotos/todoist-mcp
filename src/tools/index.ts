@@ -91,3 +91,7 @@ export {
   getWaitingTasksSchema,
   getWaitingTasksHandler,
 } from './get-waiting-tasks';
+export {
+  getRecentMediaSchema,
+  getRecentMediaHandler,
+} from './get-recent-media';
