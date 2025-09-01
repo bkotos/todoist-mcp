@@ -426,4 +426,204 @@ describe('Search Tasks', () => {
       );
     });
   });
+
+  describe('searchTasksUsingOr', () => {
+    it('should search tasks with multiple terms using OR operator when API call succeeds', async () => {
+      // arrange
+      const mockTasks = [
+        {
+          id: '1',
+          project_id: '123',
+          content: 'Meeting with team about project',
+          description: 'Discuss project updates',
+          is_completed: false,
+          labels: ['work', 'important'],
+          priority: 1,
+          due: {
+            date: '2024-01-01',
+            string: 'Jan 1',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/task/1',
+          comment_count: 2,
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await searchTasksUsingOr(['meeting', 'team']);
+
+      // assert
+      expect(result.tasks).toHaveLength(1);
+      expect(result.tasks[0].id).toBe(1);
+      expect(result.tasks[0].content).toBe('Meeting with team about project');
+      expect(result.total_count).toBe(1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=' + encodeURIComponent('search:meeting | search:team')
+      );
+    });
+
+    it('should search tasks with three terms using OR operator', async () => {
+      // arrange
+      const mockTasks = [
+        {
+          id: '1',
+          project_id: '123',
+          content: 'Weekly report due Friday',
+          description: 'Complete weekly report',
+          is_completed: false,
+          labels: ['work', 'urgent'],
+          priority: 1,
+          due: null,
+          url: 'https://todoist.com/task/1',
+          comment_count: 0,
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await searchTasksUsingOr(['weekly', 'report', 'friday']);
+
+      // assert
+      expect(result.tasks).toHaveLength(1);
+      expect(result.tasks[0].content).toBe('Weekly report due Friday');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=' +
+          encodeURIComponent('search:weekly | search:report | search:friday')
+      );
+    });
+
+    it('should handle empty array of search terms', async () => {
+      // arrange
+      const emptyTerms: string[] = [];
+
+      // act
+      const promise = searchTasksUsingOr(emptyTerms);
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'At least one search term is required'
+      );
+    });
+
+    it('should handle array with empty strings', async () => {
+      // arrange
+      const termsWithEmpty = ['meeting', '', 'team'];
+
+      // act
+      const promise = searchTasksUsingOr(termsWithEmpty);
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'All search terms must be non-empty'
+      );
+    });
+
+    it('should handle array with whitespace-only strings', async () => {
+      // arrange
+      const termsWithWhitespace = ['meeting', '   ', 'team'];
+
+      // act
+      const promise = searchTasksUsingOr(termsWithWhitespace);
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'All search terms must be non-empty'
+      );
+    });
+
+    it('should handle single search term', async () => {
+      // arrange
+      const mockTasks = [
+        {
+          id: '1',
+          project_id: '123',
+          content: 'Single term task',
+          description: 'Test description',
+          is_completed: false,
+          labels: [],
+          priority: 1,
+          due: null,
+          url: 'https://todoist.com/task/1',
+          comment_count: 0,
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await searchTasksUsingOr(['single']);
+
+      // assert
+      expect(result.tasks).toHaveLength(1);
+      expect(result.tasks[0].content).toBe('Single term task');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/tasks?filter=' + encodeURIComponent('search:single')
+      );
+    });
+
+    it('should handle API errors', async () => {
+      // arrange
+      const mockClient = {
+        get: jest.fn().mockRejectedValue(new Error('API Error')),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const promise = searchTasksUsingOr(['meeting', 'team']);
+
+      // assert
+      await expect(promise).rejects.toThrow(
+        'Failed to or search tasks: API Error'
+      );
+    });
+
+    it('should store task names in cache for found tasks', async () => {
+      // arrange
+      const mockTasks = [
+        {
+          id: '1',
+          project_id: '123',
+          content: 'Cached or search task',
+          description: 'Test description',
+          is_completed: false,
+          labels: [],
+          priority: 1,
+          due: null,
+          url: 'https://todoist.com/task/1',
+          comment_count: 0,
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+      const mockClient = {
+        get: jest.fn().mockResolvedValue({ data: mockTasks }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      await searchTasksUsingOr(['cached', 'search']);
+
+      // assert
+      expect(mockTaskCache.setTaskName).toHaveBeenCalledWith(
+        '1',
+        'Cached or search task'
+      );
+    });
+  });
 });
