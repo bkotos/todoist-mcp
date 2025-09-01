@@ -44,3 +44,6 @@ coverage/
 # TypeScript cache
 *.tsbuildinfo
 
+# API test files
+todoist-api-test.http
+

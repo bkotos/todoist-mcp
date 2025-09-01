@@ -1,2 +1,5 @@
 ### Debug Server Test
 GET http://localhost:3001/debug
+
+### Update Task Test
+GET http://localhost:3001/debug/update-task
