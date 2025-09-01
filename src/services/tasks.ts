@@ -130,5 +130,18 @@ export async function getTaskById(taskId: string): Promise<TodoistTask> {
   }
 }
 
+// Get tasks with specific label function - returns tasks with label excluding Brian projects and Projects
+export async function getTasksWithLabel(label: string): Promise<TasksResponse> {
+  try {
+    return await fetchTasksByFilter(
+      `@${label} & !##Brian projects & !##Projects`
+    );
+  } catch (error) {
+    throw new Error(
+      `Failed to get tasks with label: ${getErrorMessage(error)}`
+    );
+  }
+}
+
 // Export types for testing
 export type { TodoistTask, TasksResponse };

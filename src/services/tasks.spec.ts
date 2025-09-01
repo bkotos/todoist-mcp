@@ -6,6 +6,7 @@ import {
   listBeckyInboxPerBrianTasks,
   listNextActions,
   getTaskById,
+  getTasksWithLabel,
 } from './tasks';
 import * as taskCache from './task-cache';
 import fs from 'fs';
@@ -477,5 +478,89 @@ describe('getTaskById', () => {
       'Failed to get task by id: Task not found'
     );
     expect(mockClient.get).toHaveBeenCalledWith('/tasks/999');
+  });
+});
+
+describe('getTasksWithLabel', () => {
+  it('should return tasks with specific label', async () => {
+    // arrange
+    const mockTasks = [
+      {
+        id: '1',
+        project_id: '123',
+        content: 'Test task with label',
+        description: 'Test description',
+        is_completed: false,
+        labels: ['urgent'],
+        priority: 1,
+        due: {
+          date: '2024-01-01',
+          string: 'Jan 1',
+          lang: 'en',
+          is_recurring: false,
+        },
+        url: 'https://todoist.com/task/1',
+        comment_count: 2,
+        created_at: '2024-01-01T00:00:00Z',
+        updated_at: '2024-01-01T00:00:00Z',
+      },
+    ];
+    const mockClient = {
+      get: jest.fn().mockResolvedValue({ data: mockTasks }),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const result = await getTasksWithLabel('urgent');
+
+    // assert
+    expect(result.tasks).toHaveLength(1);
+    expect(result.tasks[0].id).toBe(1);
+    expect(result.tasks[0].content).toBe('Test task with label');
+    expect(result.tasks[0].labels).toContain('urgent');
+    expect(result.total_count).toBe(1);
+    const expectedFilter = '@urgent & !##Brian projects & !##Projects';
+    expect(mockClient.get).toHaveBeenCalledWith(
+      `/tasks?filter=${encodeURIComponent(expectedFilter)}`
+    );
+  });
+
+  it('should handle empty response', async () => {
+    // arrange
+    const mockClient = {
+      get: jest.fn().mockResolvedValue({ data: [] }),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const result = await getTasksWithLabel('urgent');
+
+    // assert
+    expect(result.tasks).toHaveLength(0);
+    expect(result.total_count).toBe(0);
+    const expectedFilter = '@urgent & !##Brian projects & !##Projects';
+    expect(mockClient.get).toHaveBeenCalledWith(
+      `/tasks?filter=${encodeURIComponent(expectedFilter)}`
+    );
+  });
+
+  it('should handle API errors', async () => {
+    // arrange
+    const mockClient = {
+      get: jest.fn().mockRejectedValue(new Error('API Error')),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const promise = getTasksWithLabel('urgent');
+
+    // assert
+    await expect(promise).rejects.toThrow(
+      'Failed to get tasks with label: API Error'
+    );
+    const expectedFilter = '@urgent & !##Brian projects & !##Projects';
+    expect(mockClient.get).toHaveBeenCalledWith(
+      `/tasks?filter=${encodeURIComponent(expectedFilter)}`
+    );
   });
 });
