@@ -83,3 +83,7 @@ export {
   getTicklerTasksSchema,
   getTicklerTasksHandler,
 } from './get-tickler-tasks';
+export {
+  getGtdProjectsSchema,
+  getGtdProjectsHandler,
+} from './get-gtd-projects';

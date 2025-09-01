@@ -56,6 +56,8 @@ import {
   getTasksDueThisWeekHandler,
   getTicklerTasksSchema,
   getTicklerTasksHandler,
+  getGtdProjectsSchema,
+  getGtdProjectsHandler,
 } from './tools';
 import { join } from 'path';
 import { dirname } from 'path';
@@ -117,6 +119,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       getTasksDueTomorrowSchema,
       getTasksDueThisWeekSchema,
       getTicklerTasksSchema,
+      getGtdProjectsSchema,
     ],
   };
 });
@@ -234,6 +237,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'get_tickler_tasks':
         return await getTicklerTasksHandler();
+
+      case 'get_gtd_projects':
+        return await getGtdProjectsHandler();
 
       default:
         throw new Error(`Unknown tool: ${name}`);
