@@ -79,3 +79,7 @@ export {
   getTasksDueThisWeekSchema,
   getTasksDueThisWeekHandler,
 } from './get-tasks-due-this-week';
+export {
+  getTicklerTasksSchema,
+  getTicklerTasksHandler,
+} from './get-tickler-tasks';
