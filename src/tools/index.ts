@@ -53,3 +53,4 @@ export {
   getTasksWithLabelSchema,
   getTasksWithLabelHandler,
 } from './get-tasks-with-label';
+export { completeTaskSchema, completeTaskHandler } from './complete-task';
