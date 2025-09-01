@@ -37,9 +37,16 @@ import {
   moveTaskSchema,
   moveTaskHandler,
 } from './tools';
+import { join } from 'path';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-// Load environment variables from .env file
-config({ path: '.env' });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const envPath = join(__dirname, '..', '.env');
+
+console.error('Loading .env file from:', envPath);
+config({ path: envPath });
 
 // Validate required environment variables
 const requiredEnvVars = ['TODOIST_API_TOKEN'];
