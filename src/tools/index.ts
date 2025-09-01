@@ -87,3 +87,7 @@ export {
   getGtdProjectsSchema,
   getGtdProjectsHandler,
 } from './get-gtd-projects';
+export {
+  getWaitingTasksSchema,
+  getWaitingTasksHandler,
+} from './get-waiting-tasks';

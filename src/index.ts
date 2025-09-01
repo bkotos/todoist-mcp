@@ -58,6 +58,8 @@ import {
   getTicklerTasksHandler,
   getGtdProjectsSchema,
   getGtdProjectsHandler,
+  getWaitingTasksSchema,
+  getWaitingTasksHandler,
 } from './tools';
 import { join } from 'path';
 import { dirname } from 'path';
@@ -120,6 +122,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       getTasksDueThisWeekSchema,
       getTicklerTasksSchema,
       getGtdProjectsSchema,
+      getWaitingTasksSchema,
     ],
   };
 });
@@ -240,6 +243,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'get_gtd_projects':
         return await getGtdProjectsHandler();
+
+      case 'get_waiting_tasks':
+        return await getWaitingTasksHandler();
 
       default:
         throw new Error(`Unknown tool: ${name}`);
