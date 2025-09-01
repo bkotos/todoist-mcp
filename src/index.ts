@@ -34,6 +34,8 @@ import {
   updateTaskHandler,
   createTaskSchema,
   createTaskHandler,
+  moveTaskSchema,
+  moveTaskHandler,
 } from './tools';
 
 // Load environment variables
@@ -64,6 +66,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       createTaskCommentSchema,
       updateTaskSchema,
       createTaskSchema,
+      moveTaskSchema,
     ],
   };
 });
@@ -138,6 +141,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             labels?: string[];
             priority?: number;
             due_date?: string;
+          }
+        );
+
+      case 'move_task':
+        return await moveTaskHandler(
+          args as {
+            task_id: string;
+            project_id: string;
           }
         );
 
