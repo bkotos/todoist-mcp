@@ -1,4 +1,10 @@
 import { listProjects, ProjectsResponse } from './projects';
+import {
+  isBrianOnlyProject,
+  isBrianSharedProject,
+  isBeckySharedProject,
+  isInboxProject,
+} from '../utils';
 
 // Get error message
 function getErrorMessage(error: any): string {
@@ -26,28 +32,7 @@ export async function getBrianOnlyProjects(): Promise<ProjectsResponse> {
   try {
     const allProjects = await listProjects();
 
-    const filteredProjects = allProjects.projects.filter((project) => {
-      switch (project.name) {
-        case 'Areas of focus':
-        case 'Inbox':
-        case 'Media':
-        case 'Musings':
-        case 'Next actions':
-        case 'Contextual':
-        case 'Projects':
-        case 'Calendar':
-        case 'Tickler':
-        case 'Someday':
-        case 'Waiting':
-        case 'Chores':
-        case 'Graveyard':
-        case 'Graveyard - read':
-        case 'Graveyard - watch':
-          return true;
-        default:
-          return false;
-      }
-    });
+    const filteredProjects = allProjects.projects.filter(isBrianOnlyProject);
 
     return {
       projects: filteredProjects,
@@ -65,20 +50,7 @@ export async function getBrianSharedProjects(): Promise<ProjectsResponse> {
   try {
     const allProjects = await listProjects();
 
-    const filteredProjects = allProjects.projects.filter((project) => {
-      switch (project.name) {
-        case 'Brian inbox - per Becky':
-        case 'Brian acknowledged':
-        case 'Brian projects':
-        case 'Brian waiting':
-        case 'Brian someday':
-        case 'Brian tickler':
-        case 'Brian contextual':
-          return true;
-        default:
-          return false;
-      }
-    });
+    const filteredProjects = allProjects.projects.filter(isBrianSharedProject);
 
     return {
       projects: filteredProjects,
@@ -96,17 +68,7 @@ export async function getBeckySharedProjects(): Promise<ProjectsResponse> {
   try {
     const allProjects = await listProjects();
 
-    const filteredProjects = allProjects.projects.filter((project) => {
-      switch (project.name) {
-        case 'Becky someday':
-        case 'Becky inbox - per Brian':
-        case 'Becky acknowledged':
-        case 'Becky In Progress':
-          return true;
-        default:
-          return false;
-      }
-    });
+    const filteredProjects = allProjects.projects.filter(isBeckySharedProject);
 
     return {
       projects: filteredProjects,
@@ -124,16 +86,7 @@ export async function getInboxProjects(): Promise<ProjectsResponse> {
   try {
     const allProjects = await listProjects();
 
-    const filteredProjects = allProjects.projects.filter((project) => {
-      switch (project.name) {
-        case 'Inbox':
-        case 'Brian inbox - per Becky':
-        case 'Becky inbox - per Brian':
-          return true;
-        default:
-          return false;
-      }
-    });
+    const filteredProjects = allProjects.projects.filter(isInboxProject);
 
     return {
       projects: filteredProjects,
