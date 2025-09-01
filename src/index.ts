@@ -42,6 +42,8 @@ import {
   getTasksWithLabelHandler,
   completeTaskSchema,
   completeTaskHandler,
+  searchTasksSchema,
+  searchTasksHandler,
 } from './tools';
 import { join } from 'path';
 import { dirname } from 'path';
@@ -96,6 +98,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       getContextLabelsSchema,
       getTasksWithLabelSchema,
       completeTaskSchema,
+      searchTasksSchema,
     ],
   };
 });
@@ -188,6 +191,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'complete_task':
         return await completeTaskHandler(args as { task_id: string });
+
+      case 'search_tasks':
+        return await searchTasksHandler(args as { query: string });
 
       default:
         throw new Error(`Unknown tool: ${name}`);
