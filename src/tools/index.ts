@@ -63,3 +63,7 @@ export {
   searchTasksUsingOrSchema,
   searchTasksUsingOrHandler,
 } from './search-tasks-using-or';
+export {
+  getTasksDueTodaySchema,
+  getTasksDueTodayHandler,
+} from './get-tasks-due-today';
