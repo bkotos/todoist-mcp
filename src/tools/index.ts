@@ -49,3 +49,7 @@ export {
   getContextLabelsSchema,
   getContextLabelsHandler,
 } from './get-context-labels';
+export {
+  getTasksWithLabelSchema,
+  getTasksWithLabelHandler,
+} from './get-tasks-with-label';
