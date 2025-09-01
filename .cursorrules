@@ -13,7 +13,7 @@
 
 - Use functional programming approach with pure functions
 - Separate concerns: client logic in `client.ts`, business logic in `todoist.ts`
-- Use Jest module mocking for testing (not dependency injection)
+- Use Vitest module mocking for testing (not dependency injection)
 - Keep functions small and focused on single responsibility
 
 ## Code Style
@@ -28,7 +28,17 @@
 
 - Write tests first (TDD approach)
 - Use descriptive test names that explain the behavior
-- Mock modules at the top of test files with `jest.mock('./module')`
+- Mock modules at the top of test files with `vi.mock('./module')`
+- **Import Vitest types only, not runtime functions:**
+
+  ```typescript
+  // ✅ Good - import types only
+  import type { MockedFunction, Mocked } from 'vitest';
+
+  // ❌ Bad - import runtime functions
+  import { vi, describe, it, expect } from 'vitest';
+  ```
+
 - Test both success and error cases
 - Keep tests focused and isolated
 - **Tests are sufficient validation - do NOT start/run the project manually**
@@ -45,7 +55,7 @@
 it('should do something', async () => {
   // arrange
   const mockClient = {
-    get: jest.fn().mockResolvedValue({ data: mockData }),
+    get: vi.fn().mockResolvedValue({ data: mockData }),
   };
   mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -77,7 +87,7 @@ describe('newTool', () => {
   it('should handle success case', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn().mockResolvedValue({ data: mockData }),
+      get: vi.fn().mockResolvedValue({ data: mockData }),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -92,7 +102,7 @@ describe('newTool', () => {
   it('should handle error case', async () => {
     // arrange
     const mockClient = {
-      get: jest.fn().mockRejectedValue(new Error('API Error')),
+      get: vi.fn().mockRejectedValue(new Error('API Error')),
     };
     mockGetTodoistClient.mockReturnValue(mockClient);
 
@@ -166,6 +176,22 @@ function getErrorMessage(error: any): string {
   }
   return error instanceof Error ? error.message : 'Unknown error';
 }
+```
+
+### URL Encoding Pattern
+
+**For complex query strings in tests, use constants and `encodeURIComponent`:**
+
+```typescript
+// Define complex filters as constants for readability
+const COMPLEX_FILTER = '(today | overdue) & !##Tickler & !##Someday';
+
+// In tests, use encodeURIComponent for URL assertions
+expect(mockClient.get).toHaveBeenCalledWith(
+  `/tasks?filter=${encodeURIComponent(COMPLEX_FILTER)}`
+);
+
+// This makes tests more readable and maintainable
 ```
 
 ### Formatting Pattern
