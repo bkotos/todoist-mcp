@@ -10,11 +10,6 @@ vi.mock('./comments');
 vi.mock('./move-task');
 vi.mock('./projects');
 
-// Mock Date to return a fixed date
-const mockDate = new Date('2025-09-01T10:00:00Z');
-vi.useFakeTimers();
-vi.setSystemTime(mockDate);
-
 const mockUpdateTask = updateTask as MockedFunction<typeof updateTask>;
 const mockCreateTaskComment = createTaskComment as MockedFunction<
   typeof createTaskComment
@@ -52,14 +47,14 @@ describe('completeBeckyTask', () => {
       mockMoveTask.mockResolvedValue(undefined);
     });
 
-    it('should update the task due date to today', async () => {
+    it('should update the task due string to today', async () => {
       // act
       await completeBeckyTask(mockTaskId);
 
       // assert
       expect(mockUpdateTask).toHaveBeenCalledWith({
         taskId: mockTaskId,
-        dueDate: '2025-09-01',
+        dueString: 'today',
       });
     });
 
@@ -207,10 +202,5 @@ This was an automated comment from Claude.`;
     await expect(promise).rejects.toThrow(
       'Failed to complete Becky task: Move API Error'
     );
-  });
-
-  // Cleanup fake timers
-  afterAll(() => {
-    vi.useRealTimers();
   });
 });

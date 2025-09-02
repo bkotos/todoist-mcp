@@ -24,11 +24,6 @@ async function findProjectByName(projectName: string): Promise<string> {
   return project.id.toString();
 }
 
-// Helper function to get today's date in YYYY-MM-DD format
-function getTodayDate(): string {
-  return new Date().toISOString().split('T')[0];
-}
-
 // Helper function to build the comment content
 function buildCommentContent(): string {
   return `I finished this task. If it looks good to you, please mark as complete. Otherwise, put back in my inbox.
@@ -44,7 +39,6 @@ This was an automated comment from Claude.`;
  */
 export async function completeBeckyTask(taskId: string): Promise<void> {
   try {
-    const today = getTodayDate();
     const commentContent = buildCommentContent();
 
     // Find the Becky inbox project
@@ -52,10 +46,10 @@ export async function completeBeckyTask(taskId: string): Promise<void> {
       'Becky inbox - per Brian'
     );
 
-    // Update the task due date to today
+    // Update the task due string to today
     await updateTask({
       taskId,
-      dueDate: today,
+      dueString: 'today',
     });
 
     // Add the completion comment
