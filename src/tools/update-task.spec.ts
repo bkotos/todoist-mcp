@@ -35,7 +35,7 @@ describe('updateTask Tool', () => {
       expect(properties.description).toBeDefined();
       expect(properties.labels).toBeDefined();
       expect(properties.priority).toBeDefined();
-      expect(properties.due_date).toBeDefined();
+      expect(properties.due_string).toBeDefined();
     });
 
     it('should have correct property types', () => {
@@ -48,7 +48,7 @@ describe('updateTask Tool', () => {
       expect(properties.description.type).toBe('string');
       expect(properties.labels.type).toBe('array');
       expect(properties.priority.type).toBe('number');
-      expect(properties.due_date.type).toBe('string');
+      expect(properties.due_string.type).toBe('string');
     });
   });
 
@@ -137,27 +137,6 @@ describe('updateTask Tool', () => {
       });
     });
 
-    it('should update task due date successfully', async () => {
-      // arrange
-      const args = {
-        task_id: '123',
-        due_date: '2024-01-15',
-      };
-      mockUpdateTask.mockResolvedValue('Task updated successfully');
-
-      // act
-      const result = await updateTaskHandler(args);
-
-      // assert
-      expect(result.content).toHaveLength(1);
-      expect(result.content[0].type).toBe('text');
-      expect(result.content[0].text).toContain('Task updated successfully');
-      expect(mockUpdateTask).toHaveBeenCalledWith({
-        taskId: '123',
-        dueDate: '2024-01-15',
-      });
-    });
-
     it('should update task due string successfully', async () => {
       // arrange
       const args = {
@@ -187,7 +166,6 @@ describe('updateTask Tool', () => {
         description: 'Updated description',
         priority: 2,
         labels: ['work'],
-        due_date: '2024-01-15',
         due_string: 'tomorrow',
       };
       mockUpdateTask.mockResolvedValue('Task updated successfully');
@@ -205,7 +183,6 @@ describe('updateTask Tool', () => {
         description: 'Updated description',
         priority: 2,
         labels: ['work'],
-        dueDate: '2024-01-15',
         dueString: 'tomorrow',
       });
     });
@@ -266,7 +243,7 @@ describe('updateTask Tool', () => {
           description: undefined,
           labels: undefined,
           priority: undefined,
-          dueDate: undefined,
+          dueString: undefined,
         })
       );
     });

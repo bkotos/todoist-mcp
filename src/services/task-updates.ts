@@ -9,7 +9,6 @@ export interface UpdateTaskParams {
   description?: string;
   labels?: string[];
   priority?: number;
-  dueDate?: string;
   dueString?: string;
 }
 
@@ -18,7 +17,6 @@ interface TaskUpdatePayload {
   description?: string;
   labels?: string[];
   priority?: number;
-  due_date?: string;
   due_string?: string;
   project_id?: string;
 }
@@ -62,10 +60,6 @@ function buildUpdatePayload(params: UpdateTaskParams): TaskUpdatePayload {
 
   if (params.priority !== undefined) {
     payload.priority = params.priority;
-  }
-
-  if (params.dueDate) {
-    payload.due_date = params.dueDate;
   }
 
   if (params.dueString) {

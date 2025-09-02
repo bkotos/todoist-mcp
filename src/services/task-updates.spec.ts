@@ -113,29 +113,6 @@ describe('updateTask', () => {
     });
   });
 
-  it('should update task due date successfully', async () => {
-    // arrange
-    const mockClient = {
-      get: vi.fn(),
-      post: vi.fn().mockResolvedValue({
-        data: { id: '123', due: { date: '2024-01-15' } },
-      }),
-    };
-    mockGetTodoistClient.mockReturnValue(mockClient);
-
-    // act
-    const result = await updateTask({
-      taskId: '123',
-      dueDate: '2024-01-15',
-    });
-
-    // assert
-    expect(result).toContain('Task updated successfully');
-    expect(mockClient.post).toHaveBeenCalledWith('/tasks/123', {
-      due_date: '2024-01-15',
-    });
-  });
-
   it('should update task due string successfully', async () => {
     // arrange
     const mockClient = {

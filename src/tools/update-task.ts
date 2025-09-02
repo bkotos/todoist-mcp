@@ -3,7 +3,7 @@ import { updateTask } from '../services/task-updates';
 export const updateTaskSchema = {
   name: 'update_task',
   description:
-    'Update a Todoist task with new title, description, labels, priority, or due date. All fields are optional - only provided fields will be updated.',
+    'Update a Todoist task with new title, description, labels, priority, or due string. All fields are optional - only provided fields will be updated.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -30,10 +30,6 @@ export const updateTaskSchema = {
         type: 'number',
         description: 'Priority level (1-4, where 1 is highest priority)',
       },
-      due_date: {
-        type: 'string',
-        description: 'Due date in YYYY-MM-DD format',
-      },
       due_string: {
         type: 'string',
         description:
@@ -50,7 +46,6 @@ export const updateTaskHandler = async (args: {
   description?: string;
   labels?: string[];
   priority?: number;
-  due_date?: string;
   due_string?: string;
 }): Promise<{
   content: Array<{
@@ -59,15 +54,7 @@ export const updateTaskHandler = async (args: {
   }>;
 }> => {
   console.error('Executing update_task...');
-  const {
-    task_id,
-    title,
-    description,
-    labels,
-    priority,
-    due_date,
-    due_string,
-  } = args;
+  const { task_id, title, description, labels, priority, due_string } = args;
 
   if (!task_id) {
     throw new Error('task_id is required');
@@ -93,10 +80,6 @@ export const updateTaskHandler = async (args: {
 
     if (priority !== undefined) {
       serviceParams.priority = priority;
-    }
-
-    if (due_date !== undefined) {
-      serviceParams.dueDate = due_date;
     }
 
     if (due_string !== undefined) {
