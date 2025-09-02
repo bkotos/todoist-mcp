@@ -142,11 +142,14 @@ export async function getTaskById(taskId: string): Promise<TodoistTask> {
 }
 
 // Get tasks with specific label function - returns tasks with label excluding Brian projects and Projects
+// unless label starts with 'context:' in which case project tasks are included
 export async function getTasksWithLabel(label: string): Promise<TasksResponse> {
   try {
-    return await fetchTasksByFilter(
-      `@${label} & !##Brian projects & !##Projects`
-    );
+    const filter = label.startsWith('context:')
+      ? `@${label}`
+      : `@${label} & !##Brian projects & !##Projects`;
+
+    return await fetchTasksByFilter(filter);
   } catch (error) {
     throw new Error(
       `Failed to get tasks with label: ${getErrorMessage(error)}`

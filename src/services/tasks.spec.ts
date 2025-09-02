@@ -647,6 +647,137 @@ describe('getTasksWithLabel', () => {
       `/tasks?filter=${encodeURIComponent(expectedFilter)}`
     );
   });
+
+  describe('context label behavior', () => {
+    it('should use filter without project exclusions when label starts with context:', async () => {
+      // arrange
+      const mockTasks = [
+        {
+          id: '1',
+          project_id: '123',
+          content: 'Project task with context label',
+          description: 'Test description',
+          is_completed: false,
+          labels: ['context:work'],
+          priority: 1,
+          due: {
+            date: '2024-01-01',
+            string: 'Jan 1',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/task/1',
+          comment_count: 2,
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+      const mockClient = {
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await getTasksWithLabel('context:work');
+
+      // assert
+      expect(result.tasks).toHaveLength(1);
+      expect(result.tasks[0].id).toBe(1);
+      expect(result.tasks[0].content).toBe('Project task with context label');
+      expect(result.tasks[0].labels).toContain('context:work');
+      expect(result.total_count).toBe(1);
+      const expectedFilter = '@context:work';
+      expect(mockClient.get).toHaveBeenCalledWith(
+        `/tasks?filter=${encodeURIComponent(expectedFilter)}`
+      );
+    });
+
+    it('should exclude project tasks when label does not start with context:', async () => {
+      // arrange
+      const mockTasks = [
+        {
+          id: '1',
+          project_id: '123',
+          content: 'Regular task with label',
+          description: 'Test description',
+          is_completed: false,
+          labels: ['work'],
+          priority: 1,
+          due: {
+            date: '2024-01-01',
+            string: 'Jan 1',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/task/1',
+          comment_count: 2,
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+      const mockClient = {
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await getTasksWithLabel('work');
+
+      // assert
+      expect(result.tasks).toHaveLength(1);
+      expect(result.tasks[0].id).toBe(1);
+      expect(result.tasks[0].content).toBe('Regular task with label');
+      expect(result.tasks[0].labels).toContain('work');
+      expect(result.total_count).toBe(1);
+      const expectedFilter = '@work & !##Brian projects & !##Projects';
+      expect(mockClient.get).toHaveBeenCalledWith(
+        `/tasks?filter=${encodeURIComponent(expectedFilter)}`
+      );
+    });
+
+    it('should use filter without project exclusions for context labels with special characters', async () => {
+      // arrange
+      const mockTasks = [
+        {
+          id: '1',
+          project_id: '123',
+          content: 'Task with complex context label',
+          description: 'Test description',
+          is_completed: false,
+          labels: ['context:home-office'],
+          priority: 1,
+          due: {
+            date: '2024-01-01',
+            string: 'Jan 1',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/task/1',
+          comment_count: 2,
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+      const mockClient = {
+        get: vi.fn().mockResolvedValue({ data: mockTasks }),
+      };
+      mockGetTodoistClient.mockReturnValue(mockClient);
+
+      // act
+      const result = await getTasksWithLabel('context:home-office');
+
+      // assert
+      expect(result.tasks).toHaveLength(1);
+      expect(result.tasks[0].id).toBe(1);
+      expect(result.tasks[0].content).toBe('Task with complex context label');
+      expect(result.tasks[0].labels).toContain('context:home-office');
+      expect(result.total_count).toBe(1);
+      const expectedFilter = '@context:home-office';
+      expect(mockClient.get).toHaveBeenCalledWith(
+        `/tasks?filter=${encodeURIComponent(expectedFilter)}`
+      );
+    });
+  });
 });
 
 describe('getAreasOfFocus', () => {
