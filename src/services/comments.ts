@@ -20,20 +20,24 @@ interface TodoistComment {
   reactions: Record<string, any>;
 }
 
+interface CommentAttachment {
+  resource_type: string;
+  file_name: string;
+  file_size: number;
+  file_url: string;
+  upload_state: string;
+}
+
+interface CommentResult {
+  id: number;
+  content: string;
+  posted: string;
+  posted_uid: string;
+  attachment: CommentAttachment | null;
+}
+
 interface CommentsResponse {
-  comments: Array<{
-    id: number;
-    content: string;
-    posted: string;
-    posted_uid: string;
-    attachment: {
-      resource_type: string;
-      file_name: string;
-      file_size: number;
-      file_url: string;
-      upload_state: string;
-    } | null;
-  }>;
+  comments: CommentResult[];
   total_count: number;
 }
 
@@ -43,6 +47,31 @@ function getErrorMessage(error: any): string {
     return error.response?.data?.error || error.message;
   }
   return error instanceof Error ? error.message : 'Unknown error';
+}
+
+// Helper function to create a comment with common logic
+async function createCommentInternal(
+  taskId: string,
+  content: string
+): Promise<CommentResult> {
+  const todoistClient = getTodoistClient();
+
+  if (!todoistClient.post) {
+    throw new Error('POST method not available on client');
+  }
+
+  const response = await todoistClient.post<TodoistComment>('/comments', {
+    task_id: taskId,
+    content,
+  });
+
+  return {
+    id: parseInt(response.data.id),
+    content: response.data.content,
+    posted: response.data.posted,
+    posted_uid: response.data.posted_uid,
+    attachment: response.data.attachment,
+  };
 }
 
 // Get task comments function - returns structured data for comments on a specific task
@@ -76,40 +105,10 @@ export async function getTaskComments(
 export async function createTaskComment(
   taskId: string,
   content: string
-): Promise<{
-  id: number;
-  content: string;
-  posted: string;
-  posted_uid: string;
-  attachment: {
-    resource_type: string;
-    file_name: string;
-    file_size: number;
-    file_url: string;
-    upload_state: string;
-  } | null;
-}> {
-  const todoistClient = getTodoistClient();
-
+): Promise<CommentResult> {
   try {
     const commentContent = `${content}\n\n*(commented using Claude)*`;
-
-    if (!todoistClient.post) {
-      throw new Error('POST method not available on client');
-    }
-
-    const response = await todoistClient.post<TodoistComment>('/comments', {
-      task_id: taskId,
-      content: commentContent,
-    });
-
-    return {
-      id: parseInt(response.data.id),
-      content: response.data.content,
-      posted: response.data.posted,
-      posted_uid: response.data.posted_uid,
-      attachment: response.data.attachment,
-    };
+    return await createCommentInternal(taskId, commentContent);
   } catch (error) {
     throw new Error(`Failed to create task comment: ${getErrorMessage(error)}`);
   }
@@ -120,40 +119,10 @@ export async function addTaskRenameComment(
   taskId: string,
   oldTitle: string,
   newTitle: string
-): Promise<{
-  id: number;
-  content: string;
-  posted: string;
-  posted_uid: string;
-  attachment: {
-    resource_type: string;
-    file_name: string;
-    file_size: number;
-    file_url: string;
-    upload_state: string;
-  } | null;
-}> {
-  const todoistClient = getTodoistClient();
-
+): Promise<CommentResult> {
   try {
     const commentContent = `Task renamed from \`${oldTitle}\` to \`${newTitle}\`\n\n*(renamed using Claude)*`;
-
-    if (!todoistClient.post) {
-      throw new Error('POST method not available on client');
-    }
-
-    const response = await todoistClient.post<TodoistComment>('/comments', {
-      task_id: taskId,
-      content: commentContent,
-    });
-
-    return {
-      id: parseInt(response.data.id),
-      content: response.data.content,
-      posted: response.data.posted,
-      posted_uid: response.data.posted_uid,
-      attachment: response.data.attachment,
-    };
+    return await createCommentInternal(taskId, commentContent);
   } catch (error) {
     throw new Error(
       `Failed to add task rename comment: ${getErrorMessage(error)}`
@@ -165,40 +134,10 @@ export async function addTaskRenameComment(
 export async function createAutomatedTaskComment(
   taskId: string,
   content: string
-): Promise<{
-  id: number;
-  content: string;
-  posted: string;
-  posted_uid: string;
-  attachment: {
-    resource_type: string;
-    file_name: string;
-    file_size: number;
-    file_url: string;
-    upload_state: string;
-  } | null;
-}> {
-  const todoistClient = getTodoistClient();
-
+): Promise<CommentResult> {
   try {
     const commentContent = `${content}\n\n*(automated comment from Claude)*`;
-
-    if (!todoistClient.post) {
-      throw new Error('POST method not available on client');
-    }
-
-    const response = await todoistClient.post<TodoistComment>('/comments', {
-      task_id: taskId,
-      content: commentContent,
-    });
-
-    return {
-      id: parseInt(response.data.id),
-      content: response.data.content,
-      posted: response.data.posted,
-      posted_uid: response.data.posted_uid,
-      attachment: response.data.attachment,
-    };
+    return await createCommentInternal(taskId, commentContent);
   } catch (error) {
     throw new Error(
       `Failed to create automated task comment: ${getErrorMessage(error)}`
@@ -207,4 +146,9 @@ export async function createAutomatedTaskComment(
 }
 
 // Export types for testing
-export type { TodoistComment, CommentsResponse };
+export type {
+  TodoistComment,
+  CommentsResponse,
+  CommentResult,
+  CommentAttachment,
+};
