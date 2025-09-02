@@ -19,8 +19,12 @@ describe('Move Task Functions', () => {
   describe('moveTask', () => {
     it('should successfully move a task to a new project', async () => {
       // arrange
-      const mockTaskIdMapping = { id: 'v1_task_id_123' };
-      const mockProjectIdMapping = { id: 'v1_project_id_456' };
+      const mockTaskIdMapping = [
+        { new_id: 'v1_task_id_123', old_id: 'task_123' },
+      ];
+      const mockProjectIdMapping = [
+        { new_id: 'v1_project_id_456', old_id: 'project_456' },
+      ];
       const mockMoveResponse = { success: true };
 
       const mockV1Client = {
@@ -73,7 +77,9 @@ describe('Move Task Functions', () => {
 
     it('should handle project ID mapping error', async () => {
       // arrange
-      const mockTaskIdMapping = { id: 'v1_task_id_123' };
+      const mockTaskIdMapping = [
+        { new_id: 'v1_task_id_123', old_id: 'task_123' },
+      ];
       const mockV1Client = {
         get: vi
           .fn()
@@ -100,8 +106,12 @@ describe('Move Task Functions', () => {
 
     it('should handle move operation error', async () => {
       // arrange
-      const mockTaskIdMapping = { id: 'v1_task_id_123' };
-      const mockProjectIdMapping = { id: 'v1_project_id_456' };
+      const mockTaskIdMapping = [
+        { new_id: 'v1_task_id_123', old_id: 'task_123' },
+      ];
+      const mockProjectIdMapping = [
+        { new_id: 'v1_project_id_456', old_id: 'project_456' },
+      ];
       const mockV1Client = {
         get: vi
           .fn()

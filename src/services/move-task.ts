@@ -1,9 +1,6 @@
 import axios from 'axios';
 import { getTodoistV1Client } from './client';
-
-interface IdMappingResponse {
-  id: string;
-}
+import { convertV2IdToV1 } from './id-mapping';
 
 // Get error message
 function getErrorMessage(error: any): string {
@@ -22,22 +19,13 @@ export async function moveTask(
   taskId: string,
   projectId: string
 ): Promise<void> {
-  const client = getTodoistV1Client();
-
   try {
-    // Convert v2 task ID to v1 format
-    const taskIdMappingResponse = await client.get<IdMappingResponse>(
-      `/api/v1/id_mappings/tasks/${taskId}`
-    );
-    const v1TaskId = taskIdMappingResponse.data.id;
-
-    // Convert v2 project ID to v1 format
-    const projectIdMappingResponse = await client.get<IdMappingResponse>(
-      `/api/v1/id_mappings/projects/${projectId}`
-    );
-    const v1ProjectId = projectIdMappingResponse.data.id;
+    // Convert v2 IDs to v1 format
+    const v1TaskId = await convertV2IdToV1('tasks', taskId);
+    const v1ProjectId = await convertV2IdToV1('projects', projectId);
 
     // Move the task using v1 API
+    const client = getTodoistV1Client();
     await client.post(`/api/v1/tasks/${v1TaskId}/move`, {
       project_id: v1ProjectId,
     });
