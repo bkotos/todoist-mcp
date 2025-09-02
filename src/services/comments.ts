@@ -161,5 +161,50 @@ export async function addTaskRenameComment(
   }
 }
 
+// Create automated task comment function - creates a comment with automated signature
+export async function createAutomatedTaskComment(
+  taskId: string,
+  content: string
+): Promise<{
+  id: number;
+  content: string;
+  posted: string;
+  posted_uid: string;
+  attachment: {
+    resource_type: string;
+    file_name: string;
+    file_size: number;
+    file_url: string;
+    upload_state: string;
+  } | null;
+}> {
+  const todoistClient = getTodoistClient();
+
+  try {
+    const commentContent = `${content}\n\n*(automated comment from Claude)*`;
+
+    if (!todoistClient.post) {
+      throw new Error('POST method not available on client');
+    }
+
+    const response = await todoistClient.post<TodoistComment>('/comments', {
+      task_id: taskId,
+      content: commentContent,
+    });
+
+    return {
+      id: parseInt(response.data.id),
+      content: response.data.content,
+      posted: response.data.posted,
+      posted_uid: response.data.posted_uid,
+      attachment: response.data.attachment,
+    };
+  } catch (error) {
+    throw new Error(
+      `Failed to create automated task comment: ${getErrorMessage(error)}`
+    );
+  }
+}
+
 // Export types for testing
 export type { TodoistComment, CommentsResponse };

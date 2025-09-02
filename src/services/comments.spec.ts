@@ -3,6 +3,7 @@ import {
   getTaskComments,
   createTaskComment,
   addTaskRenameComment,
+  createAutomatedTaskComment,
 } from './comments';
 import { getTodoistClient } from './client';
 
@@ -276,6 +277,68 @@ describe('addTaskRenameComment', () => {
     // assert
     await expect(promise).rejects.toThrow(
       'Failed to add task rename comment: POST method not available on client'
+    );
+  });
+});
+
+describe('createAutomatedTaskComment', () => {
+  it('should create an automated comment with appropriate signature', async () => {
+    // arrange
+    const mockTaskId = '123';
+    const mockContent = 'This is an automated action';
+    const expectedContent = `This is an automated action\n\n*(automated comment from Claude)*`;
+    const mockResponse = {
+      id: '999',
+      task_id: '123',
+      project_id: '456',
+      posted: '2024-01-05T14:00:00Z',
+      content: expectedContent,
+      attachment: null,
+      posted_uid: 'user1',
+      uids_to_notify: [],
+      is_rtl: false,
+      reactions: {},
+    };
+
+    const mockClient = {
+      get: vi.fn(),
+      post: vi.fn().mockResolvedValue({ data: mockResponse }),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const result = await createAutomatedTaskComment(mockTaskId, mockContent);
+
+    // assert
+    expect(result).toEqual({
+      id: 999,
+      content: expectedContent,
+      posted: '2024-01-05T14:00:00Z',
+      posted_uid: 'user1',
+      attachment: null,
+    });
+    expect(mockClient.post).toHaveBeenCalledWith('/comments', {
+      task_id: mockTaskId,
+      content: expectedContent,
+    });
+  });
+
+  it('should handle API error when creating automated comment', async () => {
+    // arrange
+    const mockTaskId = '123';
+    const mockContent = 'This is an automated action';
+    const mockClient = {
+      get: vi.fn(),
+      post: vi.fn().mockRejectedValue(new Error('API Error')),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const promise = createAutomatedTaskComment(mockTaskId, mockContent);
+
+    // assert
+    await expect(promise).rejects.toThrow(
+      'Failed to create automated task comment: API Error'
     );
   });
 });

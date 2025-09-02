@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { updateTask } from './task-updates';
-import { createTaskComment } from './comments';
+import { createAutomatedTaskComment } from './comments';
 import { moveTask } from './move-task';
 import { listProjects } from './projects';
 
@@ -26,9 +26,7 @@ async function findProjectByName(projectName: string): Promise<string> {
 
 // Helper function to build the comment content
 function buildCommentContent(): string {
-  return `I finished this task. If it looks good to you, please mark as complete. Otherwise, put back in my inbox.
-
-This was an automated comment from Claude.`;
+  return `I finished this task. If it looks good to you, please mark as complete. Otherwise, put back in my inbox.`;
 }
 
 /**
@@ -53,7 +51,7 @@ export async function completeBeckyTask(taskId: string): Promise<void> {
     });
 
     // Add the completion comment
-    await createTaskComment(taskId, commentContent);
+    await createAutomatedTaskComment(taskId, commentContent);
 
     // Move the task to the Becky inbox project
     await moveTask(taskId, beckyInboxProjectId);

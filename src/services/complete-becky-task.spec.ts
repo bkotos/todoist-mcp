@@ -1,7 +1,7 @@
 import type { MockedFunction } from 'vitest';
 import { completeBeckyTask } from './complete-becky-task';
 import { updateTask } from './task-updates';
-import { createTaskComment } from './comments';
+import { createAutomatedTaskComment } from './comments';
 import { moveTask } from './move-task';
 import { listProjects } from './projects';
 
@@ -11,9 +11,10 @@ vi.mock('./move-task');
 vi.mock('./projects');
 
 const mockUpdateTask = updateTask as MockedFunction<typeof updateTask>;
-const mockCreateTaskComment = createTaskComment as MockedFunction<
-  typeof createTaskComment
->;
+const mockCreateAutomatedTaskComment =
+  createAutomatedTaskComment as MockedFunction<
+    typeof createAutomatedTaskComment
+  >;
 const mockMoveTask = moveTask as MockedFunction<typeof moveTask>;
 const mockListProjects = listProjects as MockedFunction<typeof listProjects>;
 
@@ -37,7 +38,7 @@ describe('completeBeckyTask', () => {
     beforeEach(() => {
       mockListProjects.mockResolvedValue(mockProjects);
       mockUpdateTask.mockResolvedValue('Task updated successfully');
-      mockCreateTaskComment.mockResolvedValue({
+      mockCreateAutomatedTaskComment.mockResolvedValue({
         id: 1,
         content: 'Test comment',
         posted: '2024-01-01T10:00:00Z',
@@ -63,10 +64,8 @@ describe('completeBeckyTask', () => {
       await completeBeckyTask(mockTaskId);
 
       // assert
-      const expectedCommentContent = `I finished this task. If it looks good to you, please mark as complete. Otherwise, put back in my inbox.
-
-This was an automated comment from Claude.`;
-      expect(mockCreateTaskComment).toHaveBeenCalledWith(
+      const expectedCommentContent = `I finished this task. If it looks good to you, please mark as complete. Otherwise, put back in my inbox.`;
+      expect(mockCreateAutomatedTaskComment).toHaveBeenCalledWith(
         mockTaskId,
         expectedCommentContent
       );
@@ -157,7 +156,9 @@ This was an automated comment from Claude.`;
 
     mockListProjects.mockResolvedValue(mockProjects);
     mockUpdateTask.mockResolvedValue('Task updated successfully');
-    mockCreateTaskComment.mockRejectedValue(new Error('Comment API Error'));
+    mockCreateAutomatedTaskComment.mockRejectedValue(
+      new Error('Comment API Error')
+    );
 
     // act
     const promise = completeBeckyTask(mockTaskId);
@@ -186,7 +187,7 @@ This was an automated comment from Claude.`;
 
     mockListProjects.mockResolvedValue(mockProjects);
     mockUpdateTask.mockResolvedValue('Task updated successfully');
-    mockCreateTaskComment.mockResolvedValue({
+    mockCreateAutomatedTaskComment.mockResolvedValue({
       id: 1,
       content: 'Test comment',
       posted: '2024-01-01T10:00:00Z',
