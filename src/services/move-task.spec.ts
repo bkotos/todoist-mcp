@@ -68,7 +68,7 @@ describe('Move Task Functions', () => {
 
       // assert
       await expect(promise).rejects.toThrow(
-        'Failed to move task: Task not found'
+        'Failed to move task: Failed to convert ID: Task not found'
       );
       expect(mockV1Client.get).toHaveBeenCalledWith(
         '/api/v1/id_mappings/tasks/invalid_task'
@@ -94,7 +94,7 @@ describe('Move Task Functions', () => {
 
       // assert
       await expect(promise).rejects.toThrow(
-        'Failed to move task: Project not found'
+        'Failed to move task: Failed to convert ID: Project not found'
       );
       expect(mockV1Client.get).toHaveBeenCalledWith(
         '/api/v1/id_mappings/tasks/task_123'
@@ -164,7 +164,7 @@ describe('Move Task Functions', () => {
 
       // assert
       await expect(promise).rejects.toThrow(
-        'Failed to move task: Invalid task ID'
+        'Failed to move task: Failed to convert ID: API Error'
       );
     });
   });
