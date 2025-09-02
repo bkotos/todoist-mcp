@@ -1,5 +1,5 @@
 import { updateTaskSchema, updateTaskHandler } from './update-task';
-import type { MockedFunction } from "vitest";
+import type { MockedFunction } from 'vitest';
 import { updateTask } from '../services/task-updates';
 
 // Mock the service module
@@ -158,6 +158,27 @@ describe('updateTask Tool', () => {
       });
     });
 
+    it('should update task due string successfully', async () => {
+      // arrange
+      const args = {
+        task_id: '123',
+        due_string: 'next Monday',
+      };
+      mockUpdateTask.mockResolvedValue('Task updated successfully');
+
+      // act
+      const result = await updateTaskHandler(args);
+
+      // assert
+      expect(result.content).toHaveLength(1);
+      expect(result.content[0].type).toBe('text');
+      expect(result.content[0].text).toContain('Task updated successfully');
+      expect(mockUpdateTask).toHaveBeenCalledWith({
+        taskId: '123',
+        dueString: 'next Monday',
+      });
+    });
+
     it('should update multiple fields successfully', async () => {
       // arrange
       const args = {
@@ -167,6 +188,7 @@ describe('updateTask Tool', () => {
         priority: 2,
         labels: ['work'],
         due_date: '2024-01-15',
+        due_string: 'tomorrow',
       };
       mockUpdateTask.mockResolvedValue('Task updated successfully');
 
@@ -184,6 +206,7 @@ describe('updateTask Tool', () => {
         priority: 2,
         labels: ['work'],
         dueDate: '2024-01-15',
+        dueString: 'tomorrow',
       });
     });
 

@@ -1,5 +1,5 @@
 import { updateTask } from './task-updates';
-import type { MockedFunction } from "vitest";
+import type { MockedFunction } from 'vitest';
 import { getTodoistClient } from './client';
 import { getTaskName, setTaskName } from './task-cache';
 import { addTaskRenameComment } from './comments';
@@ -133,6 +133,29 @@ describe('updateTask', () => {
     expect(result).toContain('Task updated successfully');
     expect(mockClient.post).toHaveBeenCalledWith('/tasks/123', {
       due_date: '2024-01-15',
+    });
+  });
+
+  it('should update task due string successfully', async () => {
+    // arrange
+    const mockClient = {
+      get: vi.fn(),
+      post: vi.fn().mockResolvedValue({
+        data: { id: '123', due: { string: 'next Monday' } },
+      }),
+    };
+    mockGetTodoistClient.mockReturnValue(mockClient);
+
+    // act
+    const result = await updateTask({
+      taskId: '123',
+      dueString: 'next Monday',
+    });
+
+    // assert
+    expect(result).toContain('Task updated successfully');
+    expect(mockClient.post).toHaveBeenCalledWith('/tasks/123', {
+      due_string: 'next Monday',
     });
   });
 

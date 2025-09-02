@@ -34,6 +34,11 @@ export const updateTaskSchema = {
         type: 'string',
         description: 'Due date in YYYY-MM-DD format',
       },
+      due_string: {
+        type: 'string',
+        description:
+          'Human defined task due date (ex.: "next Monday", "Tomorrow"). Value is set using local (not UTC) time. Using "no date" or "no due date" removes the date.',
+      },
     },
     required: ['task_id'],
   },
@@ -46,6 +51,7 @@ export const updateTaskHandler = async (args: {
   labels?: string[];
   priority?: number;
   due_date?: string;
+  due_string?: string;
 }): Promise<{
   content: Array<{
     type: 'text';
@@ -53,7 +59,15 @@ export const updateTaskHandler = async (args: {
   }>;
 }> => {
   console.error('Executing update_task...');
-  const { task_id, title, description, labels, priority, due_date } = args;
+  const {
+    task_id,
+    title,
+    description,
+    labels,
+    priority,
+    due_date,
+    due_string,
+  } = args;
 
   if (!task_id) {
     throw new Error('task_id is required');
@@ -83,6 +97,10 @@ export const updateTaskHandler = async (args: {
 
     if (due_date !== undefined) {
       serviceParams.dueDate = due_date;
+    }
+
+    if (due_string !== undefined) {
+      serviceParams.dueString = due_string;
     }
 
     const result = await updateTask(serviceParams);
