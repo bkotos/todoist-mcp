@@ -26,7 +26,22 @@ export function createDebugServer(): express.Application {
         },
       });
 
-      res.json(result);
+      // Parse nested JSON strings in the response
+      const parsedResult = {
+        ...result,
+        content: result.content.map((item) => {
+          if (item.type === 'text' && item.text) {
+            try {
+              return JSON.parse(item.text);
+            } catch (parseError) {
+              return item.text;
+            }
+          }
+          return item;
+        }),
+      };
+
+      res.json(parsedResult);
     } catch (error) {
       console.error('Debug tool invocation error:', error);
       res.status(500).json({
