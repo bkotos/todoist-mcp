@@ -1,5 +1,257 @@
-### Debug Server Test
-GET http://localhost:3001/debug
+### Debug Server HTTP Requests
+### Base URL: http://localhost:3001
 
-### Update Task Test
-GET http://localhost:3001/debug/update-task
+### ============================================
+### TOOLS WITH ARGUMENTS
+### ============================================
+
+### Get Task Comments
+POST http://localhost:3001/debug/tool/get_task_comments
+Content-Type: application/json
+
+{
+  "task_id": "9498012720"
+}
+
+### Create Project Label
+POST http://localhost:3001/debug/tool/create_project_label
+Content-Type: application/json
+
+{
+  "name": "urgent",
+  "color": "red"
+}
+
+### Create Task Comment
+POST http://localhost:3001/debug/tool/create_task_comment
+Content-Type: application/json
+
+{
+  "task_id": "9498012720",
+  "content": "This is a test comment"
+}
+
+### Update Task
+POST http://localhost:3001/debug/tool/update_task
+Content-Type: application/json
+
+{
+  "task_id": "9498012720",
+  "title": "Updated task title",
+  "description": "Updated description",
+  "labels": ["urgent", "important"],
+  "priority": 1,
+  "due_string": "tomorrow"
+}
+
+### Create Task
+POST http://localhost:3001/debug/tool/create_task
+Content-Type: application/json
+
+{
+  "title": "New task created via API",
+  "description": "This task was created using the debug API",
+  "project_id": "2322804039",
+  "labels": ["work", "important"],
+  "priority": 2,
+  "due_date": "2024-01-15"
+}
+
+### Move Task
+POST http://localhost:3001/debug/tool/move_task
+Content-Type: application/json
+
+{
+  "task_id": "9498012720",
+  "project_id": "2322804039"
+}
+
+### Get Tasks With Label
+POST http://localhost:3001/debug/tool/get_tasks_with_label
+Content-Type: application/json
+
+{
+  "label": "urgent"
+}
+
+### Complete Task
+POST http://localhost:3001/debug/tool/complete_task
+Content-Type: application/json
+
+{
+  "task_id": "9498012720"
+}
+
+### Uncomplete Task
+POST http://localhost:3001/debug/tool/uncomplete_task
+Content-Type: application/json
+
+{
+  "task_id": "9498012720"
+}
+
+### Search Tasks (Basic)
+POST http://localhost:3001/debug/tool/search_tasks
+Content-Type: application/json
+
+{
+  "query": "meeting"
+}
+
+### Search Tasks Using AND
+POST http://localhost:3001/debug/tool/search_tasks_using_and
+Content-Type: application/json
+
+{
+  "queries": ["urgent", "work"]
+}
+
+### Search Tasks Using OR
+POST http://localhost:3001/debug/tool/search_tasks_using_or
+Content-Type: application/json
+
+{
+  "queries": ["urgent", "important"]
+}
+
+### Complete Becky Task
+POST http://localhost:3001/debug/tool/complete_becky_task
+Content-Type: application/json
+
+{
+  "task_id": "9498012720"
+}
+
+### ============================================
+### TOOLS WITHOUT ARGUMENTS
+### ============================================
+
+### List Personal Inbox Tasks
+POST http://localhost:3001/debug/tool/list_personal_inbox_tasks
+Content-Type: application/json
+
+{}
+
+### List Brian Inbox Per Becky Tasks
+POST http://localhost:3001/debug/tool/list_brian_inbox_per_becky_tasks
+Content-Type: application/json
+
+{}
+
+### List Becky Inbox Per Brian Tasks
+POST http://localhost:3001/debug/tool/list_becky_inbox_per_brian_tasks
+Content-Type: application/json
+
+{}
+
+### List Next Actions
+POST http://localhost:3001/debug/tool/list_next_actions
+Content-Type: application/json
+
+{}
+
+### Get Brian Only Projects
+POST http://localhost:3001/debug/tool/get_brian_only_projects
+Content-Type: application/json
+
+{}
+
+### Get Brian Shared Projects
+POST http://localhost:3001/debug/tool/get_brian_shared_projects
+Content-Type: application/json
+
+{}
+
+### Get Becky Shared Projects
+POST http://localhost:3001/debug/tool/get_becky_shared_projects
+Content-Type: application/json
+
+{}
+
+### Get Inbox Projects
+POST http://localhost:3001/debug/tool/get_inbox_projects
+Content-Type: application/json
+
+{}
+
+### Get Context Labels
+POST http://localhost:3001/debug/tool/get_context_labels
+Content-Type: application/json
+
+{}
+
+### Get Chores Due Today
+POST http://localhost:3001/debug/tool/get_chores_due_today
+Content-Type: application/json
+
+{}
+
+### Get Tasks Due Tomorrow
+POST http://localhost:3001/debug/tool/get_tasks_due_tomorrow
+Content-Type: application/json
+
+{}
+
+### Get Tasks Due This Week
+POST http://localhost:3001/debug/tool/get_tasks_due_this_week
+Content-Type: application/json
+
+{}
+
+### Get Tickler Tasks
+POST http://localhost:3001/debug/tool/get_tickler_tasks
+Content-Type: application/json
+
+{}
+
+### List GTD Projects
+POST http://localhost:3001/debug/tool/list_gtd_projects
+Content-Type: application/json
+
+{}
+
+### Get Waiting Tasks
+POST http://localhost:3001/debug/tool/get_waiting_tasks
+Content-Type: application/json
+
+{}
+
+### Get Recent Media
+POST http://localhost:3001/debug/tool/get_recent_media
+Content-Type: application/json
+
+{}
+
+### Get Areas of Focus
+POST http://localhost:3001/debug/tool/get_areas_of_focus
+Content-Type: application/json
+
+{}
+
+### Get Shopping List
+POST http://localhost:3001/debug/tool/get_shopping_list
+Content-Type: application/json
+
+{}
+
+### ============================================
+### EXAMPLE USAGE NOTES
+### ============================================
+
+### To use these requests:
+### 1. Start the debug server: npm run dev:debug
+### 2. Replace placeholder IDs (like "9498012720", "2322804039") with actual task/project IDs
+### 3. Modify parameters as needed for your specific use case
+### 4. Click the "Send Request" button in your HTTP client (VS Code REST Client, Postman, etc.)
+
+### Common Task IDs for testing:
+### - Task ID: 9498012720 (example task)
+### - Project ID: 2322804039 (example project)
+
+### Common Labels for testing:
+### - "urgent", "important", "work", "personal", "chores"
+
+### Search Query Examples:
+### - Basic: "meeting", "report", "grocery"
+### - Wildcard: "*report*", "*urgent*"
+### - Exact phrase: "buy groceries", "team meeting"
