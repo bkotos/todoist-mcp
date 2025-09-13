@@ -183,5 +183,31 @@ export async function getShoppingList(): Promise<TasksResponse> {
   }
 }
 
+// List Brian time sensitive tasks function - returns structured data for Brian time sensitive tasks
+export async function listBrianTimeSensitiveTasks(): Promise<TasksResponse> {
+  try {
+    return await fetchTasksByFilter(
+      '##Brian time sensitive (per Becky) & !subtask'
+    );
+  } catch (error) {
+    throw new Error(
+      `Failed to list Brian time sensitive tasks: ${getErrorMessage(error)}`
+    );
+  }
+}
+
+// List Becky time sensitive tasks function - returns structured data for Becky time sensitive tasks
+export async function listBeckyTimeSensitiveTasks(): Promise<TasksResponse> {
+  try {
+    return await fetchTasksByFilter(
+      '##Becky time sensitive (per Brian) & !subtask'
+    );
+  } catch (error) {
+    throw new Error(
+      `Failed to list Becky time sensitive tasks: ${getErrorMessage(error)}`
+    );
+  }
+}
+
 // Export types for testing
 export type { TodoistTask, TasksResponse };
