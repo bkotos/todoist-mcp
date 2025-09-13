@@ -1,10 +1,11 @@
 import { getBeckySharedProjects } from '../services/project-filters';
-import type { MockedFunction } from "vitest";
+import type { MockedFunction } from 'vitest';
 
 // Mock the project-filters service
 vi.mock('../services/project-filters');
-const mockGetBeckySharedProjects =
-  getBeckySharedProjects as MockedFunction<typeof getBeckySharedProjects>;
+const mockGetBeckySharedProjects = getBeckySharedProjects as MockedFunction<
+  typeof getBeckySharedProjects
+>;
 
 describe('get-becky-shared-projects tool', () => {
   beforeEach(() => {
@@ -42,10 +43,17 @@ describe('get-becky-shared-projects tool', () => {
         is_favorite: false,
         is_inbox: false,
       },
+      {
+        id: 27,
+        name: 'Becky time sensitive (per Brian)',
+        url: 'https://todoist.com/project/27',
+        is_favorite: false,
+        is_inbox: false,
+      },
     ];
     const mockResult = {
       projects: mockProjects,
-      total_count: 4,
+      total_count: 5,
     };
     mockGetBeckySharedProjects.mockResolvedValue(mockResult);
 

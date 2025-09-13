@@ -202,8 +202,22 @@ describe('Project Filters', () => {
     },
     {
       id: 27,
-      name: 'Some other project',
+      name: 'Becky time sensitive (per Brian)',
       url: 'https://todoist.com/project/27',
+      is_favorite: false,
+      is_inbox: false,
+    },
+    {
+      id: 28,
+      name: 'Brian time sensitive (per Becky)',
+      url: 'https://todoist.com/project/28',
+      is_favorite: false,
+      is_inbox: false,
+    },
+    {
+      id: 29,
+      name: 'Some other project',
+      url: 'https://todoist.com/project/29',
       is_favorite: false,
       is_inbox: false,
     },
@@ -405,6 +419,13 @@ describe('Project Filters', () => {
           is_favorite: false,
           is_inbox: false,
         },
+        {
+          id: 28,
+          name: 'Brian time sensitive (per Becky)',
+          url: 'https://todoist.com/project/28',
+          is_favorite: false,
+          is_inbox: false,
+        },
       ];
 
       // act
@@ -412,7 +433,7 @@ describe('Project Filters', () => {
 
       // assert
       expect(result.projects).toEqual(expectedProjects);
-      expect(result.total_count).toBe(7);
+      expect(result.total_count).toBe(8);
       expect(mockListProjects).toHaveBeenCalledTimes(1);
     });
 
@@ -462,6 +483,13 @@ describe('Project Filters', () => {
           is_favorite: false,
           is_inbox: false,
         },
+        {
+          id: 27,
+          name: 'Becky time sensitive (per Brian)',
+          url: 'https://todoist.com/project/27',
+          is_favorite: false,
+          is_inbox: false,
+        },
       ];
 
       // act
@@ -469,7 +497,7 @@ describe('Project Filters', () => {
 
       // assert
       expect(result.projects).toEqual(expectedProjects);
-      expect(result.total_count).toBe(4);
+      expect(result.total_count).toBe(5);
       expect(mockListProjects).toHaveBeenCalledTimes(1);
     });
 

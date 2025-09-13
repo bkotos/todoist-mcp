@@ -41,6 +41,7 @@ export function isBrianSharedProject(project: Project): boolean {
     case 'Brian someday':
     case 'Brian tickler':
     case 'Brian contextual':
+    case 'Brian time sensitive (per Becky)':
       return true;
     default:
       return false;
@@ -54,6 +55,7 @@ export function isBeckySharedProject(project: Project): boolean {
     case 'Becky inbox - per Brian':
     case 'Becky acknowledged':
     case 'Becky In Progress':
+    case 'Becky time sensitive (per Brian)':
       return true;
     default:
       return false;

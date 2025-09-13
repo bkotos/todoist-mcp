@@ -1,5 +1,5 @@
 import { getBrianSharedProjects } from '../services/project-filters';
-import type { MockedFunction } from "vitest";
+import type { MockedFunction } from 'vitest';
 
 // Mock the project-filters service
 vi.mock('../services/project-filters');
@@ -36,10 +36,17 @@ describe('get-brian-shared-projects tool', () => {
         is_favorite: false,
         is_inbox: false,
       },
+      {
+        id: 28,
+        name: 'Brian time sensitive (per Becky)',
+        url: 'https://todoist.com/project/28',
+        is_favorite: false,
+        is_inbox: false,
+      },
     ];
     const mockResult = {
       projects: mockProjects,
-      total_count: 3,
+      total_count: 4,
     };
     mockGetBrianSharedProjects.mockResolvedValue(mockResult);
 
