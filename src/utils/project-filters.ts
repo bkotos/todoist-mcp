@@ -12,21 +12,21 @@ interface Project {
 // Check if a project is a Brian-only project (not shared)
 export function isBrianOnlyProject(project: Project): boolean {
   switch (project.name) {
-    case 'Areas of focus':
-    case 'Inbox':
-    case 'Media':
-    case 'Musings':
-    case 'Next actions':
-    case 'Contextual':
-    case 'Projects':
-    case 'Calendar':
-    case 'Tickler':
-    case 'Someday':
-    case 'Waiting':
-    case 'Chores':
-    case 'Graveyard':
-    case 'Graveyard - read':
-    case 'Graveyard - watch':
+    case ProjectNames.AREAS_OF_FOCUS:
+    case ProjectNames.INBOX:
+    case ProjectNames.MEDIA:
+    case ProjectNames.MUSINGS:
+    case ProjectNames.NEXT_ACTIONS:
+    case ProjectNames.CONTEXTUAL:
+    case ProjectNames.PROJECTS:
+    case ProjectNames.CALENDAR:
+    case ProjectNames.TICKLER:
+    case ProjectNames.SOMEDAY:
+    case ProjectNames.WAITING:
+    case ProjectNames.CHORES:
+    case ProjectNames.GRAVEYARD:
+    case ProjectNames.GRAVEYARD_READ:
+    case ProjectNames.GRAVEYARD_WATCH:
       return true;
     default:
       return false;
@@ -36,13 +36,13 @@ export function isBrianOnlyProject(project: Project): boolean {
 // Check if a project is a Brian shared project (for tasks in his ballpark to handle per Becky)
 export function isBrianSharedProject(project: Project): boolean {
   switch (project.name) {
-    case 'Brian inbox - per Becky':
-    case 'Brian acknowledged':
-    case 'Brian projects':
-    case 'Brian waiting':
-    case 'Brian someday':
-    case 'Brian tickler':
-    case 'Brian contextual':
+    case ProjectNames.BRIAN_INBOX_PER_BECKY:
+    case ProjectNames.BRIAN_ACKNOWLEDGED:
+    case ProjectNames.BRIAN_PROJECTS:
+    case ProjectNames.BRIAN_WAITING:
+    case ProjectNames.BRIAN_SOMEDAY:
+    case ProjectNames.BRIAN_TICKLER:
+    case ProjectNames.BRIAN_CONTEXTUAL:
     case ProjectNames.BRIAN_TIME_SENSITIVE:
       return true;
     default:
@@ -53,10 +53,10 @@ export function isBrianSharedProject(project: Project): boolean {
 // Check if a project is a Becky shared project (for tasks in her ballpark to handle per Brian)
 export function isBeckySharedProject(project: Project): boolean {
   switch (project.name) {
-    case 'Becky someday':
-    case 'Becky inbox - per Brian':
-    case 'Becky acknowledged':
-    case 'Becky In Progress':
+    case ProjectNames.BECKY_SOMEDAY:
+    case ProjectNames.BECKY_INBOX_PER_BRIAN:
+    case ProjectNames.BECKY_ACKNOWLEDGED:
+    case ProjectNames.BECKY_IN_PROGRESS:
     case ProjectNames.BECKY_TIME_SENSITIVE:
       return true;
     default:
@@ -67,9 +67,9 @@ export function isBeckySharedProject(project: Project): boolean {
 // Check if a project is an inbox project
 export function isInboxProject(project: Project): boolean {
   switch (project.name) {
-    case 'Inbox':
-    case 'Brian inbox - per Becky':
-    case 'Becky inbox - per Brian':
+    case ProjectNames.INBOX:
+    case ProjectNames.BRIAN_INBOX_PER_BECKY:
+    case ProjectNames.BECKY_INBOX_PER_BRIAN:
       return true;
     default:
       return false;

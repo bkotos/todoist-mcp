@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getTodoistClient } from './client';
+import { ProjectNames } from '../utils';
 
 interface TodoistTask {
   id: string;
@@ -22,8 +23,7 @@ interface TodoistTask {
 }
 
 // Define the filter query for better readability
-const RECENT_MEDIA_FILTER =
-  '##Media & !subtask & (created after: 30 days ago) & !@watched';
+const RECENT_MEDIA_FILTER = `##${ProjectNames.MEDIA} & !subtask & (created after: 30 days ago) & !@watched`;
 
 // Get error message
 function getErrorMessage(error: any): string {

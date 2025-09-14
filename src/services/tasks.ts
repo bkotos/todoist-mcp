@@ -78,7 +78,7 @@ async function fetchTasksByFilter(filter: string): Promise<TasksResponse> {
 // List personal inbox tasks function - returns structured data for personal inbox tasks
 export async function listPersonalInboxTasks(): Promise<TasksResponse> {
   try {
-    return await fetchTasksByFilter('##Inbox & !subtask');
+    return await fetchTasksByFilter(`##${ProjectNames.INBOX} & !subtask`);
   } catch (error) {
     throw new Error(
       `Failed to list personal inbox tasks: ${getErrorMessage(error)}`
@@ -89,7 +89,9 @@ export async function listPersonalInboxTasks(): Promise<TasksResponse> {
 // List Brian inbox per Becky tasks function - returns structured data for Brian inbox per Becky tasks
 export async function listBrianInboxPerBeckyTasks(): Promise<TasksResponse> {
   try {
-    return await fetchTasksByFilter('##Brian inbox - per Becky & !subtask');
+    return await fetchTasksByFilter(
+      `##${ProjectNames.BRIAN_INBOX_PER_BECKY} & !subtask`
+    );
   } catch (error) {
     throw new Error(
       `Failed to list Brian inbox per Becky tasks: ${getErrorMessage(error)}`
@@ -100,7 +102,9 @@ export async function listBrianInboxPerBeckyTasks(): Promise<TasksResponse> {
 // List Becky inbox per Brian tasks function - returns structured data for Becky inbox per Brian tasks
 export async function listBeckyInboxPerBrianTasks(): Promise<TasksResponse> {
   try {
-    return await fetchTasksByFilter('##Becky inbox - per Brian & !subtask');
+    return await fetchTasksByFilter(
+      `##${ProjectNames.BECKY_INBOX_PER_BRIAN} & !subtask`
+    );
   } catch (error) {
     throw new Error(
       `Failed to list Becky inbox per Brian tasks: ${getErrorMessage(error)}`
@@ -161,7 +165,7 @@ export async function getTasksWithLabel(label: string): Promise<TasksResponse> {
 // Get tasks from Areas of focus project function - returns structured data for Areas of focus tasks
 export async function getAreasOfFocus(): Promise<TasksResponse> {
   try {
-    return await fetchTasksByFilter('##Areas of focus');
+    return await fetchTasksByFilter(`##${ProjectNames.AREAS_OF_FOCUS}`);
   } catch (error) {
     throw new Error(
       `Failed to get tasks from Areas of focus project: ${getErrorMessage(
@@ -174,7 +178,7 @@ export async function getAreasOfFocus(): Promise<TasksResponse> {
 // Get tasks from Shopping list project function - returns structured data for Shopping list tasks
 export async function getShoppingList(): Promise<TasksResponse> {
   try {
-    return await fetchTasksByFilter('##Shopping list');
+    return await fetchTasksByFilter(`##${ProjectNames.SHOPPING_LIST}`);
   } catch (error) {
     throw new Error(
       `Failed to get tasks from Shopping list project: ${getErrorMessage(
