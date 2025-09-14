@@ -39,6 +39,8 @@ import {
   getAreasOfFocusSchema,
   getShoppingListSchema,
   completeBeckyTaskSchema,
+  listBrianTimeSensitiveTasksSchema,
+  listBeckyTimeSensitiveTasksSchema,
 } from './tools';
 import { handleToolRequest } from './handlers';
 import { join } from 'path';
@@ -108,6 +110,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       getAreasOfFocusSchema,
       getShoppingListSchema,
       completeBeckyTaskSchema,
+      listBrianTimeSensitiveTasksSchema,
+      listBeckyTimeSensitiveTasksSchema,
     ],
   };
 });

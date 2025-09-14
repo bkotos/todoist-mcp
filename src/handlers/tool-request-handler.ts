@@ -31,6 +31,8 @@ import {
   getAreasOfFocusHandler,
   getShoppingListHandler,
   completeBeckyTaskHandler,
+  listBrianTimeSensitiveTasksHandler,
+  listBeckyTimeSensitiveTasksHandler,
 } from '../tools';
 
 export interface ToolRequestArgs {
@@ -84,6 +86,8 @@ const toolsWithoutArgs: Record<string, ToolHandlerWithoutArgs> = {
   get_recent_media: getRecentMediaHandler,
   get_areas_of_focus: getAreasOfFocusHandler,
   get_shopping_list: getShoppingListHandler,
+  list_brian_time_sensitive_tasks: listBrianTimeSensitiveTasksHandler,
+  list_becky_time_sensitive_tasks: listBeckyTimeSensitiveTasksHandler,
 };
 
 export async function handleToolRequest(

@@ -36,6 +36,8 @@ vi.mock('../tools', () => ({
   getAreasOfFocusHandler: vi.fn(),
   getShoppingListHandler: vi.fn(),
   completeBeckyTaskHandler: vi.fn(),
+  listBrianTimeSensitiveTasksHandler: vi.fn(),
+  listBeckyTimeSensitiveTasksHandler: vi.fn(),
 }));
 
 // Import mocked functions
@@ -71,6 +73,8 @@ import {
   getAreasOfFocusHandler,
   getShoppingListHandler,
   completeBeckyTaskHandler,
+  listBrianTimeSensitiveTasksHandler,
+  listBeckyTimeSensitiveTasksHandler,
 } from '../tools';
 
 // Test configuration for all tools
@@ -256,6 +260,14 @@ const noParamToolTestConfig = [
   {
     toolName: 'get_shopping_list',
     handler: getShoppingListHandler,
+  },
+  {
+    toolName: 'list_brian_time_sensitive_tasks',
+    handler: listBrianTimeSensitiveTasksHandler,
+  },
+  {
+    toolName: 'list_becky_time_sensitive_tasks',
+    handler: listBeckyTimeSensitiveTasksHandler,
   },
 ];
 

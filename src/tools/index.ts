@@ -108,3 +108,11 @@ export {
   completeBeckyTaskSchema,
   completeBeckyTaskHandler,
 } from './complete-becky-task';
+export {
+  listBrianTimeSensitiveTasksSchema,
+  listBrianTimeSensitiveTasksHandler,
+} from './list-brian-time-sensitive-tasks';
+export {
+  listBeckyTimeSensitiveTasksSchema,
+  listBeckyTimeSensitiveTasksHandler,
+} from './list-becky-time-sensitive-tasks';
