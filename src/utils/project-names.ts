@@ -1,15 +1,4 @@
-export enum CoreProjectNames {
-  INBOX = 'Inbox',
-  AREAS_OF_FOCUS = 'Areas of focus',
-  MEDIA = 'Media',
-  SHOPPING_LIST = 'Shopping list',
-}
-
-export enum TimeSensitiveProjectNames {
-  BRIAN_TIME_SENSITIVE = 'Brian time sensitive (per Becky)',
-  BECKY_TIME_SENSITIVE = 'Becky time sensitive (per Brian)',
-}
-
+// Brian shared project names (projects shared with Becky)
 export enum BrianSharedProjectNames {
   BRIAN_INBOX_PER_BECKY = 'Brian inbox - per Becky',
   BRIAN_ACKNOWLEDGED = 'Brian acknowledged',
@@ -18,16 +7,24 @@ export enum BrianSharedProjectNames {
   BRIAN_SOMEDAY = 'Brian someday',
   BRIAN_TICKLER = 'Brian tickler',
   BRIAN_CONTEXTUAL = 'Brian contextual',
+  BRIAN_TIME_SENSITIVE = 'Brian time sensitive (per Becky)',
 }
 
+// Becky shared project names (projects shared with Brian)
 export enum BeckySharedProjectNames {
   BECKY_SOMEDAY = 'Becky someday',
   BECKY_INBOX_PER_BRIAN = 'Becky inbox - per Brian',
   BECKY_ACKNOWLEDGED = 'Becky acknowledged',
   BECKY_IN_PROGRESS = 'Becky In Progress',
+  BECKY_TIME_SENSITIVE = 'Becky time sensitive (per Brian)',
 }
 
-export enum OtherProjectNames {
+// Brian non-shared project names (Brian's personal projects)
+export enum BrianNonSharedProjectNames {
+  INBOX = 'Inbox',
+  AREAS_OF_FOCUS = 'Areas of focus',
+  MEDIA = 'Media',
+  SHOPPING_LIST = 'Shopping list',
   MUSINGS = 'Musings',
   NEXT_ACTIONS = 'Next actions',
   CONTEXTUAL = 'Contextual',
@@ -42,10 +39,9 @@ export enum OtherProjectNames {
   GRAVEYARD_WATCH = 'Graveyard - watch',
 }
 
+// Combined enum for backward compatibility and convenience
 export const ProjectNames = {
-  ...CoreProjectNames,
-  ...TimeSensitiveProjectNames,
   ...BrianSharedProjectNames,
   ...BeckySharedProjectNames,
-  ...OtherProjectNames,
+  ...BrianNonSharedProjectNames,
 } as const;
