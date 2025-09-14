@@ -1,4 +1,4 @@
-import { getContextLabels } from '../services/labels';
+import { getContextLabels } from '../services/labels/labels';
 
 export const getContextLabelsSchema = {
   name: 'get_context_labels',

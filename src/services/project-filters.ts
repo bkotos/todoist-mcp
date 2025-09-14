@@ -1,4 +1,4 @@
-import { listProjects, ProjectsResponse } from './projects';
+import { listProjects, ProjectsResponse } from './projects/projects';
 import {
   isBrianOnlyProject,
   isBrianSharedProject,

@@ -1,4 +1,4 @@
-import { listGtdProjects } from '../services/tasks';
+import { listGtdProjects } from '../services/tasks/tasks';
 
 export const listGtdProjectsSchema = {
   name: 'list_gtd_projects',

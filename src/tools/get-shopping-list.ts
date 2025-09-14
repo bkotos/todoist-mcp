@@ -1,4 +1,4 @@
-import { getShoppingList } from '../services/tasks';
+import { getShoppingList } from '../services/tasks/tasks';
 
 export const getShoppingListSchema = {
   name: 'get_shopping_list',

@@ -1,4 +1,4 @@
-import { listNextActions } from '../services/tasks';
+import { listNextActions } from '../services/tasks/tasks';
 
 export const listNextActionsSchema = {
   name: 'list_next_actions',

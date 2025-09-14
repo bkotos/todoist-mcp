@@ -1,4 +1,4 @@
-import { getRecentMedia } from '../services/recent-media';
+import { getRecentMedia } from '../services/tasks/recent-media';
 
 export const getRecentMediaSchema = {
   name: 'get_recent_media',

@@ -1,4 +1,4 @@
-import { listBrianTimeSensitiveTasks } from '../services/tasks';
+import { listBrianTimeSensitiveTasks } from '../services/tasks/tasks';
 import { ProjectNames } from '../utils';
 
 export const listBrianTimeSensitiveTasksSchema = {

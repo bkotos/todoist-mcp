@@ -1,4 +1,4 @@
-import { getChoresDueToday } from '../services/chores-due-today';
+import { getChoresDueToday } from '../services/tasks/chores-due-today';
 
 export const getChoresDueTodaySchema = {
   name: 'get_chores_due_today',

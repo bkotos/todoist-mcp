@@ -1,4 +1,4 @@
-import { createProjectLabel } from '../services/labels';
+import { createProjectLabel } from '../services/labels/labels';
 
 export const createProjectLabelSchema = {
   name: 'create_project_label',

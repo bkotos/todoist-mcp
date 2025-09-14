@@ -1,9 +1,9 @@
 import { createProjectLabelHandler } from './create-project-label';
-import type { MockedFunction } from "vitest";
-import { createProjectLabel } from '../services/labels';
+import type { MockedFunction } from 'vitest';
+import { createProjectLabel } from '../services/labels/labels';
 
 // Mock the labels service
-vi.mock('../services/labels');
+vi.mock('../services/labels/labels');
 
 const mockCreateProjectLabel = createProjectLabel as MockedFunction<
   typeof createProjectLabel

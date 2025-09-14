@@ -1,4 +1,4 @@
-import { listBeckyTimeSensitiveTasks } from '../services/tasks';
+import { listBeckyTimeSensitiveTasks } from '../services/tasks/tasks';
 import { ProjectNames } from '../utils';
 
 export const listBeckyTimeSensitiveTasksSchema = {

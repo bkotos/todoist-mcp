@@ -1,4 +1,4 @@
-import { moveTask } from '../services/move-task';
+import { moveTask } from '../services/tasks/move-task';
 
 export const moveTaskSchema = {
   name: 'move_task',

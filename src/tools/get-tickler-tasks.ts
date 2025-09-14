@@ -1,4 +1,4 @@
-import { getTicklerTasks } from '../services/tickler-tasks';
+import { getTicklerTasks } from '../services/tasks/tickler-tasks';
 
 export const getTicklerTasksSchema = {
   name: 'get_tickler_tasks',

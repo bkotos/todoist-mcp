@@ -11,8 +11,8 @@ import { getTodoistClient } from './client';
 vi.mock('./client');
 
 // Mock the projects service
-vi.mock('./projects');
-import { listProjects } from './projects';
+vi.mock('./projects/projects');
+import { listProjects } from './projects/projects';
 const mockListProjects = listProjects as any;
 
 describe('Project Filters', () => {

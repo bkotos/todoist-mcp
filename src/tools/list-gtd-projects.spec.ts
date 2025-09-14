@@ -1,9 +1,9 @@
 import { listGtdProjectsHandler } from './list-gtd-projects';
 import type { MockedFunction } from 'vitest';
-import { listGtdProjects } from '../services/tasks';
+import { listGtdProjects } from '../services/tasks/tasks';
 
 // Mock the tasks service
-vi.mock('../services/tasks');
+vi.mock('../services/tasks/tasks');
 const mockListGtdProjects = listGtdProjects as MockedFunction<
   typeof listGtdProjects
 >;

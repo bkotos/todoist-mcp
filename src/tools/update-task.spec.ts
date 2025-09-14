@@ -1,9 +1,9 @@
 import { updateTaskSchema, updateTaskHandler } from './update-task';
 import type { MockedFunction } from 'vitest';
-import { updateTask } from '../services/task-updates';
+import { updateTask } from '../services/tasks/task-updates';
 
 // Mock the service module
-vi.mock('../services/task-updates');
+vi.mock('../services/tasks/task-updates');
 
 const mockUpdateTask = updateTask as MockedFunction<typeof updateTask>;
 

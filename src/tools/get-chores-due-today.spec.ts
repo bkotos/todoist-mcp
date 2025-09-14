@@ -1,9 +1,9 @@
 import type { MockedFunction, Mocked } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { getChoresDueTodayHandler } from './get-chores-due-today';
-import { getChoresDueToday } from '../services/chores-due-today';
+import { getChoresDueToday } from '../services/tasks/chores-due-today';
 
-vi.mock('../services/chores-due-today');
+vi.mock('../services/tasks/chores-due-today');
 
 const mockGetChoresDueToday = vi.mocked(getChoresDueToday);
 

@@ -1,4 +1,4 @@
-import { getAreasOfFocus } from '../services/tasks';
+import { getAreasOfFocus } from '../services/tasks/tasks';
 
 export const getAreasOfFocusSchema = {
   name: 'get_areas_of_focus',

@@ -1,9 +1,9 @@
 import { getContextLabelsHandler } from './get-context-labels';
-import type { MockedFunction } from "vitest";
-import { getContextLabels } from '../services/labels';
+import type { MockedFunction } from 'vitest';
+import { getContextLabels } from '../services/labels/labels';
 
 // Mock the labels service
-vi.mock('../services/labels');
+vi.mock('../services/labels/labels');
 
 const mockGetContextLabels = getContextLabels as MockedFunction<
   typeof getContextLabels

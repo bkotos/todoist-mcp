@@ -1,9 +1,9 @@
 import { listBeckyTimeSensitiveTasksHandler } from './list-becky-time-sensitive-tasks';
 import type { MockedFunction } from 'vitest';
-import { listBeckyTimeSensitiveTasks } from '../services/tasks';
+import { listBeckyTimeSensitiveTasks } from '../services/tasks/tasks';
 
 // Mock the tasks service
-vi.mock('../services/tasks');
+vi.mock('../services/tasks/tasks');
 const mockListBeckyTimeSensitiveTasks =
   listBeckyTimeSensitiveTasks as MockedFunction<
     typeof listBeckyTimeSensitiveTasks

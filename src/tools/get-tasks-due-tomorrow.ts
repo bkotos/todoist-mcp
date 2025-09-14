@@ -1,4 +1,4 @@
-import { getTasksDueTomorrow } from '../services/tasks-due-tomorrow';
+import { getTasksDueTomorrow } from '../services/tasks/tasks-due-tomorrow';
 
 export const getTasksDueTomorrowSchema = {
   name: 'get_tasks_due_tomorrow',

@@ -1,9 +1,9 @@
 import { listNextActionsHandler } from './list-next-actions';
 import type { MockedFunction } from "vitest";
-import { listNextActions } from '../services/tasks';
+import { listNextActions } from '../services/tasks/tasks';
 
 // Mock the tasks service
-vi.mock('../services/tasks');
+vi.mock('../services/tasks/tasks');
 const mockListNextActions = listNextActions as MockedFunction<
   typeof listNextActions
 >;

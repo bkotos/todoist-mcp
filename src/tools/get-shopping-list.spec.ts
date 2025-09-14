@@ -1,9 +1,9 @@
 import type { MockedFunction } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { getShoppingListHandler } from './get-shopping-list';
-import { getShoppingList } from '../services/tasks';
+import { getShoppingList } from '../services/tasks/tasks';
 
-vi.mock('../services/tasks');
+vi.mock('../services/tasks/tasks');
 
 const mockGetShoppingList = vi.mocked(getShoppingList);
 

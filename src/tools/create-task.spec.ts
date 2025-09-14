@@ -1,8 +1,8 @@
 import { createTaskHandler } from './create-task';
-import type { MockedFunction } from "vitest";
-import { createTask } from '../services/create-task';
+import type { MockedFunction } from 'vitest';
+import { createTask } from '../services/tasks/create-task';
 
-vi.mock('../services/create-task');
+vi.mock('../services/tasks/create-task');
 
 const mockCreateTask = createTask as MockedFunction<typeof createTask>;
 

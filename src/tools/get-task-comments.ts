@@ -1,4 +1,4 @@
-import { getTaskComments } from '../services/comments';
+import { getTaskComments } from '../services/tasks/comments';
 
 export const getTaskCommentsSchema = {
   name: 'get_task_comments',

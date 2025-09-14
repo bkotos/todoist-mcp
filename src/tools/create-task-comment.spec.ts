@@ -1,8 +1,8 @@
 import { createTaskCommentHandler } from './create-task-comment';
 import type { MockedFunction } from "vitest";
-import { createTaskComment } from '../services/comments';
+import { createTaskComment } from '../services/tasks/comments';
 
-vi.mock('../services/comments');
+vi.mock('../services/tasks/comments');
 
 const mockCreateTaskComment = createTaskComment as MockedFunction<
   typeof createTaskComment

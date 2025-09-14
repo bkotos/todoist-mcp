@@ -1,9 +1,9 @@
 import { getTasksWithLabelHandler } from './get-tasks-with-label';
 import type { MockedFunction } from "vitest";
-import { getTasksWithLabel } from '../services/tasks';
+import { getTasksWithLabel } from '../services/tasks/tasks';
 
 // Mock the tasks service
-vi.mock('../services/tasks');
+vi.mock('../services/tasks/tasks');
 const mockGetTasksWithLabel = getTasksWithLabel as MockedFunction<
   typeof getTasksWithLabel
 >;
