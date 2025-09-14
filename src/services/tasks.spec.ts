@@ -985,7 +985,7 @@ describe('getShoppingList', () => {
 
   describe('listBrianTimeSensitiveTasks', () => {
     const BRIAN_TIME_SENSITIVE_FILTER =
-      '##Brian time sensitive (per Becky) & !subtask';
+      '##Brian time sensitive (per BP) & !subtask';
 
     it('should return Brian time sensitive tasks when API call succeeds', async () => {
       // arrange
@@ -1065,7 +1065,7 @@ describe('getShoppingList', () => {
 
   describe('listBeckyTimeSensitiveTasks', () => {
     const BECKY_TIME_SENSITIVE_FILTER =
-      '##Becky time sensitive (per Brian) & !subtask';
+      '##Becky time sensitive (per BK) & !subtask';
 
     it('should return Becky time sensitive tasks when API call succeeds', async () => {
       // arrange
