@@ -234,6 +234,18 @@ Content-Type: application/json
 
 {}
 
+### List Brian Time Sensitive Tasks
+POST http://localhost:3001/debug/tool/list_brian_time_sensitive_tasks
+Content-Type: application/json
+
+{}
+
+### List Becky Time Sensitive Tasks
+POST http://localhost:3001/debug/tool/list_becky_time_sensitive_tasks
+Content-Type: application/json
+
+{}
+
 ### ============================================
 ### EXAMPLE USAGE NOTES
 ### ============================================
