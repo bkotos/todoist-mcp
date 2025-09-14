@@ -4,3 +4,5 @@ export {
   isBeckySharedProject,
   isInboxProject,
 } from './project-filters';
+
+export { ProjectNames } from './project-names';

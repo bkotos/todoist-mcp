@@ -1,9 +1,9 @@
 import { listBeckyTimeSensitiveTasks } from '../services/tasks';
+import { ProjectNames } from '../utils';
 
 export const listBeckyTimeSensitiveTasksSchema = {
   name: 'list_becky_time_sensitive_tasks',
-  description:
-    'List all Becky time sensitive tasks from Todoist using the ##Becky time sensitive (per Brian) & !subtask filter. Returns structured JSON data with task details including id, content, description, completion status, labels, priority, due date, and comment count.',
+  description: `List all Becky time sensitive tasks from Todoist using the ##${ProjectNames.BECKY_TIME_SENSITIVE} & !subtask filter. Returns structured JSON data with task details including id, content, description, completion status, labels, priority, due date, and comment count.`,
   inputSchema: {
     type: 'object',
     properties: {},

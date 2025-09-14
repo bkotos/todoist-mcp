@@ -1,9 +1,9 @@
 import { listBrianTimeSensitiveTasks } from '../services/tasks';
+import { ProjectNames } from '../utils';
 
 export const listBrianTimeSensitiveTasksSchema = {
   name: 'list_brian_time_sensitive_tasks',
-  description:
-    'List all Brian time sensitive tasks from Todoist using the ##Brian time sensitive (per Becky) & !subtask filter. Returns structured JSON data with task details including id, content, description, completion status, labels, priority, due date, and comment count.',
+  description: `List all Brian time sensitive tasks from Todoist using the ##${ProjectNames.BRIAN_TIME_SENSITIVE} & !subtask filter. Returns structured JSON data with task details including id, content, description, completion status, labels, priority, due date, and comment count.`,
   inputSchema: {
     type: 'object',
     properties: {},

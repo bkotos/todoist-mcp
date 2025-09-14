@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { getTodoistClient } from './client';
 import { setTaskName } from './task-cache';
+import { ProjectNames } from '../utils';
 
 interface TodoistTask {
   id: string;
@@ -187,7 +188,7 @@ export async function getShoppingList(): Promise<TasksResponse> {
 export async function listBrianTimeSensitiveTasks(): Promise<TasksResponse> {
   try {
     return await fetchTasksByFilter(
-      '##Brian time sensitive (per Becky) & !subtask'
+      `##${ProjectNames.BRIAN_TIME_SENSITIVE} & !subtask`
     );
   } catch (error) {
     throw new Error(
@@ -200,7 +201,7 @@ export async function listBrianTimeSensitiveTasks(): Promise<TasksResponse> {
 export async function listBeckyTimeSensitiveTasks(): Promise<TasksResponse> {
   try {
     return await fetchTasksByFilter(
-      '##Becky time sensitive (per Brian) & !subtask'
+      `##${ProjectNames.BECKY_TIME_SENSITIVE} & !subtask`
     );
   } catch (error) {
     throw new Error(
