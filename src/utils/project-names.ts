@@ -7,7 +7,7 @@ export enum BrianSharedProjectNames {
   BRIAN_SOMEDAY = 'Brian someday',
   BRIAN_TICKLER = 'Brian tickler',
   BRIAN_CONTEXTUAL = 'Brian contextual',
-  BRIAN_TIME_SENSITIVE = 'Brian time sensitive (per BP)',
+  BRIAN_TIME_SENSITIVE = 'Brian time sensitive \\(per BP\\)',
 }
 
 // Becky shared project names (projects shared with Brian)
@@ -16,7 +16,7 @@ export enum BeckySharedProjectNames {
   BECKY_INBOX_PER_BRIAN = 'Becky inbox - per Brian',
   BECKY_ACKNOWLEDGED = 'Becky acknowledged',
   BECKY_IN_PROGRESS = 'Becky In Progress',
-  BECKY_TIME_SENSITIVE = 'Becky time sensitive (per BK)',
+  BECKY_TIME_SENSITIVE = 'Becky time sensitive \\(per BK\\)',
 }
 
 // Brian non-shared project names (Brian's personal projects)

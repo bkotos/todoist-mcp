@@ -202,14 +202,14 @@ describe('Project Filters', () => {
     },
     {
       id: 27,
-      name: 'Becky time sensitive (per BK)',
+      name: 'Becky time sensitive \\(per BK\\)',
       url: 'https://todoist.com/project/27',
       is_favorite: false,
       is_inbox: false,
     },
     {
       id: 28,
-      name: 'Brian time sensitive (per BP)',
+      name: 'Brian time sensitive \\(per BP\\)',
       url: 'https://todoist.com/project/28',
       is_favorite: false,
       is_inbox: false,
@@ -421,7 +421,7 @@ describe('Project Filters', () => {
         },
         {
           id: 28,
-          name: 'Brian time sensitive (per BP)',
+          name: 'Brian time sensitive \\(per BP\\)',
           url: 'https://todoist.com/project/28',
           is_favorite: false,
           is_inbox: false,
@@ -485,7 +485,7 @@ describe('Project Filters', () => {
         },
         {
           id: 27,
-          name: 'Becky time sensitive (per BK)',
+          name: 'Becky time sensitive \\(per BK\\)',
           url: 'https://todoist.com/project/27',
           is_favorite: false,
           is_inbox: false,
