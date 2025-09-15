@@ -1,4 +1,4 @@
-import { searchTasksUsingOr } from '../services/tasks/task-retrieval';
+import { searchTasksUsingOr } from '../services/tasks/task-search';
 
 export const searchTasksUsingOrSchema = {
   name: 'search_tasks_using_or',
