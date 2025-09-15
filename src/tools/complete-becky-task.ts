@@ -1,4 +1,4 @@
-import { completeBeckyTask } from '../services/tasks/complete-becky-task';
+import { completeBeckyTask } from '../services/tasks/task-update';
 
 export const completeBeckyTaskSchema = {
   name: 'complete_becky_task',

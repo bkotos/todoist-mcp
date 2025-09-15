@@ -1,12 +1,10 @@
 import { completeTaskHandler } from './complete-task';
-import type { MockedFunction } from "vitest";
-import { completeTask } from '../services/tasks/complete-task';
+import type { MockedFunction } from 'vitest';
+import { completeTask } from '../services/tasks/task-update';
 
-vi.mock('../services/tasks/complete-task');
+vi.mock('../services/tasks/task-update');
 
-const mockCompleteTask = completeTask as MockedFunction<
-  typeof completeTask
->;
+const mockCompleteTask = completeTask as MockedFunction<typeof completeTask>;
 
 describe('completeTaskHandler', () => {
   it('should complete a task successfully', async () => {

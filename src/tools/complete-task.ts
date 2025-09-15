@@ -1,4 +1,4 @@
-import { completeTask } from '../services/tasks/complete-task';
+import { completeTask } from '../services/tasks/task-update';
 
 export const completeTaskSchema = {
   name: 'complete_task',

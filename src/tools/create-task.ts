@@ -1,4 +1,4 @@
-import { createTask } from '../services/tasks/create-task';
+import { createTask } from '../services/tasks/task-update';
 
 export const createTaskSchema = {
   name: 'create_task',

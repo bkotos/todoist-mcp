@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { MockedFunction } from 'vitest';
 import { getTodoistClient, getTodoistV1Client } from '../client';
-import { moveTask } from './move-task';
+import { moveTask } from './task-update';
 
 // Mock the client module
 vi.mock('../client');

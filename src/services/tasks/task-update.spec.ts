@@ -1,4 +1,4 @@
-import { updateTask } from './task-updates';
+import { updateTask } from './task-update';
 import type { MockedFunction } from 'vitest';
 import { getTodoistClient } from '../client';
 import { getTaskName, setTaskName } from '../cache/task-cache';

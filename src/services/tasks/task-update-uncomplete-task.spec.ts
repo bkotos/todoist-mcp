@@ -1,6 +1,6 @@
 import type { MockedFunction } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { uncompleteTask } from './uncomplete-task';
+import { uncompleteTask } from './task-update';
 import { getTodoistClient } from '../client';
 
 vi.mock('../client');

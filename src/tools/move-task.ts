@@ -1,4 +1,4 @@
-import { moveTask } from '../services/tasks/move-task';
+import { moveTask } from '../services/tasks/task-update';
 
 export const moveTaskSchema = {
   name: 'move_task',

@@ -1,5 +1,5 @@
-import { createTask } from './create-task';
-import type { MockedFunction } from "vitest";
+import { createTask } from './task-update';
+import type { MockedFunction } from 'vitest';
 import { getTodoistClient } from '../client';
 
 vi.mock('../client');

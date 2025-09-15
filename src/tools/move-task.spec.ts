@@ -1,9 +1,9 @@
 import { moveTaskHandler } from './move-task';
 import type { MockedFunction } from 'vitest';
-import * as moveTaskService from '../services/tasks/move-task';
+import * as moveTaskService from '../services/tasks/task-update';
 
 // Mock the move-task service
-vi.mock('../services/tasks/move-task');
+vi.mock('../services/tasks/task-update');
 
 const mockMoveTask = moveTaskService.moveTask as MockedFunction<
   typeof moveTaskService.moveTask

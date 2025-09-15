@@ -1,4 +1,4 @@
-import { uncompleteTask } from '../services/tasks/uncomplete-task';
+import { uncompleteTask } from '../services/tasks/task-update';
 
 export const uncompleteTaskSchema = {
   name: 'uncomplete_task',
