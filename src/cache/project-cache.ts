@@ -2,14 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import type { ProjectsResponse } from '../services/projects';
 
-// Get error message
-function getErrorMessage(error: any): string {
-  if (error instanceof Error) {
-    return error.message;
-  }
-  return 'Unknown error';
-}
-
 // Helper function to get cache configuration
 function getCacheConfig() {
   const CACHE_DIR = '.cache';

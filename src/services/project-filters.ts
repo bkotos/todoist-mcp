@@ -4,28 +4,8 @@ import {
   isBrianSharedProject,
   isBeckySharedProject,
   isInboxProject,
+  getErrorMessage,
 } from '../utils';
-
-// Get error message
-function getErrorMessage(error: any): string {
-  if (error instanceof Error) {
-    return error.message;
-  }
-  return 'Unknown error';
-}
-
-// Helper function to format project list
-function formatProjectList(projects: any[], categoryName: string): string {
-  if (projects.length === 0) {
-    return `No ${categoryName} projects found.`;
-  }
-
-  const formattedProjects = projects
-    .map((project) => `- ${project.name} (${project.url})`)
-    .join('\n');
-
-  return `Found ${projects.length} ${categoryName} project(s):\n\n${formattedProjects}`;
-}
 
 // Get Brian-only projects (not shared)
 export async function getBrianOnlyProjects(): Promise<ProjectsResponse> {
