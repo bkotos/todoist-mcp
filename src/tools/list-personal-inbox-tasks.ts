@@ -1,4 +1,4 @@
-import { listPersonalInboxTasks } from '../services/tasks/tasks';
+import { listPersonalInboxTasks } from '../services/tasks/task-retrieval';
 
 export const listPersonalInboxTasksSchema = {
   name: 'list_personal_inbox_tasks',

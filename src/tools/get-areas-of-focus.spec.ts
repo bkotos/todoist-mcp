@@ -1,9 +1,9 @@
 import type { MockedFunction } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { getAreasOfFocusHandler } from './get-areas-of-focus';
-import { getAreasOfFocus } from '../services/tasks/tasks';
+import { getAreasOfFocus } from '../services/tasks/task-retrieval';
 
-vi.mock('../services/tasks/tasks');
+vi.mock('../services/tasks/task-retrieval');
 
 const mockGetAreasOfFocus = vi.mocked(getAreasOfFocus);
 

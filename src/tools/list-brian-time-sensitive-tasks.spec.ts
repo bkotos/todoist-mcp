@@ -1,9 +1,9 @@
 import { listBrianTimeSensitiveTasksHandler } from './list-brian-time-sensitive-tasks';
 import type { MockedFunction } from 'vitest';
-import { listBrianTimeSensitiveTasks } from '../services/tasks/tasks';
+import { listBrianTimeSensitiveTasks } from '../services/tasks/task-retrieval';
 
 // Mock the tasks service
-vi.mock('../services/tasks/tasks');
+vi.mock('../services/tasks/task-retrieval');
 const mockListBrianTimeSensitiveTasks =
   listBrianTimeSensitiveTasks as MockedFunction<
     typeof listBrianTimeSensitiveTasks

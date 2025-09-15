@@ -1,9 +1,9 @@
 import { getTaskName, setTaskName, clearCache } from '../cache/task-cache';
 import type { MockedFunction } from 'vitest';
-import * as tasksService from '../tasks/tasks';
+import * as tasksService from '../tasks/task-retrieval';
 
 // Mock the tasks service
-vi.mock('../tasks/tasks');
+vi.mock('../tasks/task-retrieval');
 
 const mockGetTaskById = tasksService.getTaskById as MockedFunction<
   typeof tasksService.getTaskById

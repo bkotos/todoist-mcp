@@ -1,13 +1,13 @@
 import { completeTask } from './complete-task';
 import type { MockedFunction } from 'vitest';
 import { getTodoistClient } from '../client';
-import { getTaskById } from '../tasks/tasks';
+import { getTaskById } from './task-retrieval';
 import { listProjects } from '../projects/projects';
 import { isBrianSharedProject } from '../../utils/project-filters';
 import { TodoistProject } from '../../types';
 
 vi.mock('../client');
-vi.mock('./tasks');
+vi.mock('./task-retrieval');
 vi.mock('../projects/projects');
 // Don't mock isBrianSharedProject since it's a pure function
 

@@ -1,6 +1,6 @@
 import type { MockedFunction } from 'vitest';
 import { vi } from 'vitest';
-import { getRecentMedia } from './recent-media';
+import { getRecentMedia } from './task-retrieval';
 import { getTodoistClient } from '../client';
 
 vi.mock('../client');

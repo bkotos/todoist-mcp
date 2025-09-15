@@ -1,9 +1,9 @@
 import type { MockedFunction } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { getTasksDueThisWeekHandler } from './get-tasks-due-this-week';
-import * as todoistService from '../services/tasks/tasks-due-this-week';
+import * as todoistService from '../services/tasks/task-retrieval';
 
-vi.mock('../services/tasks/tasks-due-this-week');
+vi.mock('../services/tasks/task-retrieval');
 
 const mockGetTasksDueThisWeek = vi.mocked(todoistService.getTasksDueThisWeek);
 

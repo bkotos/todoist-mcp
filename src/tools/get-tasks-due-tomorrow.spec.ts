@@ -1,10 +1,10 @@
 import type { MockedFunction } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { getTasksDueTomorrowHandler } from './get-tasks-due-tomorrow';
-import * as serviceModule from '../services/tasks/tasks-due-tomorrow';
+import * as serviceModule from '../services/tasks/task-retrieval';
 
 // Mock the service module
-vi.mock('../services/tasks/tasks-due-tomorrow');
+vi.mock('../services/tasks/task-retrieval');
 
 const mockGetTasksDueTomorrow = vi.mocked(serviceModule.getTasksDueTomorrow);
 

@@ -1,4 +1,4 @@
-import { getTaskById } from '../tasks/tasks';
+import { getTaskById } from '../tasks/task-retrieval';
 
 // In-memory cache for task names
 const taskNameCache = new Map<string, string>();

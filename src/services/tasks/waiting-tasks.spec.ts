@@ -1,5 +1,5 @@
 import { getTodoistClient } from '../client';
-import { getWaitingTasks } from './waiting-tasks';
+import { getWaitingTasks } from './task-retrieval';
 
 // Mock the client module
 vi.mock('../client');

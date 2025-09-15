@@ -1,9 +1,9 @@
 import type { MockedFunction } from 'vitest';
 import { vi } from 'vitest';
 import { getRecentMediaHandler } from './get-recent-media';
-import { getRecentMedia } from '../services/tasks/recent-media';
+import { getRecentMedia } from '../services/tasks/task-retrieval';
 
-vi.mock('../services/tasks/recent-media');
+vi.mock('../services/tasks/task-retrieval');
 
 const mockGetRecentMedia = vi.mocked(getRecentMedia);
 

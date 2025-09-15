@@ -12,7 +12,7 @@ import {
   getShoppingList,
   listBrianTimeSensitiveTasks,
   listBeckyTimeSensitiveTasks,
-} from '../tasks/tasks';
+} from './task-retrieval';
 import * as taskCache from '../cache/task-cache';
 import fs from 'fs';
 import path from 'path';

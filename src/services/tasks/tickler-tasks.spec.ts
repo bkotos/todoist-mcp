@@ -1,6 +1,6 @@
 import type { MockedFunction } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { getTicklerTasks } from './tickler-tasks';
+import { getTicklerTasks } from './task-retrieval';
 import { getTodoistClient } from '../client';
 
 vi.mock('../client');

@@ -1,5 +1,5 @@
 import { getTodoistClient } from '../client';
-import { getTasksDueToday } from './tasks-due-today';
+import { getTasksDueToday } from './task-retrieval';
 
 // Mock the client module
 vi.mock('../client');

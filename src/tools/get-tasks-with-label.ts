@@ -1,4 +1,4 @@
-import { getTasksWithLabel } from '../services/tasks/tasks';
+import { getTasksWithLabel } from '../services/tasks/task-retrieval';
 
 export const getTasksWithLabelSchema = {
   name: 'get_tasks_with_label',

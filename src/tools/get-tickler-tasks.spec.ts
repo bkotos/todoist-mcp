@@ -1,9 +1,9 @@
 import type { MockedFunction } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { getTicklerTasksHandler } from './get-tickler-tasks';
-import { getTicklerTasks } from '../services/tasks/tickler-tasks';
+import { getTicklerTasks } from '../services/tasks/task-retrieval';
 
-vi.mock('../services/tasks/tickler-tasks');
+vi.mock('../services/tasks/task-retrieval');
 
 const mockGetTicklerTasks = vi.mocked(getTicklerTasks);
 

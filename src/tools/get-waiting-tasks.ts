@@ -1,4 +1,4 @@
-import { getWaitingTasks } from '../services/tasks/waiting-tasks';
+import { getWaitingTasks } from '../services/tasks/task-retrieval';
 
 export const getWaitingTasksSchema = {
   name: 'get_waiting_tasks',

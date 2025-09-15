@@ -4,7 +4,7 @@ import {
   searchTasks,
   searchTasksUsingAnd,
   searchTasksUsingOr,
-} from './search-tasks';
+} from './task-retrieval';
 import * as taskCache from '../cache/task-cache';
 import type { MockedFunction } from 'vitest';
 

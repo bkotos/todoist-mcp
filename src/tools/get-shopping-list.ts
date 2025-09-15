@@ -1,4 +1,4 @@
-import { getShoppingList } from '../services/tasks/tasks';
+import { getShoppingList } from '../services/tasks/task-retrieval';
 
 export const getShoppingListSchema = {
   name: 'get_shopping_list',

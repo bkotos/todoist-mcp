@@ -1,4 +1,4 @@
-import { searchTasksUsingAnd } from '../services/tasks/search-tasks';
+import { searchTasksUsingAnd } from '../services/tasks/task-retrieval';
 
 export const searchTasksUsingAndSchema = {
   name: 'search_tasks_using_and',

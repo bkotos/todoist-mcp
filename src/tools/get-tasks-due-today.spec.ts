@@ -1,8 +1,8 @@
-import { getTasksDueToday } from '../services/tasks/tasks-due-today';
+import { getTasksDueToday } from '../services/tasks/task-retrieval';
 import type { MockedFunction } from 'vitest';
 
 // Mock the tasks-due-today service
-vi.mock('../services/tasks/tasks-due-today');
+vi.mock('../services/tasks/task-retrieval');
 
 const mockGetTasksDueToday = getTasksDueToday as MockedFunction<
   typeof getTasksDueToday

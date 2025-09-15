@@ -1,6 +1,6 @@
 import type { MockedFunction } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { getTasksDueTomorrow } from './tasks-due-tomorrow';
+import { getTasksDueTomorrow } from './task-retrieval';
 import * as clientModule from '../client';
 
 // Mock the client module

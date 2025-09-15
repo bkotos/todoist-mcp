@@ -1,8 +1,8 @@
-import { getWaitingTasks } from '../services/tasks/waiting-tasks';
+import { getWaitingTasks } from '../services/tasks/task-retrieval';
 import type { MockedFunction } from 'vitest';
 
 // Mock the waiting-tasks service
-vi.mock('../services/tasks/waiting-tasks');
+vi.mock('../services/tasks/task-retrieval');
 
 const mockGetWaitingTasks = getWaitingTasks as MockedFunction<
   typeof getWaitingTasks

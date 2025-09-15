@@ -1,5 +1,5 @@
 import { getTodoistClient } from '../client';
-import { getTaskById } from '../tasks/tasks';
+import { getTaskById } from './task-retrieval';
 import { listProjects } from '../projects/projects';
 import { isBrianSharedProject, getErrorMessage } from '../../utils';
 

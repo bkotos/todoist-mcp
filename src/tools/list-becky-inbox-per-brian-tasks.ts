@@ -1,4 +1,4 @@
-import { listBeckyInboxPerBrianTasks } from '../services/tasks/tasks';
+import { listBeckyInboxPerBrianTasks } from '../services/tasks/task-retrieval';
 
 export const listBeckyInboxPerBrianTasksSchema = {
   name: 'list_becky_inbox_per_brian_tasks',

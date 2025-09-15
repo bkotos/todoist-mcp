@@ -1,6 +1,6 @@
 import type { MockedFunction, Mocked } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { getChoresDueToday } from './chores-due-today';
+import { getChoresDueToday } from './task-retrieval';
 import { getTodoistClient } from '../client';
 
 vi.mock('../client');
