@@ -3,21 +3,9 @@ import { setTaskName } from '../cache/task-cache';
 import { ProjectNames, getErrorMessage } from '../../utils';
 import { TodoistTask, TasksResponse } from '../../types';
 
-// Define the filter query for better readability
-const DUE_TODAY_FILTER = [
-  '(today | overdue)',
-  '& !##Tickler',
-  '& !##Brian tickler',
-  '& !##Ansonia Tickler',
-  '& !##Someday',
-  '& !##Brian someday',
-  '& !##Brian inbox - per Becky',
-  '& !##Becky inbox - per Brian',
-  '& !##Shopping list',
-  '& !##Becky acknowledged',
-  '& !##Chores',
-  '& !##rent',
-  '& (!##BABY',
+// Baby project exclusion filter - used across multiple functions
+const BABY_PROJECTS_EXCLUSION = [
+  '(!##BABY',
   '& !###BrianBabyFocus',
   '& !##Home Preparation',
   '& !##Cards',
@@ -32,6 +20,23 @@ const DUE_TODAY_FILTER = [
   '& !##CarPreparation',
   '& !##Food',
   '& !##Before Hospital Stay)',
+].join(' ');
+
+// Define the filter query for better readability
+const DUE_TODAY_FILTER = [
+  '(today | overdue)',
+  '& !##Tickler',
+  '& !##Brian tickler',
+  '& !##Ansonia Tickler',
+  '& !##Someday',
+  '& !##Brian someday',
+  '& !##Brian inbox - per Becky',
+  '& !##Becky inbox - per Brian',
+  '& !##Shopping list',
+  '& !##Becky acknowledged',
+  '& !##Chores',
+  '& !##rent',
+  `& ${BABY_PROJECTS_EXCLUSION}`,
   '& !##Daily Chores',
   '& !##Baby Research',
   '& !##Becky someday',
@@ -43,13 +48,28 @@ const WAITING_FILTER = '#Waiting | #Brian waiting | #Ansonia Waiting';
 // Define the filter query for better readability
 const RECENT_MEDIA_FILTER = `##${ProjectNames.MEDIA} & !subtask & (created after: 30 days ago) & !@watched`;
 
-// Generic private function to fetch tasks with a specific filter
-async function fetchTasksByFilter(filter: string): Promise<TasksResponse> {
-  const todoistClient = getTodoistClient();
-  const response = await todoistClient.get<TodoistTask[]>(
-    `/tasks?filter=${encodeURIComponent(filter)}`
-  );
-  const tasks = response.data.map((task) => ({
+// Tomorrow filter - complex filter for tasks due tomorrow
+const TOMORROW_FILTER = [
+  'tomorrow',
+  '& (!##Tickler)',
+  '& (!##Chores)',
+  '& (!##Brian tickler)',
+  '& (!##Ansonia Tickler)',
+  '& (!##Project - Meal prep)',
+  '& (!shared | assigned to: Brian | ##Brian acknowledged | ##Project - Meal prep | ##Shopping list)',
+  `& ${BABY_PROJECTS_EXCLUSION}`,
+].join(' ');
+
+// This week filter - complex filter for tasks due this week
+const THIS_WEEK_FILTER = [
+  'next 7 days & (!##Tickler) & (!##Ansonia Tickler) & (!##Project - Meal prep) &',
+  '(!shared | assigned to: Brian | ##Brian inbox - per Becky | ##Brian acknowledged | ##Project - Meal prep | ##Shopping list) &',
+  BABY_PROJECTS_EXCLUSION,
+].join(' ');
+
+// Helper function to transform TodoistTask[] to structured format
+function transformTasks(tasks: TodoistTask[]) {
+  return tasks.map((task) => ({
     id: parseInt(task.id),
     content: task.content,
     description: task.description,
@@ -60,6 +80,15 @@ async function fetchTasksByFilter(filter: string): Promise<TasksResponse> {
     url: task.url,
     comment_count: task.comment_count,
   }));
+}
+
+// Generic private function to fetch tasks with a specific filter
+async function fetchTasksByFilter(filter: string): Promise<TasksResponse> {
+  const todoistClient = getTodoistClient();
+  const response = await todoistClient.get<TodoistTask[]>(
+    `/tasks?filter=${encodeURIComponent(filter)}`
+  );
+  const tasks = transformTasks(response.data);
 
   // Store task names in cache
   tasks.forEach((task) => {
@@ -74,29 +103,8 @@ async function fetchTasksByFilter(filter: string): Promise<TasksResponse> {
 
 // Get tasks due today function - returns structured data for tasks due today
 export async function getTasksDueToday(): Promise<TasksResponse> {
-  const todoistClient = getTodoistClient();
-
   try {
-    const response = await todoistClient.get<TodoistTask[]>(
-      `/tasks?filter=${encodeURIComponent(DUE_TODAY_FILTER)}`
-    );
-
-    const tasks = response.data.map((task) => ({
-      id: parseInt(task.id),
-      content: task.content,
-      description: task.description,
-      is_completed: task.is_completed,
-      labels: task.labels,
-      priority: task.priority,
-      due_date: task.due?.date || null,
-      url: task.url,
-      comment_count: task.comment_count,
-    }));
-
-    return {
-      tasks,
-      total_count: tasks.length,
-    };
+    return await fetchTasksByFilter(DUE_TODAY_FILTER);
   } catch (error) {
     throw new Error(`Failed to get tasks due today: ${getErrorMessage(error)}`);
   }
@@ -106,19 +114,8 @@ export async function getTasksDueTomorrow(): Promise<TodoistTask[]> {
   const client = getTodoistClient();
 
   try {
-    const filter = [
-      'tomorrow',
-      '& (!##Tickler)',
-      '& (!##Chores)',
-      '& (!##Brian tickler)',
-      '& (!##Ansonia Tickler)',
-      '& (!##Project - Meal prep)',
-      '& (!shared | assigned to: Brian | ##Brian acknowledged | ##Project - Meal prep | ##Shopping list)',
-      '& (!##BABY & !###BrianBabyFocus & !##Home Preparation & !##Cards & !##Hospital Preparation & !##Baby Care Book & !##To Pack & !##Hospital Stay & !##Post Partum & !##Questions and Concerns & !##Research & !##BabyClassNotes & !##CarPreparation & !##Food & !##Before Hospital Stay)',
-    ].join(' ');
-
     const response = await client.get<TodoistTask[]>(
-      `/tasks?filter=${encodeURIComponent(filter)}`
+      `/tasks?filter=${encodeURIComponent(TOMORROW_FILTER)}`
     );
     return response.data;
   } catch (error) {
@@ -132,15 +129,8 @@ export async function getTasksDueThisWeek(): Promise<TodoistTask[]> {
   const client = getTodoistClient();
 
   try {
-    const filter =
-      'next 7 days & (!##Tickler) & (!##Ansonia Tickler) & (!##Project - Meal prep) & ' +
-      '(!shared | assigned to: Brian | ##Brian inbox - per Becky | ##Brian acknowledged | ##Project - Meal prep | ##Shopping list) & ' +
-      '(!##BABY & !###BrianBabyFocus & !##Home Preparation & !##Cards & !##Hospital Preparation & !##Baby Care Book & ' +
-      '!##To Pack & !##Hospital Stay & !##Post Partum & !##Questions and Concerns & !##Research & !##BabyClassNotes & ' +
-      '!##CarPreparation & !##Food & !##Before Hospital Stay)';
-
     const response = await client.get<TodoistTask[]>(
-      `/tasks?filter=${encodeURIComponent(filter)}`
+      `/tasks?filter=${encodeURIComponent(THIS_WEEK_FILTER)}`
     );
     return response.data;
   } catch (error) {
@@ -197,29 +187,8 @@ export async function getRecentMedia(): Promise<TodoistTask[]> {
 
 // Get waiting tasks function - returns structured data for waiting tasks
 export async function getWaitingTasks(): Promise<TasksResponse> {
-  const todoistClient = getTodoistClient();
-
   try {
-    const response = await todoistClient.get<TodoistTask[]>(
-      `/tasks?filter=${encodeURIComponent(WAITING_FILTER)}`
-    );
-
-    const tasks = response.data.map((task) => ({
-      id: parseInt(task.id),
-      content: task.content,
-      description: task.description,
-      is_completed: task.is_completed,
-      labels: task.labels,
-      priority: task.priority,
-      due_date: task.due?.date || null,
-      url: task.url,
-      comment_count: task.comment_count,
-    }));
-
-    return {
-      tasks,
-      total_count: tasks.length,
-    };
+    return await fetchTasksByFilter(WAITING_FILTER);
   } catch (error) {
     throw new Error(`Failed to get waiting tasks: ${getErrorMessage(error)}`);
   }
@@ -277,7 +246,7 @@ export async function listNextActions(): Promise<TasksResponse> {
 export async function listGtdProjects(): Promise<TasksResponse> {
   try {
     return await fetchTasksByFilter(
-      '(#Projects | #Brian projects | #Ansonia Projects) & !subtask & (!##BABY & !###BrianBabyFocus & !##Home Preparation & !##Cards & !##Hospital Preparation & !##Baby Care Book & !##To Pack & !##Hospital Stay & !##Post Partum & !##Questions and Concerns & !##Research & !##BabyClassNotes & !##CarPreparation & !##Food & !##Before Hospital Stay)'
+      `(#Projects | #Brian projects | #Ansonia Projects) & !subtask & ${BABY_PROJECTS_EXCLUSION}`
     );
   } catch (error) {
     throw new Error(`Failed to list GTD projects: ${getErrorMessage(error)}`);
