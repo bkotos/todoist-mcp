@@ -1,4 +1,5 @@
 import { getTodoistClient } from '../client';
+import { getErrorMessage } from '../../utils';
 
 export async function uncompleteTask(taskId: string): Promise<void> {
   const client = getTodoistClient();
@@ -8,11 +9,4 @@ export async function uncompleteTask(taskId: string): Promise<void> {
   } catch (error) {
     throw new Error(`Failed to uncomplete task: ${getErrorMessage(error)}`);
   }
-}
-
-function getErrorMessage(error: any): string {
-  if (error.response?.data?.error) {
-    return error.response.data.error;
-  }
-  return error instanceof Error ? error.message : 'Unknown error';
 }

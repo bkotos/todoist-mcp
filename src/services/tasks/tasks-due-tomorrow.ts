@@ -1,5 +1,6 @@
 import { getTodoistClient } from '../client';
 import { TodoistTask } from '../../types';
+import { getErrorMessage } from '../../utils';
 
 export async function getTasksDueTomorrow(): Promise<TodoistTask[]> {
   const client = getTodoistClient();
@@ -25,11 +26,4 @@ export async function getTasksDueTomorrow(): Promise<TodoistTask[]> {
       `Failed to get tasks due tomorrow: ${getErrorMessage(error)}`
     );
   }
-}
-
-function getErrorMessage(error: any): string {
-  if (error.response?.data?.error) {
-    return error.response.data.error;
-  }
-  return error instanceof Error ? error.message : 'Unknown error';
 }
