@@ -1,40 +1,6 @@
 import axios from 'axios';
 import { getTodoistClient } from '../client';
-
-interface TodoistTask {
-  id: string;
-  project_id: string;
-  content: string;
-  description: string;
-  is_completed: boolean;
-  labels: string[];
-  priority: number;
-  due: {
-    date: string;
-    string: string;
-    lang: string;
-    is_recurring: boolean;
-  } | null;
-  url: string;
-  comment_count: number;
-  created_at: string;
-  updated_at: string;
-}
-
-interface TasksResponse {
-  tasks: Array<{
-    id: number;
-    content: string;
-    description: string;
-    is_completed: boolean;
-    labels: string[];
-    priority: number;
-    due_date: string | null;
-    url: string;
-    comment_count: number;
-  }>;
-  total_count: number;
-}
+import { TodoistTask, TasksResponse } from '../../types';
 
 // Define the filter query for better readability
 const DUE_TODAY_FILTER = [
@@ -108,5 +74,4 @@ export async function getTasksDueToday(): Promise<TasksResponse> {
   }
 }
 
-// Export types for testing
-export type { TodoistTask, TasksResponse };
+// Export types for testing - TasksResponse is now imported from types.ts

@@ -1,5 +1,5 @@
 import { getTodoistClient } from '../client';
-import type { TodoistTask } from '../tasks/tasks';
+import { TodoistTask } from '../../types';
 
 function getErrorMessage(error: any): string {
   if (error?.response?.data?.error) {

@@ -1,12 +1,5 @@
 import { getTodoistClient } from '../client';
-
-interface TodoistTask {
-  id: string;
-  content: string;
-  due?: { date: string };
-  project_id: string;
-  labels: string[];
-}
+import { TodoistTask } from '../../types';
 
 export async function getChoresDueToday(): Promise<TodoistTask[]> {
   const client = getTodoistClient();

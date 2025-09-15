@@ -1,26 +1,7 @@
 import axios from 'axios';
 import { getTodoistClient } from '../client';
 import { ProjectNames } from '../../utils';
-
-interface TodoistTask {
-  id: string;
-  project_id: string;
-  content: string;
-  description: string;
-  is_completed: boolean;
-  labels: string[];
-  priority: number;
-  due: {
-    date: string;
-    string: string;
-    lang: string;
-    is_recurring: boolean;
-  } | null;
-  url: string;
-  comment_count: number;
-  created_at: string;
-  updated_at: string;
-}
+import { TodoistTask } from '../../types';
 
 // Define the filter query for better readability
 const RECENT_MEDIA_FILTER = `##${ProjectNames.MEDIA} & !subtask & (created after: 30 days ago) & !@watched`;
