@@ -32,3 +32,28 @@ export interface TasksResponse {
   }>;
   total_count: number;
 }
+
+export interface TransformedProject {
+  id: number;
+  name: string;
+  url: string;
+  is_favorite: boolean;
+  is_inbox: boolean;
+}
+
+export interface TodoistProject {
+  id: string;
+  name: string;
+  color: string;
+  parent_id?: string;
+  order: number;
+  comment_count: number;
+  is_shared: boolean;
+  is_favorite: boolean;
+  is_inbox_project: boolean;
+  is_team_inbox: boolean;
+  view_style: string;
+  url: string;
+  created_at: string;
+  updated_at: string;
+}
