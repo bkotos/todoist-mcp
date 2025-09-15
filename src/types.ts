@@ -33,14 +33,6 @@ export interface TasksResponse {
   total_count: number;
 }
 
-export interface TransformedProject {
-  id: number;
-  name: string;
-  url: string;
-  is_favorite: boolean;
-  is_inbox: boolean;
-}
-
 export interface TodoistProject {
   id: string;
   name: string;

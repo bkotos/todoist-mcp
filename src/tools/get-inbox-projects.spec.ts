@@ -1,5 +1,5 @@
 import { getInboxProjects } from '../services/project-filters';
-import type { MockedFunction } from "vitest";
+import type { MockedFunction } from 'vitest';
 
 // Mock the project-filters service
 vi.mock('../services/project-filters');
@@ -20,21 +20,21 @@ describe('get-inbox-projects tool', () => {
         name: 'Inbox',
         url: 'https://todoist.com/project/2',
         is_favorite: false,
-        is_inbox: true,
+        is_inbox_project: true,
       },
       {
         id: 16,
         name: 'Brian inbox - per Becky',
         url: 'https://todoist.com/project/16',
         is_favorite: false,
-        is_inbox: false,
+        is_inbox_project: false,
       },
       {
         id: 24,
         name: 'Becky inbox - per Brian',
         url: 'https://todoist.com/project/24',
         is_favorite: false,
-        is_inbox: false,
+        is_inbox_project: false,
       },
     ];
     const mockResult = {

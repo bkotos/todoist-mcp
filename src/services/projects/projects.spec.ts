@@ -73,26 +73,21 @@ describe('Projects Service', () => {
       const result = await listProjects();
 
       // assert
-      expect(result).toEqual({
-        projects: [
-          {
-            id: 1,
-            name: 'Personal',
-            url: 'https://todoist.com/project/1',
-            is_favorite: false,
-            is_inbox: true,
-          },
-          {
-            id: 2,
-            name: 'Work',
-            url: 'https://todoist.com/project/2',
-            is_favorite: true,
-            is_inbox: false,
-          },
-        ],
-        total_count: 2,
-        cached_at: expect.any(String),
+      expect(result.projects).toHaveLength(2);
+      expect(result.projects[0]).toMatchObject({
+        id: '1',
+        name: 'Personal',
+        is_inbox_project: true,
+        is_favorite: false,
       });
+      expect(result.projects[1]).toMatchObject({
+        id: '2',
+        name: 'Work',
+        is_inbox_project: false,
+        is_favorite: true,
+      });
+      expect(result.total_count).toBe(2);
+      expect(result.cached_at).toBeDefined();
       expect(mockClient.get).toHaveBeenCalledWith('/projects');
     });
 
@@ -182,19 +177,15 @@ describe('Projects Service', () => {
       const result = await listProjects();
 
       // assert
-      expect(result).toEqual({
-        projects: [
-          {
-            id: 1,
-            name: 'Personal',
-            url: 'https://todoist.com/project/1',
-            is_favorite: false,
-            is_inbox: true,
-          },
-        ],
-        total_count: 1,
-        cached_at: expect.any(String),
+      expect(result.projects).toHaveLength(1);
+      expect(result.projects[0]).toMatchObject({
+        id: '1',
+        name: 'Personal',
+        is_inbox_project: true,
+        is_favorite: false,
       });
+      expect(result.total_count).toBe(1);
+      expect(result.cached_at).toBeDefined();
       expect(mockClient.get).toHaveBeenCalledWith('/projects');
       expect(mockFs.existsSync).toHaveBeenCalledWith('.cache');
       expect(mockFs.mkdirSync).toHaveBeenCalledWith('.cache', {
@@ -215,7 +206,7 @@ describe('Projects Service', () => {
             name: 'Cached Project',
             url: 'https://todoist.com/project/1',
             is_favorite: true,
-            is_inbox: false,
+            is_inbox_project: false,
           },
         ],
         total_count: 1,
@@ -273,19 +264,15 @@ describe('Projects Service', () => {
       const result = await listProjects();
 
       // assert
-      expect(result).toEqual({
-        projects: [
-          {
-            id: 2,
-            name: 'New Project',
-            url: 'https://todoist.com/project/2',
-            is_favorite: true,
-            is_inbox: false,
-          },
-        ],
-        total_count: 1,
-        cached_at: expect.any(String),
+      expect(result.projects).toHaveLength(1);
+      expect(result.projects[0]).toMatchObject({
+        id: '2',
+        name: 'New Project',
+        is_inbox_project: false,
+        is_favorite: true,
       });
+      expect(result.total_count).toBe(1);
+      expect(result.cached_at).toBeDefined();
       expect(mockClient.get).toHaveBeenCalledWith('/projects');
       expect(mockFs.writeFileSync).toHaveBeenCalledWith(
         '.cache/projects.json',
@@ -330,19 +317,15 @@ describe('Projects Service', () => {
       const result = await listProjects();
 
       // assert
-      expect(result).toEqual({
-        projects: [
-          {
-            id: 3,
-            name: 'Fallback Project',
-            url: 'https://todoist.com/project/3',
-            is_favorite: false,
-            is_inbox: true,
-          },
-        ],
-        total_count: 1,
-        cached_at: expect.any(String),
+      expect(result.projects).toHaveLength(1);
+      expect(result.projects[0]).toMatchObject({
+        id: '3',
+        name: 'Fallback Project',
+        is_inbox_project: true,
+        is_favorite: false,
       });
+      expect(result.total_count).toBe(1);
+      expect(result.cached_at).toBeDefined();
       expect(mockClient.get).toHaveBeenCalledWith('/projects');
     });
 
@@ -381,19 +364,15 @@ describe('Projects Service', () => {
       const result = await listProjects();
 
       // assert
-      expect(result).toEqual({
-        projects: [
-          {
-            id: 4,
-            name: 'JSON Error Project',
-            url: 'https://todoist.com/project/4',
-            is_favorite: false,
-            is_inbox: false,
-          },
-        ],
-        total_count: 1,
-        cached_at: expect.any(String),
+      expect(result.projects).toHaveLength(1);
+      expect(result.projects[0]).toMatchObject({
+        id: '4',
+        name: 'JSON Error Project',
+        is_inbox_project: false,
+        is_favorite: false,
       });
+      expect(result.total_count).toBe(1);
+      expect(result.cached_at).toBeDefined();
       expect(mockClient.get).toHaveBeenCalledWith('/projects');
     });
 

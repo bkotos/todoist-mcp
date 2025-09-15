@@ -14,9 +14,7 @@ function getErrorMessage(error: any): string {
 async function throwIfTaskIsFromBecky(taskId: string): Promise<void> {
   const task = await getTaskById(taskId);
   const projects = await listProjects();
-  const project = projects.projects.find(
-    (p) => p.id.toString() === task.project_id
-  );
+  const project = projects.projects.find((p) => p.id === task.project_id);
 
   if (project && isBrianSharedProject(project)) {
     throw new Error(

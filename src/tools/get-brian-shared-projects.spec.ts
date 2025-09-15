@@ -20,28 +20,28 @@ describe('get-brian-shared-projects tool', () => {
         name: 'Brian inbox - per Becky',
         url: 'https://todoist.com/project/16',
         is_favorite: false,
-        is_inbox: false,
+        is_inbox_project: false,
       },
       {
         id: 17,
         name: 'Brian acknowledged',
         url: 'https://todoist.com/project/17',
         is_favorite: false,
-        is_inbox: false,
+        is_inbox_project: false,
       },
       {
         id: 18,
         name: 'Brian projects',
         url: 'https://todoist.com/project/18',
         is_favorite: false,
-        is_inbox: false,
+        is_inbox_project: false,
       },
       {
         id: 28,
         name: 'Brian time sensitive (per Becky)',
         url: 'https://todoist.com/project/28',
         is_favorite: false,
-        is_inbox: false,
+        is_inbox_project: false,
       },
     ];
     const mockResult = {

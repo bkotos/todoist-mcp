@@ -4,6 +4,7 @@ import { getTodoistClient } from '../client';
 import { getTaskById } from '../tasks/tasks';
 import { listProjects } from '../projects/projects';
 import { isBrianSharedProject } from '../../utils/project-filters';
+import { TodoistProject } from '../../types';
 
 vi.mock('../client');
 vi.mock('./tasks');
@@ -37,12 +38,12 @@ describe('completeTask', () => {
     mockListProjects.mockResolvedValue({
       projects: [
         {
-          id: 456,
+          id: '456',
           name: 'Personal Project',
           url: 'https://todoist.com/project/456',
           is_favorite: false,
-          is_inbox: false,
-        },
+          is_inbox_project: false,
+        } as TodoistProject,
       ],
       total_count: 1,
     });
@@ -118,12 +119,12 @@ describe('completeTask - Brian shared project validation', () => {
     mockListProjects.mockResolvedValue({
       projects: [
         {
-          id: 456,
+          id: '456',
           name: 'Personal Project',
           url: 'https://todoist.com/project/456',
           is_favorite: false,
-          is_inbox: false,
-        },
+          is_inbox_project: false,
+        } as TodoistProject,
       ],
       total_count: 1,
     });
@@ -168,12 +169,12 @@ describe('completeTask - Brian shared project validation', () => {
     mockListProjects.mockResolvedValue({
       projects: [
         {
-          id: 789,
+          id: '789',
           name: 'Brian inbox - per Becky',
           url: 'https://todoist.com/project/789',
           is_favorite: false,
-          is_inbox: true,
-        },
+          is_inbox_project: true,
+        } as TodoistProject,
       ],
       total_count: 1,
     });

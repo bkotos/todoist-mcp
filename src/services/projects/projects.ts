@@ -6,10 +6,10 @@ import {
   createCachedResult,
   writeToCache,
 } from '../../cache/project-cache';
-import { TransformedProject, TodoistProject } from '../../types';
+import { TodoistProject } from '../../types';
 
 interface ProjectsResponse {
-  projects: TransformedProject[];
+  projects: TodoistProject[];
   total_count: number;
 }
 
@@ -21,27 +21,14 @@ function getErrorMessage(error: any): string {
   return error instanceof Error ? error.message : 'Unknown error';
 }
 
-// Helper function to transform Todoist projects to our format
-function transformProjects(projects: TodoistProject[]): ProjectsResponse {
-  const transformedProjects = projects.map((project) => ({
-    id: parseInt(project.id),
-    name: project.name,
-    url: project.url,
-    is_favorite: project.is_favorite,
-    is_inbox: project.is_inbox_project,
-  }));
-
-  return {
-    projects: transformedProjects,
-    total_count: transformedProjects.length,
-  };
-}
-
 // Helper function to fetch projects from API
 async function fetchProjectsFromAPI(): Promise<ProjectsResponse> {
   const todoistClient = getTodoistClient();
   const apiResponse = await todoistClient.get<TodoistProject[]>('/projects');
-  return transformProjects(apiResponse.data);
+  return {
+    projects: apiResponse.data,
+    total_count: apiResponse.data.length,
+  };
 }
 
 // List projects function with caching - returns structured data

@@ -1,5 +1,5 @@
 import { getBrianOnlyProjects } from '../services/project-filters';
-import type { MockedFunction } from "vitest";
+import type { MockedFunction } from 'vitest';
 
 // Mock the project-filters service
 vi.mock('../services/project-filters');
@@ -20,21 +20,21 @@ describe('get-brian-only-projects tool', () => {
         name: 'Areas of focus',
         url: 'https://todoist.com/project/1',
         is_favorite: false,
-        is_inbox: false,
+        is_inbox_project: false,
       },
       {
         id: 2,
         name: 'Inbox',
         url: 'https://todoist.com/project/2',
         is_favorite: false,
-        is_inbox: true,
+        is_inbox_project: true,
       },
       {
         id: 3,
         name: 'Media',
         url: 'https://todoist.com/project/3',
         is_favorite: false,
-        is_inbox: false,
+        is_inbox_project: false,
       },
     ];
     const mockResult = {
