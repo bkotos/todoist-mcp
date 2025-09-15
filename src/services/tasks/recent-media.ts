@@ -1,18 +1,9 @@
-import axios from 'axios';
 import { getTodoistClient } from '../client';
-import { ProjectNames } from '../../utils';
+import { ProjectNames, getErrorMessage } from '../../utils';
 import { TodoistTask } from '../../types';
 
 // Define the filter query for better readability
 const RECENT_MEDIA_FILTER = `##${ProjectNames.MEDIA} & !subtask & (created after: 30 days ago) & !@watched`;
-
-// Get error message
-function getErrorMessage(error: any): string {
-  if (axios.isAxiosError(error)) {
-    return error.response?.data?.error || error.message;
-  }
-  return error instanceof Error ? error.message : 'Unknown error';
-}
 
 // Get recent media tasks function - returns raw JSON data for recent media tasks
 export async function getRecentMedia(): Promise<TodoistTask[]> {

@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { getTodoistClient } from '../client';
+import { getErrorMessage } from '../../utils';
 
 export interface CreateTaskParams {
   title: string;
@@ -17,13 +17,6 @@ interface TaskCreatePayload {
   labels?: string[];
   priority?: number;
   due_date?: string;
-}
-
-function getErrorMessage(error: any): string {
-  if (axios.isAxiosError(error)) {
-    return error.response?.data?.error || error.message;
-  }
-  return error instanceof Error ? error.message : 'Unknown error';
 }
 
 function buildCreatePayload(params: CreateTaskParams): TaskCreatePayload {

@@ -1,14 +1,6 @@
-import axios from 'axios';
 import { getTodoistV1Client } from '../client';
 import { convertV2IdToV1 } from '../id-mapping';
-
-// Get error message
-function getErrorMessage(error: any): string {
-  if (axios.isAxiosError(error)) {
-    return error.response?.data?.error || error.message;
-  }
-  return error instanceof Error ? error.message : 'Unknown error';
-}
+import { getErrorMessage } from '../../utils';
 
 /**
  * Move a task from one project to another

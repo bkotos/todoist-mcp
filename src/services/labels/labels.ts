@@ -1,7 +1,7 @@
-import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 import { getTodoistClient } from '../client';
+import { getErrorMessage } from '../../utils';
 
 interface TodoistLabel {
   id: string;
@@ -20,14 +20,6 @@ interface LabelsResponse {
     is_favorite: boolean;
   }>;
   total_count: number;
-}
-
-// Get error message
-function getErrorMessage(error: any): string {
-  if (axios.isAxiosError(error)) {
-    return error.response?.data?.error || error.message;
-  }
-  return error instanceof Error ? error.message : 'Unknown error';
 }
 
 // Get all labels function with caching - returns structured data

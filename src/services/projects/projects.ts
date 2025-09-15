@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { getTodoistClient } from '../client';
 import {
   ensureCacheDirectory,
@@ -7,18 +6,11 @@ import {
   writeToCache,
 } from '../../cache/project-cache';
 import { TodoistProject } from '../../types';
+import { getErrorMessage } from '../../utils';
 
 interface ProjectsResponse {
   projects: TodoistProject[];
   total_count: number;
-}
-
-// Get error message
-function getErrorMessage(error: any): string {
-  if (axios.isAxiosError(error)) {
-    return error.response?.data?.error || error.message;
-  }
-  return error instanceof Error ? error.message : 'Unknown error';
 }
 
 // Helper function to fetch projects from API

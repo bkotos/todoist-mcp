@@ -1,17 +1,9 @@
-import axios from 'axios';
 import { getTodoistClient } from '../client';
 import { TodoistTask, TasksResponse } from '../../types';
+import { getErrorMessage } from '../../utils';
 
 // Define the filter query for better readability
 const WAITING_FILTER = '#Waiting | #Brian waiting | #Ansonia Waiting';
-
-// Get error message
-function getErrorMessage(error: any): string {
-  if (axios.isAxiosError(error)) {
-    return error.response?.data?.error || error.message;
-  }
-  return error instanceof Error ? error.message : 'Unknown error';
-}
 
 // Get waiting tasks function - returns structured data for waiting tasks
 export async function getWaitingTasks(): Promise<TasksResponse> {
@@ -42,5 +34,3 @@ export async function getWaitingTasks(): Promise<TasksResponse> {
     throw new Error(`Failed to get waiting tasks: ${getErrorMessage(error)}`);
   }
 }
-
-// Export types for testing - TasksResponse is now imported from types.ts

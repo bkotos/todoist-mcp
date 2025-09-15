@@ -1,15 +1,7 @@
-import axios from 'axios';
 import { getTodoistClient } from '../client';
 import { setTaskName } from '../cache/task-cache';
 import { TodoistTask, TasksResponse } from '../../types';
-
-// Get error message
-function getErrorMessage(error: any): string {
-  if (axios.isAxiosError(error)) {
-    return error.response?.data?.error || error.message;
-  }
-  return error instanceof Error ? error.message : 'Unknown error';
-}
+import { getErrorMessage } from '../../utils';
 
 // Search tasks function - returns structured data for tasks matching the search query
 // Supports Todoist search syntax:

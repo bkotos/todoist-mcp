@@ -1,16 +1,7 @@
-import axios from 'axios';
 import { getTodoistClient } from '../client';
 import { setTaskName } from '../cache/task-cache';
-import { ProjectNames } from '../../utils';
+import { ProjectNames, getErrorMessage } from '../../utils';
 import { TodoistTask, TasksResponse } from '../../types';
-
-// Get error message
-function getErrorMessage(error: any): string {
-  if (axios.isAxiosError(error)) {
-    return error.response?.data?.error || error.message;
-  }
-  return error instanceof Error ? error.message : 'Unknown error';
-}
 
 // Generic private function to fetch tasks with a specific filter
 async function fetchTasksByFilter(filter: string): Promise<TasksResponse> {

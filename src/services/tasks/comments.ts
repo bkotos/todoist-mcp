@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { getTodoistClient } from '../client';
+import { getErrorMessage } from '../../utils';
 
 interface TodoistComment {
   id: string;
@@ -39,14 +39,6 @@ interface CommentResult {
 interface CommentsResponse {
   comments: CommentResult[];
   total_count: number;
-}
-
-// Get error message
-function getErrorMessage(error: any): string {
-  if (axios.isAxiosError(error)) {
-    return error.response?.data?.error || error.message;
-  }
-  return error instanceof Error ? error.message : 'Unknown error';
 }
 
 // Helper function to create a comment with common logic

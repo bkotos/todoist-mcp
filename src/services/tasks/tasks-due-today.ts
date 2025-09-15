@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { getTodoistClient } from '../client';
 import { TodoistTask, TasksResponse } from '../../types';
+import { getErrorMessage } from '../../utils';
 
 // Define the filter query for better readability
 const DUE_TODAY_FILTER = [
@@ -36,14 +36,6 @@ const DUE_TODAY_FILTER = [
   '& !##Becky someday',
 ].join(' ');
 
-// Get error message
-function getErrorMessage(error: any): string {
-  if (axios.isAxiosError(error)) {
-    return error.response?.data?.error || error.message;
-  }
-  return error instanceof Error ? error.message : 'Unknown error';
-}
-
 // Get tasks due today function - returns structured data for tasks due today
 export async function getTasksDueToday(): Promise<TasksResponse> {
   const todoistClient = getTodoistClient();
@@ -73,5 +65,3 @@ export async function getTasksDueToday(): Promise<TasksResponse> {
     throw new Error(`Failed to get tasks due today: ${getErrorMessage(error)}`);
   }
 }
-
-// Export types for testing - TasksResponse is now imported from types.ts

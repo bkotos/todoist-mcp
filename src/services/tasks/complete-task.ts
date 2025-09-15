@@ -1,15 +1,7 @@
-import axios from 'axios';
 import { getTodoistClient } from '../client';
 import { getTaskById } from '../tasks/tasks';
 import { listProjects } from '../projects/projects';
-import { isBrianSharedProject } from '../../utils/project-filters';
-
-function getErrorMessage(error: any): string {
-  if (axios.isAxiosError(error)) {
-    return error.response?.data?.error || error.message;
-  }
-  return error instanceof Error ? error.message : 'Unknown error';
-}
+import { isBrianSharedProject, getErrorMessage } from '../../utils';
 
 async function throwIfTaskIsFromBecky(taskId: string): Promise<void> {
   const task = await getTaskById(taskId);

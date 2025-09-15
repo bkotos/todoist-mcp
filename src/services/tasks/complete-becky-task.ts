@@ -1,16 +1,8 @@
-import axios from 'axios';
 import { updateTask } from './task-updates';
 import { createAutomatedTaskComment } from './comments';
 import { moveTask } from './move-task';
 import { listProjects } from '../projects/projects';
-
-// Get error message
-function getErrorMessage(error: any): string {
-  if (axios.isAxiosError(error)) {
-    return error.response?.data?.error || error.message;
-  }
-  return error instanceof Error ? error.message : 'Unknown error';
-}
+import { getErrorMessage } from '../../utils';
 
 // Helper function to find project by name
 async function findProjectByName(projectName: string): Promise<string> {
