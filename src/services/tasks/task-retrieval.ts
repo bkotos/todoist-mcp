@@ -2,70 +2,14 @@ import { getTodoistClient } from '../client';
 import { setTaskName } from '../cache/task-cache';
 import { ProjectNames, getErrorMessage } from '../../utils';
 import { TodoistTask, TasksResponse } from '../../types';
-
-// Baby project exclusion filter - used across multiple functions
-const BABY_PROJECTS_EXCLUSION = [
-  '(!##BABY',
-  '& !###BrianBabyFocus',
-  '& !##Home Preparation',
-  '& !##Cards',
-  '& !##Hospital Preparation',
-  '& !##Baby Care Book',
-  '& !##To Pack',
-  '& !##Hospital Stay',
-  '& !##Post Partum',
-  '& !##Questions and Concerns',
-  '& !##Research',
-  '& !##BabyClassNotes',
-  '& !##CarPreparation',
-  '& !##Food',
-  '& !##Before Hospital Stay)',
-].join(' ');
-
-// Define the filter query for better readability
-const DUE_TODAY_FILTER = [
-  '(today | overdue)',
-  '& !##Tickler',
-  '& !##Brian tickler',
-  '& !##Ansonia Tickler',
-  '& !##Someday',
-  '& !##Brian someday',
-  '& !##Brian inbox - per Becky',
-  '& !##Becky inbox - per Brian',
-  '& !##Shopping list',
-  '& !##Becky acknowledged',
-  '& !##Chores',
-  '& !##rent',
-  `& ${BABY_PROJECTS_EXCLUSION}`,
-  '& !##Daily Chores',
-  '& !##Baby Research',
-  '& !##Becky someday',
-].join(' ');
-
-// Define the filter query for better readability
-const WAITING_FILTER = '#Waiting | #Brian waiting | #Ansonia Waiting';
-
-// Define the filter query for better readability
-const RECENT_MEDIA_FILTER = `##${ProjectNames.MEDIA} & !subtask & (created after: 30 days ago) & !@watched`;
-
-// Tomorrow filter - complex filter for tasks due tomorrow
-const TOMORROW_FILTER = [
-  'tomorrow',
-  '& (!##Tickler)',
-  '& (!##Chores)',
-  '& (!##Brian tickler)',
-  '& (!##Ansonia Tickler)',
-  '& (!##Project - Meal prep)',
-  '& (!shared | assigned to: Brian | ##Brian acknowledged | ##Project - Meal prep | ##Shopping list)',
-  `& ${BABY_PROJECTS_EXCLUSION}`,
-].join(' ');
-
-// This week filter - complex filter for tasks due this week
-const THIS_WEEK_FILTER = [
-  'next 7 days & (!##Tickler) & (!##Ansonia Tickler) & (!##Project - Meal prep) &',
-  '(!shared | assigned to: Brian | ##Brian inbox - per Becky | ##Brian acknowledged | ##Project - Meal prep | ##Shopping list) &',
+import {
   BABY_PROJECTS_EXCLUSION,
-].join(' ');
+  DUE_TODAY_FILTER,
+  WAITING_FILTER,
+  RECENT_MEDIA_FILTER,
+  TOMORROW_FILTER,
+  THIS_WEEK_FILTER,
+} from './task-retrieval-filters';
 
 // Helper function to transform TodoistTask[] to structured format
 function transformTasks(tasks: TodoistTask[]) {
