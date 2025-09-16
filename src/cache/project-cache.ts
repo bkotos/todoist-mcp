@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import type { ProjectsResponse } from '../services/projects';
+import type { ProjectsResponse } from '../services/projects/projects';
 
 // Helper function to get cache configuration
 function getCacheConfig() {

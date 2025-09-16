@@ -46,12 +46,8 @@ export interface ToolResponse {
   }>;
 }
 
-// Tool handler function types
-type ToolHandlerWithArgs = (args: any) => Promise<ToolResponse>;
-type ToolHandlerWithoutArgs = () => Promise<ToolResponse>;
-
 // Tool registries - separate objects for tools with and without arguments
-const toolsWithArgs: Record<string, ToolHandlerWithArgs> = {
+const toolsWithArgs: Record<string, (args: any) => Promise<ToolResponse>> = {
   get_task_comments: getTaskCommentsTool.handler,
   create_project_label: createProjectLabelTool.handler,
   create_task_comment: createTaskCommentTool.handler,
@@ -67,7 +63,7 @@ const toolsWithArgs: Record<string, ToolHandlerWithArgs> = {
   complete_becky_task: completeBeckyTaskTool.handler,
 };
 
-const toolsWithoutArgs: Record<string, ToolHandlerWithoutArgs> = {
+const toolsWithoutArgs: Record<string, () => Promise<ToolResponse>> = {
   list_personal_inbox_tasks: listPersonalInboxTasksTool.handler,
   list_brian_inbox_per_becky_tasks: listBrianInboxPerBeckyTasksTool.handler,
   list_becky_inbox_per_brian_tasks: listBeckyInboxPerBrianTasksTool.handler,

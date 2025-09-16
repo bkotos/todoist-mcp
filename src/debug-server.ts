@@ -1,6 +1,6 @@
 import express from 'express';
 import { config } from 'dotenv';
-import { updateTaskHandler } from './tools/update-task';
+import { updateTaskTool } from './tools/task-operations';
 import { handleToolRequest } from './handlers/tool-request-handler';
 
 // Load environment variables

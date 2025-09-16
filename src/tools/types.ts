@@ -8,5 +8,10 @@ import type { Tool as McpTool } from '@modelcontextprotocol/sdk/types';
 
 export interface Tool<TArgs = any> {
   schema: McpTool;
-  handler: Function;
+  handler: (args?: TArgs) => Promise<{
+    content: Array<{
+      type: string;
+      text: string;
+    }>;
+  }>;
 }

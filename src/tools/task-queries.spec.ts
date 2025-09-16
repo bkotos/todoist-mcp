@@ -113,16 +113,40 @@ describe('Task Queries', () => {
         {
           id: '123',
           content: 'Review project proposal',
-          due: { date: '2024-01-16' },
-          project_id: '456',
+          description: '',
+          is_completed: false,
           labels: ['work', 'priority'],
+          priority: 1,
+          due: {
+            date: '2024-01-16',
+            string: 'tomorrow',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/showTask?id=123',
+          comment_count: 0,
+          created_at: '2024-01-15T00:00:00Z',
+          updated_at: '2024-01-15T00:00:00Z',
+          project_id: '456',
         },
         {
           id: '124',
           content: 'Team meeting prep',
-          due: { date: '2024-01-16' },
-          project_id: '789',
+          description: '',
+          is_completed: false,
           labels: ['work'],
+          priority: 1,
+          due: {
+            date: '2024-01-16',
+            string: 'tomorrow',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/showTask?id=124',
+          comment_count: 0,
+          created_at: '2024-01-15T00:00:00Z',
+          updated_at: '2024-01-15T00:00:00Z',
+          project_id: '789',
         },
       ];
 
@@ -178,8 +202,44 @@ describe('Task Queries', () => {
     it('should return tasks due this week in MCP format', async () => {
       // arrange
       const mockTasks = [
-        { id: 1, content: 'Task 1', due: { date: '2024-01-15' } },
-        { id: 2, content: 'Task 2', due: { date: '2024-01-16' } },
+        {
+          id: '1',
+          content: 'Task 1',
+          description: '',
+          is_completed: false,
+          labels: [],
+          priority: 1,
+          due: {
+            date: '2024-01-15',
+            string: 'today',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/showTask?id=1',
+          comment_count: 0,
+          created_at: '2024-01-15T00:00:00Z',
+          updated_at: '2024-01-15T00:00:00Z',
+          project_id: '456',
+        },
+        {
+          id: '2',
+          content: 'Task 2',
+          description: '',
+          is_completed: false,
+          labels: [],
+          priority: 1,
+          due: {
+            date: '2024-01-16',
+            string: 'tomorrow',
+            lang: 'en',
+            is_recurring: false,
+          },
+          url: 'https://todoist.com/showTask?id=2',
+          comment_count: 0,
+          created_at: '2024-01-15T00:00:00Z',
+          updated_at: '2024-01-15T00:00:00Z',
+          project_id: '789',
+        },
       ];
       mockGetTasksDueThisWeek.mockResolvedValue(mockTasks);
 
@@ -200,7 +260,7 @@ describe('Task Queries', () => {
 
     it('should handle empty results', async () => {
       // arrange
-      const mockTasks = [];
+      const mockTasks: any[] = [];
       mockGetTasksDueThisWeek.mockResolvedValue(mockTasks);
 
       // act
@@ -348,19 +408,22 @@ describe('Task Queries', () => {
   describe('searchTasksTool', () => {
     it('should return search results', async () => {
       // arrange
-      const mockResults = [
-        {
-          id: 1,
-          content: 'Meeting with team',
-          description: 'Weekly team sync',
-          is_completed: false,
-          labels: ['work'],
-          priority: 2,
-          due_date: '2024-01-15',
-          url: 'https://todoist.com/task/1',
-          comment_count: 0,
-        },
-      ];
+      const mockResults = {
+        tasks: [
+          {
+            id: 1,
+            content: 'Meeting with team',
+            description: 'Weekly team sync',
+            is_completed: false,
+            labels: ['work'],
+            priority: 2,
+            due_date: '2024-01-15',
+            url: 'https://todoist.com/task/1',
+            comment_count: 0,
+          },
+        ],
+        total_count: 1,
+      };
       mockSearchTasks.mockResolvedValue(mockResults);
 
       // act
@@ -386,19 +449,22 @@ describe('Task Queries', () => {
   describe('searchTasksUsingAndTool', () => {
     it('should return AND search results', async () => {
       // arrange
-      const mockResults = [
-        {
-          id: 1,
-          content: 'Weekly team meeting',
-          description: 'Team sync meeting',
-          is_completed: false,
-          labels: ['work', 'meeting'],
-          priority: 2,
-          due_date: '2024-01-15',
-          url: 'https://todoist.com/task/1',
-          comment_count: 0,
-        },
-      ];
+      const mockResults = {
+        tasks: [
+          {
+            id: 1,
+            content: 'Weekly team meeting',
+            description: 'Team sync meeting',
+            is_completed: false,
+            labels: ['work', 'meeting'],
+            priority: 2,
+            due_date: '2024-01-15',
+            url: 'https://todoist.com/task/1',
+            comment_count: 0,
+          },
+        ],
+        total_count: 1,
+      };
       mockSearchTasksUsingAnd.mockResolvedValue(mockResults);
 
       // act
@@ -428,30 +494,33 @@ describe('Task Queries', () => {
   describe('searchTasksUsingOrTool', () => {
     it('should return OR search results', async () => {
       // arrange
-      const mockResults = [
-        {
-          id: 1,
-          content: 'Meeting with team',
-          description: 'Team sync',
-          is_completed: false,
-          labels: ['work'],
-          priority: 2,
-          due_date: '2024-01-15',
-          url: 'https://todoist.com/task/1',
-          comment_count: 0,
-        },
-        {
-          id: 2,
-          content: 'Team building event',
-          description: 'Company team event',
-          is_completed: false,
-          labels: ['team'],
-          priority: 3,
-          due_date: '2024-01-20',
-          url: 'https://todoist.com/task/2',
-          comment_count: 1,
-        },
-      ];
+      const mockResults = {
+        tasks: [
+          {
+            id: 1,
+            content: 'Meeting with team',
+            description: 'Team sync',
+            is_completed: false,
+            labels: ['work'],
+            priority: 2,
+            due_date: '2024-01-15',
+            url: 'https://todoist.com/task/1',
+            comment_count: 0,
+          },
+          {
+            id: 2,
+            content: 'Team building event',
+            description: 'Company team event',
+            is_completed: false,
+            labels: ['team'],
+            priority: 3,
+            due_date: '2024-01-20',
+            url: 'https://todoist.com/task/2',
+            comment_count: 1,
+          },
+        ],
+        total_count: 2,
+      };
       mockSearchTasksUsingOr.mockResolvedValue(mockResults);
 
       // act
