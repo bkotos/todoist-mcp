@@ -1,13 +1,13 @@
 import type { MockedFunction } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { getTasksDueThisWeekHandler } from './get-tasks-due-this-week';
+import { getTasksDueThisWeekTool } from './get-tasks-due-this-week';
 import * as todoistService from '../services/tasks/task-retrieval';
 
 vi.mock('../services/tasks/task-retrieval');
 
 const mockGetTasksDueThisWeek = vi.mocked(todoistService.getTasksDueThisWeek);
 
-describe('getTasksDueThisWeekHandler', () => {
+describe('getTasksDueThisWeekTool', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -22,7 +22,7 @@ describe('getTasksDueThisWeekHandler', () => {
     mockGetTasksDueThisWeek.mockResolvedValue(mockTasks);
 
     // act
-    const result = await getTasksDueThisWeekHandler();
+    const result = await getTasksDueThisWeekTool.handler();
 
     // assert
     expect(result).toEqual({
@@ -43,7 +43,7 @@ describe('getTasksDueThisWeekHandler', () => {
     const consoleSpy = vi.spyOn(console, 'error');
 
     // act
-    await getTasksDueThisWeekHandler();
+    await getTasksDueThisWeekTool.handler();
 
     // assert
     expect(consoleSpy).toHaveBeenCalledWith(
@@ -60,7 +60,7 @@ describe('getTasksDueThisWeekHandler', () => {
     mockGetTasksDueThisWeek.mockResolvedValue(mockTasks);
 
     // act
-    const result = await getTasksDueThisWeekHandler();
+    const result = await getTasksDueThisWeekTool.handler();
 
     // assert
     expect(result.content[0].text).toBe('[]');

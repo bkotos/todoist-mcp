@@ -1,118 +1,34 @@
-export {
-  getTaskCommentsSchema,
-  getTaskCommentsHandler,
-} from './get-task-comments';
-export {
-  listPersonalInboxTasksSchema,
-  listPersonalInboxTasksHandler,
-} from './list-personal-inbox-tasks';
-export {
-  listBrianInboxPerBeckyTasksSchema,
-  listBrianInboxPerBeckyTasksHandler,
-} from './list-brian-inbox-per-becky-tasks';
-export {
-  listBeckyInboxPerBrianTasksSchema,
-  listBeckyInboxPerBrianTasksHandler,
-} from './list-becky-inbox-per-brian-tasks';
-export {
-  listNextActionsSchema,
-  listNextActionsHandler,
-} from './list-next-actions';
-export {
-  getBrianOnlyProjectsSchema,
-  getBrianOnlyProjectsHandler,
-} from './get-brian-only-projects';
-export {
-  getBrianSharedProjectsSchema,
-  getBrianSharedProjectsHandler,
-} from './get-brian-shared-projects';
-export {
-  getBeckySharedProjectsSchema,
-  getBeckySharedProjectsHandler,
-} from './get-becky-shared-projects';
-export {
-  getInboxProjectsSchema,
-  getInboxProjectsHandler,
-} from './get-inbox-projects';
-export {
-  createProjectLabelSchema,
-  createProjectLabelHandler,
-} from './create-project-label';
-export {
-  createTaskCommentSchema,
-  createTaskCommentHandler,
-} from './create-task-comment';
-export { updateTaskSchema, updateTaskHandler } from './update-task';
-export { createTaskSchema, createTaskHandler } from './create-task';
-export { moveTaskSchema, moveTaskHandler } from './move-task';
-export {
-  getContextLabelsSchema,
-  getContextLabelsHandler,
-} from './get-context-labels';
-export {
-  getTasksWithLabelSchema,
-  getTasksWithLabelHandler,
-} from './get-tasks-with-label';
-export { completeTaskSchema, completeTaskHandler } from './complete-task';
-export { uncompleteTaskSchema, uncompleteTaskHandler } from './uncomplete-task';
-export { searchTasksSchema, searchTasksHandler } from './search-tasks';
-export {
-  searchTasksUsingAndSchema,
-  searchTasksUsingAndHandler,
-} from './search-tasks-using-and';
-export {
-  searchTasksUsingOrSchema,
-  searchTasksUsingOrHandler,
-} from './search-tasks-using-or';
-export {
-  getTasksDueTodaySchema,
-  getTasksDueTodayHandler,
-} from './get-tasks-due-today';
-export {
-  getChoresDueTodaySchema,
-  getChoresDueTodayHandler,
-} from './get-chores-due-today';
-export {
-  getTasksDueTomorrowSchema,
-  getTasksDueTomorrowHandler,
-} from './get-tasks-due-tomorrow';
-export {
-  getTasksDueThisWeekSchema,
-  getTasksDueThisWeekHandler,
-} from './get-tasks-due-this-week';
-export {
-  getTicklerTasksSchema,
-  getTicklerTasksHandler,
-} from './get-tickler-tasks';
-export {
-  listGtdProjectsSchema,
-  listGtdProjectsHandler,
-} from './list-gtd-projects';
-export {
-  getWaitingTasksSchema,
-  getWaitingTasksHandler,
-} from './get-waiting-tasks';
-export {
-  getRecentMediaSchema,
-  getRecentMediaHandler,
-} from './get-recent-media';
-export {
-  getAreasOfFocusSchema,
-  getAreasOfFocusHandler,
-} from './get-areas-of-focus';
-export {
-  getShoppingListSchema,
-  getShoppingListHandler,
-} from './get-shopping-list';
-export {
-  completeBeckyTaskSchema,
-  completeBeckyTaskHandler,
-} from './complete-becky-task';
-export {
-  listBrianTimeSensitiveTasksSchema,
-  listBrianTimeSensitiveTasksHandler,
-} from './list-brian-time-sensitive-tasks';
-export {
-  listBeckyTimeSensitiveTasksSchema,
-  listBeckyTimeSensitiveTasksHandler,
-} from './list-becky-time-sensitive-tasks';
+export { getTaskCommentsTool } from './get-task-comments';
+export { listPersonalInboxTasksTool } from './list-personal-inbox-tasks';
+export { listBrianInboxPerBeckyTasksTool } from './list-brian-inbox-per-becky-tasks';
+export { listBeckyInboxPerBrianTasksTool } from './list-becky-inbox-per-brian-tasks';
+export { listNextActionsTool } from './list-next-actions';
+export { getBrianOnlyProjectsTool } from './get-brian-only-projects';
+export { getBrianSharedProjectsTool } from './get-brian-shared-projects';
+export { getBeckySharedProjectsTool } from './get-becky-shared-projects';
+export { getInboxProjectsTool } from './get-inbox-projects';
+export { createProjectLabelTool } from './create-project-label';
+export { createTaskCommentTool } from './create-task-comment';
+export { updateTaskTool } from './update-task';
+export { createTaskTool } from './create-task';
+export { moveTaskTool } from './move-task';
+export { getContextLabelsTool } from './get-context-labels';
+export { getTasksWithLabelTool } from './get-tasks-with-label';
+export { completeTaskTool } from './complete-task';
+export { uncompleteTaskTool } from './uncomplete-task';
+export { searchTasksTool } from './search-tasks';
+export { searchTasksUsingAndTool } from './search-tasks-using-and';
+export { searchTasksUsingOrTool } from './search-tasks-using-or';
+export { getTasksDueTodayTool } from './get-tasks-due-today';
+export { getChoresDueTodayTool } from './get-chores-due-today';
+export { getTasksDueTomorrowTool } from './get-tasks-due-tomorrow';
+export { getTasksDueThisWeekTool } from './get-tasks-due-this-week';
+export { getTicklerTasksTool } from './get-tickler-tasks';
+export { listGtdProjectsTool } from './list-gtd-projects';
+export { getWaitingTasksTool } from './get-waiting-tasks';
+export { getRecentMediaTool } from './get-recent-media';
+export { getAreasOfFocusTool } from './get-areas-of-focus';
+export { getShoppingListTool } from './get-shopping-list';
+export { completeBeckyTaskTool } from './complete-becky-task';
+export { listBrianTimeSensitiveTasksTool } from './list-brian-time-sensitive-tasks';
+export { listBeckyTimeSensitiveTasksTool } from './list-becky-time-sensitive-tasks';

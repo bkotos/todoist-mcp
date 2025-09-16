@@ -1,4 +1,4 @@
-import { listBrianTimeSensitiveTasksHandler } from './list-brian-time-sensitive-tasks';
+import { listBrianTimeSensitiveTasksTool } from './list-brian-time-sensitive-tasks';
 import type { MockedFunction } from 'vitest';
 import { listBrianTimeSensitiveTasks } from '../services/tasks/task-retrieval';
 
@@ -47,7 +47,7 @@ describe('listBrianTimeSensitiveTasksHandler', () => {
     mockListBrianTimeSensitiveTasks.mockResolvedValue(mockResponse);
 
     // act
-    const result = await listBrianTimeSensitiveTasksHandler();
+    const result = await listBrianTimeSensitiveTasksTool.handler();
 
     // assert
     expect(result.content).toHaveLength(1);
@@ -65,7 +65,7 @@ describe('listBrianTimeSensitiveTasksHandler', () => {
     mockListBrianTimeSensitiveTasks.mockResolvedValue(mockResponse);
 
     // act
-    const result = await listBrianTimeSensitiveTasksHandler();
+    const result = await listBrianTimeSensitiveTasksTool.handler();
 
     // assert
     expect(result.content).toHaveLength(1);
@@ -79,7 +79,7 @@ describe('listBrianTimeSensitiveTasksHandler', () => {
     mockListBrianTimeSensitiveTasks.mockRejectedValue(new Error('API Error'));
 
     // act
-    const promise = listBrianTimeSensitiveTasksHandler();
+    const promise = listBrianTimeSensitiveTasksTool.handler();
 
     // assert
     await expect(promise).rejects.toThrow('API Error');

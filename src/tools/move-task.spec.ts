@@ -1,4 +1,4 @@
-import { moveTaskHandler } from './move-task';
+import { moveTaskTool } from './move-task';
 import type { MockedFunction } from 'vitest';
 import * as moveTaskService from '../services/tasks/task-update';
 
@@ -15,13 +15,13 @@ describe('Move Task Tool', () => {
     vi.clearAllMocks();
   });
 
-  describe('moveTaskHandler', () => {
+  describe('moveTaskTool.handler', () => {
     it('should successfully move a task', async () => {
       // arrange
       mockMoveTask.mockResolvedValue();
 
       // act
-      const result = await moveTaskHandler({
+      const result = await moveTaskTool.handler({
         task_id: 'task_123',
         project_id: 'project_456',
       });
@@ -40,7 +40,7 @@ describe('Move Task Tool', () => {
       mockMoveTask.mockResolvedValue();
 
       // act
-      const promise = moveTaskHandler({
+      const promise = moveTaskTool.handler({
         task_id: '',
         project_id: 'project_456',
       });
@@ -55,7 +55,7 @@ describe('Move Task Tool', () => {
       mockMoveTask.mockResolvedValue();
 
       // act
-      const promise = moveTaskHandler({
+      const promise = moveTaskTool.handler({
         task_id: 'task_123',
         project_id: '',
       });
@@ -70,7 +70,7 @@ describe('Move Task Tool', () => {
       mockMoveTask.mockRejectedValue(new Error('Task not found'));
 
       // act
-      const result = await moveTaskHandler({
+      const result = await moveTaskTool.handler({
         task_id: 'invalid_task',
         project_id: 'project_456',
       });

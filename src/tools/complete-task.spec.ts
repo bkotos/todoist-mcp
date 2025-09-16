@@ -1,4 +1,4 @@
-import { completeTaskHandler } from './complete-task';
+import { completeTaskTool } from './complete-task';
 import type { MockedFunction } from 'vitest';
 import { completeTask } from '../services/tasks/task-update';
 
@@ -12,7 +12,7 @@ describe('completeTaskHandler', () => {
     mockCompleteTask.mockResolvedValue('Task completed successfully');
 
     // act
-    const result = await completeTaskHandler({ task_id: '123' });
+    const result = await completeTaskTool.handler({ task_id: '123' });
 
     // assert
     expect(result).toEqual({
@@ -31,7 +31,7 @@ describe('completeTaskHandler', () => {
     mockCompleteTask.mockRejectedValue(new Error('API Error'));
 
     // act
-    const result = await completeTaskHandler({ task_id: '123' });
+    const result = await completeTaskTool.handler({ task_id: '123' });
 
     // assert
     expect(result).toEqual({

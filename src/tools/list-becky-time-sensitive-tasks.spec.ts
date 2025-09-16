@@ -1,4 +1,4 @@
-import { listBeckyTimeSensitiveTasksHandler } from './list-becky-time-sensitive-tasks';
+import { listBeckyTimeSensitiveTasksTool } from './list-becky-time-sensitive-tasks';
 import type { MockedFunction } from 'vitest';
 import { listBeckyTimeSensitiveTasks } from '../services/tasks/task-retrieval';
 
@@ -9,7 +9,7 @@ const mockListBeckyTimeSensitiveTasks =
     typeof listBeckyTimeSensitiveTasks
   >;
 
-describe('listBeckyTimeSensitiveTasksHandler', () => {
+describe('listBeckyTimeSensitiveTasksTool', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -47,7 +47,7 @@ describe('listBeckyTimeSensitiveTasksHandler', () => {
     mockListBeckyTimeSensitiveTasks.mockResolvedValue(mockResponse);
 
     // act
-    const result = await listBeckyTimeSensitiveTasksHandler();
+    const result = await listBeckyTimeSensitiveTasksTool.handler();
 
     // assert
     expect(result.content).toHaveLength(1);
@@ -65,7 +65,7 @@ describe('listBeckyTimeSensitiveTasksHandler', () => {
     mockListBeckyTimeSensitiveTasks.mockResolvedValue(mockResponse);
 
     // act
-    const result = await listBeckyTimeSensitiveTasksHandler();
+    const result = await listBeckyTimeSensitiveTasksTool.handler();
 
     // assert
     expect(result.content).toHaveLength(1);
@@ -79,7 +79,7 @@ describe('listBeckyTimeSensitiveTasksHandler', () => {
     mockListBeckyTimeSensitiveTasks.mockRejectedValue(new Error('API Error'));
 
     // act
-    const promise = listBeckyTimeSensitiveTasksHandler();
+    const promise = listBeckyTimeSensitiveTasksTool.handler();
 
     // assert
     await expect(promise).rejects.toThrow('API Error');

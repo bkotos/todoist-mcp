@@ -1,4 +1,4 @@
-import { listNextActionsHandler } from './list-next-actions';
+import { listNextActionsTool } from './list-next-actions';
 import type { MockedFunction } from 'vitest';
 import { listNextActions } from '../services/tasks/task-retrieval';
 
@@ -46,7 +46,7 @@ describe('listNextActionsHandler', () => {
     mockListNextActions.mockResolvedValue(mockResponse);
 
     // act
-    const result = await listNextActionsHandler();
+    const result = await listNextActionsTool.handler();
 
     // assert
     expect(result.content).toHaveLength(1);
@@ -64,7 +64,7 @@ describe('listNextActionsHandler', () => {
     mockListNextActions.mockResolvedValue(mockResponse);
 
     // act
-    const result = await listNextActionsHandler();
+    const result = await listNextActionsTool.handler();
 
     // assert
     expect(result.content).toHaveLength(1);
@@ -78,7 +78,7 @@ describe('listNextActionsHandler', () => {
     mockListNextActions.mockRejectedValue(new Error('API Error'));
 
     // act
-    const promise = listNextActionsHandler();
+    const promise = listNextActionsTool.handler();
 
     // assert
     await expect(promise).rejects.toThrow('API Error');

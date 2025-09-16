@@ -1,4 +1,4 @@
-import { getTasksWithLabelHandler } from './get-tasks-with-label';
+import { getTasksWithLabelTool } from './get-tasks-with-label';
 import type { MockedFunction } from 'vitest';
 import { getTasksWithLabel } from '../services/tasks/task-retrieval';
 
@@ -46,7 +46,7 @@ describe('getTasksWithLabelHandler', () => {
     mockGetTasksWithLabel.mockResolvedValue(mockResponse);
 
     // act
-    const result = await getTasksWithLabelHandler({ label: 'urgent' });
+    const result = await getTasksWithLabelTool.handler({ label: 'urgent' });
 
     // assert
     expect(result.content).toHaveLength(1);
@@ -64,7 +64,9 @@ describe('getTasksWithLabelHandler', () => {
     mockGetTasksWithLabel.mockResolvedValue(mockResponse);
 
     // act
-    const result = await getTasksWithLabelHandler({ label: 'nonexistent' });
+    const result = await getTasksWithLabelTool.handler({
+      label: 'nonexistent',
+    });
 
     // assert
     expect(result.content).toHaveLength(1);
@@ -78,7 +80,7 @@ describe('getTasksWithLabelHandler', () => {
     mockGetTasksWithLabel.mockRejectedValue(new Error('API Error'));
 
     // act
-    const promise = getTasksWithLabelHandler({ label: 'urgent' });
+    const promise = getTasksWithLabelTool.handler({ label: 'urgent' });
 
     // assert
     await expect(promise).rejects.toThrow('API Error');

@@ -1,4 +1,4 @@
-import { updateTaskSchema, updateTaskHandler } from './update-task';
+import { updateTaskTool } from './update-task';
 import type { MockedFunction } from 'vitest';
 import { updateTask } from '../services/tasks/task-update';
 
@@ -12,10 +12,10 @@ describe('updateTask Tool', () => {
     vi.clearAllMocks();
   });
 
-  describe('updateTaskSchema', () => {
+  describe('updateTaskTool', () => {
     it('should have correct schema structure', () => {
       // arrange & act
-      const schema = updateTaskSchema;
+      const schema = updateTaskTool.schema;
 
       // assert
       expect(schema.name).toBe('update_task');
@@ -27,7 +27,7 @@ describe('updateTask Tool', () => {
 
     it('should have all required properties in schema', () => {
       // arrange & act
-      const properties = updateTaskSchema.inputSchema.properties;
+      const properties = updateTaskTool.schema.inputSchema.properties;
 
       // assert
       expect(properties.task_id).toBeDefined();
@@ -40,7 +40,7 @@ describe('updateTask Tool', () => {
 
     it('should have correct property types', () => {
       // arrange & act
-      const properties = updateTaskSchema.inputSchema.properties;
+      const properties = updateTaskTool.schema.inputSchema.properties;
 
       // assert
       expect(properties.task_id.type).toBe('string');
@@ -52,7 +52,7 @@ describe('updateTask Tool', () => {
     });
   });
 
-  describe('updateTaskHandler', () => {
+  describe('updateTaskTool.handler', () => {
     it('should update task title successfully', async () => {
       // arrange
       const args = {
@@ -62,7 +62,7 @@ describe('updateTask Tool', () => {
       mockUpdateTask.mockResolvedValue('Task updated successfully');
 
       // act
-      const result = await updateTaskHandler(args);
+      const result = await updateTaskTool.handler(args);
 
       // assert
       expect(result.content).toHaveLength(1);
@@ -83,7 +83,7 @@ describe('updateTask Tool', () => {
       mockUpdateTask.mockResolvedValue('Task updated successfully');
 
       // act
-      const result = await updateTaskHandler(args);
+      const result = await updateTaskTool.handler(args);
 
       // assert
       expect(result.content).toHaveLength(1);
@@ -104,7 +104,7 @@ describe('updateTask Tool', () => {
       mockUpdateTask.mockResolvedValue('Task updated successfully');
 
       // act
-      const result = await updateTaskHandler(args);
+      const result = await updateTaskTool.handler(args);
 
       // assert
       expect(result.content).toHaveLength(1);
@@ -125,7 +125,7 @@ describe('updateTask Tool', () => {
       mockUpdateTask.mockResolvedValue('Task updated successfully');
 
       // act
-      const result = await updateTaskHandler(args);
+      const result = await updateTaskTool.handler(args);
 
       // assert
       expect(result.content).toHaveLength(1);
@@ -146,7 +146,7 @@ describe('updateTask Tool', () => {
       mockUpdateTask.mockResolvedValue('Task updated successfully');
 
       // act
-      const result = await updateTaskHandler(args);
+      const result = await updateTaskTool.handler(args);
 
       // assert
       expect(result.content).toHaveLength(1);
@@ -171,7 +171,7 @@ describe('updateTask Tool', () => {
       mockUpdateTask.mockResolvedValue('Task updated successfully');
 
       // act
-      const result = await updateTaskHandler(args);
+      const result = await updateTaskTool.handler(args);
 
       // assert
       expect(result.content).toHaveLength(1);
@@ -196,7 +196,7 @@ describe('updateTask Tool', () => {
       mockUpdateTask.mockRejectedValue(new Error('API Error'));
 
       // act
-      const result = await updateTaskHandler(args);
+      const result = await updateTaskTool.handler(args);
 
       // assert
       expect(result.content).toHaveLength(1);
@@ -211,7 +211,7 @@ describe('updateTask Tool', () => {
       };
 
       // act
-      const promise = updateTaskHandler(args as any);
+      const promise = updateTaskTool.handler(args as any);
 
       // assert
       await expect(promise).rejects.toThrow('task_id is required');
@@ -227,7 +227,7 @@ describe('updateTask Tool', () => {
       mockUpdateTask.mockResolvedValue('Task updated successfully');
 
       // act
-      const result = await updateTaskHandler(args);
+      const result = await updateTaskTool.handler(args);
 
       // assert
       expect(result.content).toHaveLength(1);

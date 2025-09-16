@@ -1,4 +1,4 @@
-import { listGtdProjectsHandler } from './list-gtd-projects';
+import { listGtdProjectsTool } from './list-gtd-projects';
 import type { MockedFunction } from 'vitest';
 import { listGtdProjects } from '../services/tasks/task-retrieval';
 
@@ -46,7 +46,7 @@ describe('listGtdProjectsHandler', () => {
     mockListGtdProjects.mockResolvedValue(mockResponse);
 
     // act
-    const result = await listGtdProjectsHandler();
+    const result = await listGtdProjectsTool.handler();
 
     // assert
     expect(result.content).toHaveLength(1);
@@ -64,7 +64,7 @@ describe('listGtdProjectsHandler', () => {
     mockListGtdProjects.mockResolvedValue(mockResponse);
 
     // act
-    const result = await listGtdProjectsHandler();
+    const result = await listGtdProjectsTool.handler();
 
     // assert
     expect(result.content).toHaveLength(1);
@@ -78,7 +78,7 @@ describe('listGtdProjectsHandler', () => {
     mockListGtdProjects.mockRejectedValue(new Error('API Error'));
 
     // act
-    const promise = listGtdProjectsHandler();
+    const promise = listGtdProjectsTool.handler();
 
     // assert
     await expect(promise).rejects.toThrow('API Error');

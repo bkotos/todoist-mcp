@@ -1,6 +1,6 @@
 import type { MockedFunction } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { getTicklerTasksHandler } from './get-tickler-tasks';
+import { getTicklerTasksTool } from './get-tickler-tasks';
 import { getTicklerTasks } from '../services/tasks/task-retrieval';
 
 vi.mock('../services/tasks/task-retrieval');
@@ -39,7 +39,7 @@ describe('getTicklerTasksHandler', () => {
     mockGetTicklerTasks.mockResolvedValue(mockTicklerTasks);
 
     // act
-    const result = await getTicklerTasksHandler();
+    const result = await getTicklerTasksTool.handler();
 
     // assert
     expect(result).toEqual({
@@ -58,7 +58,7 @@ describe('getTicklerTasksHandler', () => {
     mockGetTicklerTasks.mockResolvedValue([]);
 
     // act
-    const result = await getTicklerTasksHandler();
+    const result = await getTicklerTasksTool.handler();
 
     // assert
     expect(result).toEqual({
@@ -78,7 +78,7 @@ describe('getTicklerTasksHandler', () => {
     const consoleSpy = vi.spyOn(console, 'error');
 
     // act
-    await getTicklerTasksHandler();
+    await getTicklerTasksTool.handler();
 
     // assert
     expect(consoleSpy).toHaveBeenCalledWith('Executing get_tickler_tasks...');

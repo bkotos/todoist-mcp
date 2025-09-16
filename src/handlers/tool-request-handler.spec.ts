@@ -5,101 +5,101 @@ import { handleToolRequest } from './tool-request-handler';
 
 // Mock all tool handlers
 vi.mock('../tools', () => ({
-  getTaskCommentsHandler: vi.fn(),
-  listPersonalInboxTasksHandler: vi.fn(),
-  listBrianInboxPerBeckyTasksHandler: vi.fn(),
-  listBeckyInboxPerBrianTasksHandler: vi.fn(),
-  listNextActionsHandler: vi.fn(),
-  getBrianOnlyProjectsHandler: vi.fn(),
-  getBrianSharedProjectsHandler: vi.fn(),
-  getBeckySharedProjectsHandler: vi.fn(),
-  getInboxProjectsHandler: vi.fn(),
-  createProjectLabelHandler: vi.fn(),
-  createTaskCommentHandler: vi.fn(),
-  updateTaskHandler: vi.fn(),
-  createTaskHandler: vi.fn(),
-  moveTaskHandler: vi.fn(),
-  getContextLabelsHandler: vi.fn(),
-  getTasksWithLabelHandler: vi.fn(),
-  completeTaskHandler: vi.fn(),
-  uncompleteTaskHandler: vi.fn(),
-  searchTasksHandler: vi.fn(),
-  searchTasksUsingAndHandler: vi.fn(),
-  searchTasksUsingOrHandler: vi.fn(),
-  getChoresDueTodayHandler: vi.fn(),
-  getTasksDueTomorrowHandler: vi.fn(),
-  getTasksDueThisWeekHandler: vi.fn(),
-  getTicklerTasksHandler: vi.fn(),
-  listGtdProjectsHandler: vi.fn(),
-  getWaitingTasksHandler: vi.fn(),
-  getRecentMediaHandler: vi.fn(),
-  getAreasOfFocusHandler: vi.fn(),
-  getShoppingListHandler: vi.fn(),
-  completeBeckyTaskHandler: vi.fn(),
-  listBrianTimeSensitiveTasksHandler: vi.fn(),
-  listBeckyTimeSensitiveTasksHandler: vi.fn(),
+  getTaskCommentsTool: { handler: vi.fn() },
+  listPersonalInboxTasksTool: { handler: vi.fn() },
+  listBrianInboxPerBeckyTasksTool: { handler: vi.fn() },
+  listBeckyInboxPerBrianTasksTool: { handler: vi.fn() },
+  listNextActionsTool: { handler: vi.fn() },
+  getBrianOnlyProjectsTool: { handler: vi.fn() },
+  getBrianSharedProjectsTool: { handler: vi.fn() },
+  getBeckySharedProjectsTool: { handler: vi.fn() },
+  getInboxProjectsTool: { handler: vi.fn() },
+  createProjectLabelTool: { handler: vi.fn() },
+  createTaskCommentTool: { handler: vi.fn() },
+  updateTaskTool: { handler: vi.fn() },
+  createTaskTool: { handler: vi.fn() },
+  moveTaskTool: { handler: vi.fn() },
+  getContextLabelsTool: { handler: vi.fn() },
+  getTasksWithLabelTool: { handler: vi.fn() },
+  completeTaskTool: { handler: vi.fn() },
+  uncompleteTaskTool: { handler: vi.fn() },
+  searchTasksTool: { handler: vi.fn() },
+  searchTasksUsingAndTool: { handler: vi.fn() },
+  searchTasksUsingOrTool: { handler: vi.fn() },
+  getChoresDueTodayTool: { handler: vi.fn() },
+  getTasksDueTomorrowTool: { handler: vi.fn() },
+  getTasksDueThisWeekTool: { handler: vi.fn() },
+  getTicklerTasksTool: { handler: vi.fn() },
+  listGtdProjectsTool: { handler: vi.fn() },
+  getWaitingTasksTool: { handler: vi.fn() },
+  getRecentMediaTool: { handler: vi.fn() },
+  getAreasOfFocusTool: { handler: vi.fn() },
+  getShoppingListTool: { handler: vi.fn() },
+  completeBeckyTaskTool: { handler: vi.fn() },
+  listBrianTimeSensitiveTasksTool: { handler: vi.fn() },
+  listBeckyTimeSensitiveTasksTool: { handler: vi.fn() },
 }));
 
 // Import mocked functions
 import {
-  getTaskCommentsHandler,
-  listPersonalInboxTasksHandler,
-  listBrianInboxPerBeckyTasksHandler,
-  listBeckyInboxPerBrianTasksHandler,
-  listNextActionsHandler,
-  getBrianOnlyProjectsHandler,
-  getBrianSharedProjectsHandler,
-  getBeckySharedProjectsHandler,
-  getInboxProjectsHandler,
-  createProjectLabelHandler,
-  createTaskCommentHandler,
-  updateTaskHandler,
-  createTaskHandler,
-  moveTaskHandler,
-  getContextLabelsHandler,
-  getTasksWithLabelHandler,
-  completeTaskHandler,
-  uncompleteTaskHandler,
-  searchTasksHandler,
-  searchTasksUsingAndHandler,
-  searchTasksUsingOrHandler,
-  getChoresDueTodayHandler,
-  getTasksDueTomorrowHandler,
-  getTasksDueThisWeekHandler,
-  getTicklerTasksHandler,
-  listGtdProjectsHandler,
-  getWaitingTasksHandler,
-  getRecentMediaHandler,
-  getAreasOfFocusHandler,
-  getShoppingListHandler,
-  completeBeckyTaskHandler,
-  listBrianTimeSensitiveTasksHandler,
-  listBeckyTimeSensitiveTasksHandler,
+  getTaskCommentsTool,
+  listPersonalInboxTasksTool,
+  listBrianInboxPerBeckyTasksTool,
+  listBeckyInboxPerBrianTasksTool,
+  listNextActionsTool,
+  getBrianOnlyProjectsTool,
+  getBrianSharedProjectsTool,
+  getBeckySharedProjectsTool,
+  getInboxProjectsTool,
+  createProjectLabelTool,
+  createTaskCommentTool,
+  updateTaskTool,
+  createTaskTool,
+  moveTaskTool,
+  getContextLabelsTool,
+  getTasksWithLabelTool,
+  completeTaskTool,
+  uncompleteTaskTool,
+  searchTasksTool,
+  searchTasksUsingAndTool,
+  searchTasksUsingOrTool,
+  getChoresDueTodayTool,
+  getTasksDueTomorrowTool,
+  getTasksDueThisWeekTool,
+  getTicklerTasksTool,
+  listGtdProjectsTool,
+  getWaitingTasksTool,
+  getRecentMediaTool,
+  getAreasOfFocusTool,
+  getShoppingListTool,
+  completeBeckyTaskTool,
+  listBrianTimeSensitiveTasksTool,
+  listBeckyTimeSensitiveTasksTool,
 } from '../tools';
 
 // Test configuration for all tools
 const toolTestConfig = [
   {
     toolName: 'get_task_comments',
-    handler: getTaskCommentsHandler,
+    handler: getTaskCommentsTool.handler,
     args: { task_id: '123' },
     expectedCall: { task_id: '123' },
   },
   {
     toolName: 'create_project_label',
-    handler: createProjectLabelHandler,
+    handler: createProjectLabelTool.handler,
     args: { project_name: 'Test Project' },
     expectedCall: { project_name: 'Test Project' },
   },
   {
     toolName: 'create_task_comment',
-    handler: createTaskCommentHandler,
+    handler: createTaskCommentTool.handler,
     args: { task_id: '123', content: 'Test comment' },
     expectedCall: { task_id: '123', content: 'Test comment' },
   },
   {
     toolName: 'update_task',
-    handler: updateTaskHandler,
+    handler: updateTaskTool.handler,
     args: {
       task_id: '123',
       title: 'Updated Title',
@@ -119,7 +119,7 @@ const toolTestConfig = [
   },
   {
     toolName: 'create_task',
-    handler: createTaskHandler,
+    handler: createTaskTool.handler,
     args: {
       title: 'New Task',
       description: 'Task description',
@@ -139,49 +139,49 @@ const toolTestConfig = [
   },
   {
     toolName: 'move_task',
-    handler: moveTaskHandler,
+    handler: moveTaskTool.handler,
     args: { task_id: '123', project_id: '456' },
     expectedCall: { task_id: '123', project_id: '456' },
   },
   {
     toolName: 'get_tasks_with_label',
-    handler: getTasksWithLabelHandler,
+    handler: getTasksWithLabelTool.handler,
     args: { label: 'work' },
     expectedCall: { label: 'work' },
   },
   {
     toolName: 'complete_task',
-    handler: completeTaskHandler,
+    handler: completeTaskTool.handler,
     args: { task_id: '123' },
     expectedCall: { task_id: '123' },
   },
   {
     toolName: 'uncomplete_task',
-    handler: uncompleteTaskHandler,
+    handler: uncompleteTaskTool.handler,
     args: { task_id: '123' },
     expectedCall: { task_id: '123' },
   },
   {
     toolName: 'search_tasks',
-    handler: searchTasksHandler,
+    handler: searchTasksTool.handler,
     args: { query: 'search query' },
     expectedCall: { query: 'search query' },
   },
   {
     toolName: 'search_tasks_using_and',
-    handler: searchTasksUsingAndHandler,
+    handler: searchTasksUsingAndTool.handler,
     args: { search_terms: ['term1', 'term2'] },
     expectedCall: { search_terms: ['term1', 'term2'] },
   },
   {
     toolName: 'search_tasks_using_or',
-    handler: searchTasksUsingOrHandler,
+    handler: searchTasksUsingOrTool.handler,
     args: { search_terms: ['term1', 'term2'] },
     expectedCall: { search_terms: ['term1', 'term2'] },
   },
   {
     toolName: 'complete_becky_task',
-    handler: completeBeckyTaskHandler,
+    handler: completeBeckyTaskTool.handler,
     args: { task_id: '123' },
     expectedCall: { task_id: '123' },
   },
@@ -191,83 +191,83 @@ const toolTestConfig = [
 const noParamToolTestConfig = [
   {
     toolName: 'list_personal_inbox_tasks',
-    handler: listPersonalInboxTasksHandler,
+    handler: listPersonalInboxTasksTool.handler,
   },
   {
     toolName: 'list_brian_inbox_per_becky_tasks',
-    handler: listBrianInboxPerBeckyTasksHandler,
+    handler: listBrianInboxPerBeckyTasksTool.handler,
   },
   {
     toolName: 'list_becky_inbox_per_brian_tasks',
-    handler: listBeckyInboxPerBrianTasksHandler,
+    handler: listBeckyInboxPerBrianTasksTool.handler,
   },
   {
     toolName: 'list_next_actions',
-    handler: listNextActionsHandler,
+    handler: listNextActionsTool.handler,
   },
   {
     toolName: 'get_brian_only_projects',
-    handler: getBrianOnlyProjectsHandler,
+    handler: getBrianOnlyProjectsTool.handler,
   },
   {
     toolName: 'get_brian_shared_projects',
-    handler: getBrianSharedProjectsHandler,
+    handler: getBrianSharedProjectsTool.handler,
   },
   {
     toolName: 'get_becky_shared_projects',
-    handler: getBeckySharedProjectsHandler,
+    handler: getBeckySharedProjectsTool.handler,
   },
   {
     toolName: 'get_inbox_projects',
-    handler: getInboxProjectsHandler,
+    handler: getInboxProjectsTool.handler,
   },
   {
     toolName: 'get_context_labels',
-    handler: getContextLabelsHandler,
+    handler: getContextLabelsTool.handler,
   },
   {
     toolName: 'get_chores_due_today',
-    handler: getChoresDueTodayHandler,
+    handler: getChoresDueTodayTool.handler,
   },
   {
     toolName: 'get_tasks_due_tomorrow',
-    handler: getTasksDueTomorrowHandler,
+    handler: getTasksDueTomorrowTool.handler,
   },
   {
     toolName: 'get_tasks_due_this_week',
-    handler: getTasksDueThisWeekHandler,
+    handler: getTasksDueThisWeekTool.handler,
   },
   {
     toolName: 'get_tickler_tasks',
-    handler: getTicklerTasksHandler,
+    handler: getTicklerTasksTool.handler,
   },
   {
     toolName: 'list_gtd_projects',
-    handler: listGtdProjectsHandler,
+    handler: listGtdProjectsTool.handler,
   },
   {
     toolName: 'get_waiting_tasks',
-    handler: getWaitingTasksHandler,
+    handler: getWaitingTasksTool.handler,
   },
   {
     toolName: 'get_recent_media',
-    handler: getRecentMediaHandler,
+    handler: getRecentMediaTool.handler,
   },
   {
     toolName: 'get_areas_of_focus',
-    handler: getAreasOfFocusHandler,
+    handler: getAreasOfFocusTool.handler,
   },
   {
     toolName: 'get_shopping_list',
-    handler: getShoppingListHandler,
+    handler: getShoppingListTool.handler,
   },
   {
     toolName: 'list_brian_time_sensitive_tasks',
-    handler: listBrianTimeSensitiveTasksHandler,
+    handler: listBrianTimeSensitiveTasksTool.handler,
   },
   {
     toolName: 'list_becky_time_sensitive_tasks',
-    handler: listBeckyTimeSensitiveTasksHandler,
+    handler: listBeckyTimeSensitiveTasksTool.handler,
   },
 ];
 
@@ -354,7 +354,9 @@ describe('handleToolRequest', () => {
       mockRequest.params.name = 'get_task_comments';
       mockRequest.params.arguments = { task_id: '123' };
       const error = new Error('Handler failed');
-      (getTaskCommentsHandler as MockedFunction<any>).mockRejectedValue(error);
+      (getTaskCommentsTool.handler as MockedFunction<any>).mockRejectedValue(
+        error
+      );
 
       // act
       const result = await handleToolRequest(mockRequest);
@@ -374,7 +376,7 @@ describe('handleToolRequest', () => {
       // arrange
       mockRequest.params.name = 'get_task_comments';
       mockRequest.params.arguments = { task_id: '123' };
-      (getTaskCommentsHandler as MockedFunction<any>).mockRejectedValue(
+      (getTaskCommentsTool.handler as MockedFunction<any>).mockRejectedValue(
         'String error'
       );
 
@@ -401,7 +403,7 @@ describe('handleToolRequest', () => {
         .mockImplementation(() => {});
       mockRequest.params.name = 'get_task_comments';
       mockRequest.params.arguments = { task_id: '123' };
-      (getTaskCommentsHandler as MockedFunction<any>).mockResolvedValue(
+      (getTaskCommentsTool.handler as MockedFunction<any>).mockResolvedValue(
         mockResponse
       );
 
@@ -424,7 +426,9 @@ describe('handleToolRequest', () => {
       mockRequest.params.name = 'get_task_comments';
       mockRequest.params.arguments = { task_id: '123' };
       const error = new Error('Handler failed');
-      (getTaskCommentsHandler as MockedFunction<any>).mockRejectedValue(error);
+      (getTaskCommentsTool.handler as MockedFunction<any>).mockRejectedValue(
+        error
+      );
 
       // act
       await handleToolRequest(mockRequest);

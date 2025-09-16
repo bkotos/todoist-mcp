@@ -1,6 +1,6 @@
 import type { MockedFunction } from 'vitest';
 import { vi } from 'vitest';
-import { getRecentMediaHandler } from './get-recent-media';
+import { getRecentMediaTool } from './get-recent-media';
 import { getRecentMedia } from '../services/tasks/task-retrieval';
 
 vi.mock('../services/tasks/task-retrieval');
@@ -30,7 +30,7 @@ describe('getRecentMediaHandler', () => {
     mockGetRecentMedia.mockResolvedValue(mockTasks);
 
     // act
-    const result = await getRecentMediaHandler();
+    const result = await getRecentMediaTool.handler();
 
     // assert
     expect(result).toEqual({
@@ -49,7 +49,7 @@ describe('getRecentMediaHandler', () => {
     mockGetRecentMedia.mockResolvedValue([]);
 
     // act
-    const result = await getRecentMediaHandler();
+    const result = await getRecentMediaTool.handler();
 
     // assert
     expect(result).toEqual({
@@ -68,7 +68,7 @@ describe('getRecentMediaHandler', () => {
     mockGetRecentMedia.mockRejectedValue(new Error('Service Error'));
 
     // act
-    const promise = getRecentMediaHandler();
+    const promise = getRecentMediaTool.handler();
 
     // assert
     await expect(promise).rejects.toThrow('Service Error');

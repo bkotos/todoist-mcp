@@ -1,4 +1,4 @@
-import { createProjectLabelHandler } from './create-project-label';
+import { createProjectLabelTool } from './create-project-label';
 import type { MockedFunction } from 'vitest';
 import { createProjectLabel } from '../services/labels/labels';
 
@@ -27,7 +27,7 @@ describe('create-project-label tool', () => {
       mockCreateProjectLabel.mockResolvedValue(mockResult);
 
       // act
-      const result = await createProjectLabelHandler({
+      const result = await createProjectLabelTool.handler({
         project_name: 'PROJECT: New Website',
       });
 
@@ -56,7 +56,7 @@ describe('create-project-label tool', () => {
       });
 
       // act
-      const promise = createProjectLabelHandler({ project_name: '' });
+      const promise = createProjectLabelTool.handler({ project_name: '' });
 
       // assert
       await expect(promise).rejects.toThrow('project_name is required');
@@ -70,7 +70,7 @@ describe('create-project-label tool', () => {
       );
 
       // act
-      const promise = createProjectLabelHandler({
+      const promise = createProjectLabelTool.handler({
         project_name: 'Invalid Name',
       });
 
@@ -88,7 +88,7 @@ describe('create-project-label tool', () => {
       );
 
       // act
-      const promise = createProjectLabelHandler({
+      const promise = createProjectLabelTool.handler({
         project_name: 'PROJECT: Test Project',
       });
 

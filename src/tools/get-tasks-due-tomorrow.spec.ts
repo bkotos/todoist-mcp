@@ -1,6 +1,6 @@
 import type { MockedFunction } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { getTasksDueTomorrowHandler } from './get-tasks-due-tomorrow';
+import { getTasksDueTomorrowTool } from './get-tasks-due-tomorrow';
 import * as serviceModule from '../services/tasks/task-retrieval';
 
 // Mock the service module
@@ -8,7 +8,7 @@ vi.mock('../services/tasks/task-retrieval');
 
 const mockGetTasksDueTomorrow = vi.mocked(serviceModule.getTasksDueTomorrow);
 
-describe('getTasksDueTomorrowHandler', () => {
+describe('getTasksDueTomorrowTool', () => {
   it('should return formatted JSON response with tasks due tomorrow', async () => {
     // arrange
     const mockTasks = [
@@ -31,7 +31,7 @@ describe('getTasksDueTomorrowHandler', () => {
     mockGetTasksDueTomorrow.mockResolvedValue(mockTasks);
 
     // act
-    const result = await getTasksDueTomorrowHandler();
+    const result = await getTasksDueTomorrowTool.handler();
 
     // assert
     expect(result).toEqual({
@@ -50,7 +50,7 @@ describe('getTasksDueTomorrowHandler', () => {
     mockGetTasksDueTomorrow.mockResolvedValue([]);
 
     // act
-    const result = await getTasksDueTomorrowHandler();
+    const result = await getTasksDueTomorrowTool.handler();
 
     // assert
     expect(result).toEqual({
@@ -69,7 +69,7 @@ describe('getTasksDueTomorrowHandler', () => {
     mockGetTasksDueTomorrow.mockRejectedValue(new Error(errorMessage));
 
     // act
-    const promise = getTasksDueTomorrowHandler();
+    const promise = getTasksDueTomorrowTool.handler();
 
     // assert
     await expect(promise).rejects.toThrow(errorMessage);

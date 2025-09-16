@@ -1,4 +1,4 @@
-import { createTaskHandler } from './create-task';
+import { createTaskTool } from './create-task';
 import type { MockedFunction } from 'vitest';
 import { createTask } from '../services/tasks/task-update';
 
@@ -6,13 +6,13 @@ vi.mock('../services/tasks/task-update');
 
 const mockCreateTask = createTask as MockedFunction<typeof createTask>;
 
-describe('createTaskHandler', () => {
+describe('createTaskTool.handler', () => {
   it('should create a task successfully with all parameters', async () => {
     // arrange
     mockCreateTask.mockResolvedValue('Task created successfully: Test task');
 
     // act
-    const result = await createTaskHandler({
+    const result = await createTaskTool.handler({
       title: 'Test task',
       description: 'Test description',
       project_id: '67890',
@@ -40,7 +40,7 @@ describe('createTaskHandler', () => {
     mockCreateTask.mockResolvedValue('Task created successfully: Simple task');
 
     // act
-    const result = await createTaskHandler({
+    const result = await createTaskTool.handler({
       title: 'Simple task',
     });
 
@@ -58,7 +58,7 @@ describe('createTaskHandler', () => {
     const args = {} as any;
 
     // act
-    const promise = createTaskHandler(args);
+    const promise = createTaskTool.handler(args);
 
     // assert
     await expect(promise).rejects.toThrow('title is required');
@@ -69,7 +69,7 @@ describe('createTaskHandler', () => {
     mockCreateTask.mockRejectedValue(new Error('API Error'));
 
     // act
-    const result = await createTaskHandler({
+    const result = await createTaskTool.handler({
       title: 'Test task',
     });
 
@@ -82,7 +82,7 @@ describe('createTaskHandler', () => {
     mockCreateTask.mockRejectedValue('Unknown error');
 
     // act
-    const result = await createTaskHandler({
+    const result = await createTaskTool.handler({
       title: 'Test task',
     });
 

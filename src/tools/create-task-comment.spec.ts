@@ -1,5 +1,5 @@
-import { createTaskCommentHandler } from './create-task-comment';
-import type { MockedFunction } from "vitest";
+import { createTaskCommentTool } from './create-task-comment';
+import type { MockedFunction } from 'vitest';
 import { createTaskComment } from '../services/tasks/comments';
 
 vi.mock('../services/tasks/comments');
@@ -24,7 +24,7 @@ describe('createTaskCommentHandler', () => {
     mockCreateTaskComment.mockResolvedValue(mockComment);
 
     // act
-    const result = await createTaskCommentHandler({
+    const result = await createTaskCommentTool.handler({
       task_id: mockTaskId,
       content: mockContent,
     });
@@ -54,7 +54,7 @@ describe('createTaskCommentHandler', () => {
     mockCreateTaskComment.mockRejectedValue(mockError);
 
     // act
-    const result = await createTaskCommentHandler({
+    const result = await createTaskCommentTool.handler({
       task_id: mockTaskId,
       content: mockContent,
     });

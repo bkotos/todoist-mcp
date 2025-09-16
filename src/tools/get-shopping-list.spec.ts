@@ -1,6 +1,6 @@
 import type { MockedFunction } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { getShoppingListHandler } from './get-shopping-list';
+import { getShoppingListTool } from './get-shopping-list';
 import { getShoppingList } from '../services/tasks/task-retrieval';
 
 vi.mock('../services/tasks/task-retrieval');
@@ -44,7 +44,7 @@ describe('getShoppingListHandler', () => {
     });
 
     // act
-    const result = await getShoppingListHandler();
+    const result = await getShoppingListTool.handler();
 
     // assert
     expect(result).toEqual({
@@ -73,7 +73,7 @@ describe('getShoppingListHandler', () => {
     });
 
     // act
-    const result = await getShoppingListHandler();
+    const result = await getShoppingListTool.handler();
 
     // assert
     expect(result).toEqual({
@@ -99,7 +99,7 @@ describe('getShoppingListHandler', () => {
     mockGetShoppingList.mockRejectedValue(new Error('Service error'));
 
     // act
-    const promise = getShoppingListHandler();
+    const promise = getShoppingListTool.handler();
 
     // assert
     await expect(promise).rejects.toThrow('Service error');

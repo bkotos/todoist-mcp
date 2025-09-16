@@ -1,4 +1,4 @@
-import { getContextLabelsHandler } from './get-context-labels';
+import { getContextLabelsTool } from './get-context-labels';
 import type { MockedFunction } from 'vitest';
 import { getContextLabels } from '../services/labels/labels';
 
@@ -45,7 +45,7 @@ describe('getContextLabelsHandler', () => {
     mockGetContextLabels.mockResolvedValue(mockContextLabels);
 
     // act
-    const result = await getContextLabelsHandler();
+    const result = await getContextLabelsTool.handler();
 
     // assert
     expect(result).toEqual({
@@ -68,7 +68,7 @@ describe('getContextLabelsHandler', () => {
     mockGetContextLabels.mockResolvedValue(mockEmptyResponse);
 
     // act
-    const result = await getContextLabelsHandler();
+    const result = await getContextLabelsTool.handler();
 
     // assert
     expect(result).toEqual({
@@ -88,7 +88,7 @@ describe('getContextLabelsHandler', () => {
     mockGetContextLabels.mockRejectedValue(new Error(errorMessage));
 
     // act
-    const promise = getContextLabelsHandler();
+    const promise = getContextLabelsTool.handler();
 
     // assert
     await expect(promise).rejects.toThrow(errorMessage);

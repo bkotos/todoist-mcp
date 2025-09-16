@@ -1,6 +1,6 @@
 import type { MockedFunction, Mocked } from 'vitest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { getChoresDueTodayHandler } from './get-chores-due-today';
+import { getChoresDueTodayTool } from './get-chores-due-today';
 import { getChoresDueToday } from '../services/tasks/task-retrieval';
 
 vi.mock('../services/tasks/task-retrieval');
@@ -29,7 +29,7 @@ describe('getChoresDueToday tool', () => {
     mockGetChoresDueToday.mockResolvedValue(mockTasks);
 
     // act
-    const result = await getChoresDueTodayHandler();
+    const result = await getChoresDueTodayTool.handler();
 
     // assert
     expect(result.content[0].text).toBe(JSON.stringify(mockTasks, null, 2));
@@ -41,7 +41,7 @@ describe('getChoresDueToday tool', () => {
     mockGetChoresDueToday.mockResolvedValue([]);
 
     // act
-    const result = await getChoresDueTodayHandler();
+    const result = await getChoresDueTodayTool.handler();
 
     // assert
     expect(result.content[0].text).toBe('[]');
@@ -53,7 +53,7 @@ describe('getChoresDueToday tool', () => {
     mockGetChoresDueToday.mockRejectedValue(new Error('Service Error'));
 
     // act
-    const promise = getChoresDueTodayHandler();
+    const promise = getChoresDueTodayTool.handler();
 
     // assert
     await expect(promise).rejects.toThrow('Service Error');

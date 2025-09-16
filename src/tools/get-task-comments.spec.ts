@@ -1,5 +1,5 @@
-import { getTaskCommentsHandler } from './get-task-comments';
-import type { MockedFunction } from "vitest";
+import { getTaskCommentsTool } from './get-task-comments';
+import type { MockedFunction } from 'vitest';
 import { getTaskComments } from '../services/tasks/comments';
 
 // Mock the services
@@ -33,7 +33,7 @@ describe('get-task-comments Tool', () => {
       mockGetTaskComments.mockResolvedValue(mockCommentsData);
 
       // act
-      const response = await getTaskCommentsHandler({ task_id: '123' });
+      const response = await getTaskCommentsTool.handler({ task_id: '123' });
 
       // assert
       expect(response.content[0].type).toBe('text');
@@ -73,7 +73,7 @@ describe('get-task-comments Tool', () => {
       mockGetTaskComments.mockResolvedValue(mockCommentsData);
 
       // act
-      const response = await getTaskCommentsHandler({ task_id: '123' });
+      const response = await getTaskCommentsTool.handler({ task_id: '123' });
       const stringified = response.content[0].text;
 
       // assert
@@ -94,7 +94,7 @@ describe('get-task-comments Tool', () => {
       mockGetTaskComments.mockResolvedValue(mockEmptyData);
 
       // act
-      const response = await getTaskCommentsHandler({ task_id: '123' });
+      const response = await getTaskCommentsTool.handler({ task_id: '123' });
       const stringified = response.content[0].text;
 
       // assert
@@ -107,7 +107,7 @@ describe('get-task-comments Tool', () => {
       const args = {} as { task_id: string };
 
       // act
-      const promise = getTaskCommentsHandler(args);
+      const promise = getTaskCommentsTool.handler(args);
 
       // assert
       await expect(promise).rejects.toThrow('task_id is required');
