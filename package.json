@@ -10,7 +10,8 @@
     "test": "vitest run --silent",
     "test:verbose": "vitest run",
     "test:watch": "vitest --watch",
-    "test:coverage": "vitest --coverage",
+    "test:coverage": "vitest run --coverage",
+    "coverage:open": "open coverage/index.html",
     "type-check": "tsc --noEmit"
   },
   "keywords": [

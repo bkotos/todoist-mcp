@@ -22,7 +22,7 @@ export function createTodoistClient(apiToken: string): TodoistClient {
 }
 
 // Create v1 API client for operations that only exist in v1
-export function createTodoistV1Client(apiToken: string): TodoistV1Client {
+function createTodoistV1Client(apiToken: string): TodoistV1Client {
   return axios.create({
     baseURL: 'https://api.todoist.com',
     headers: {

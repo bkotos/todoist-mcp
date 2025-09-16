@@ -1,5 +1,9 @@
 import axios from 'axios';
-import { createTodoistClient, getTodoistClient } from './client';
+import {
+  createTodoistClient,
+  getTodoistClient,
+  getTodoistV1Client,
+} from './client';
 import type { Mocked } from 'vitest';
 
 // Mock axios
@@ -97,6 +101,59 @@ describe('client', () => {
 
       // act
       const result = getTodoistClient();
+
+      // assert
+      expect(result).toBeDefined();
+    });
+  });
+
+  describe('getTodoistV1Client', () => {
+    it('should return v1 client when TODOIST_API_TOKEN is set', () => {
+      // arrange
+      const apiToken = 'test-token-123';
+      process.env.TODOIST_API_TOKEN = apiToken;
+      const mockClient = { get: vi.fn(), post: vi.fn() };
+      mockAxios.create = vi.fn().mockReturnValue(mockClient);
+
+      // act
+      const result = getTodoistV1Client();
+
+      // assert
+      expect(result).toBe(mockClient);
+      expect(mockAxios.create).toHaveBeenCalledWith({
+        baseURL: 'https://api.todoist.com',
+        headers: {
+          Authorization: 'Bearer test-token-123',
+          'Content-Type': 'application/json',
+        },
+      });
+    });
+
+    it('should throw error when TODOIST_API_TOKEN is not set', () => {
+      // act
+      const act = () => getTodoistV1Client();
+
+      // assert
+      expect(act).toThrow('TODOIST_API_TOKEN environment variable is required');
+    });
+
+    it('should throw error when TODOIST_API_TOKEN is empty string', () => {
+      // arrange
+      process.env.TODOIST_API_TOKEN = '';
+
+      // act
+      const act = () => getTodoistV1Client();
+
+      // assert
+      expect(act).toThrow('TODOIST_API_TOKEN environment variable is required');
+    });
+
+    it('should not throw error when TODOIST_API_TOKEN is whitespace only', () => {
+      // arrange
+      process.env.TODOIST_API_TOKEN = '   ';
+
+      // act
+      const result = getTodoistV1Client();
 
       // assert
       expect(result).toBeDefined();

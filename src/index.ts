@@ -42,7 +42,7 @@ import {
   listBrianTimeSensitiveTasksTool,
   listBeckyTimeSensitiveTasksTool,
 } from './tools';
-import { handleToolRequest } from './handlers';
+import { handleToolRequest } from './handlers/tool-request-handler';
 import { join } from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
