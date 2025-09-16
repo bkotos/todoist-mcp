@@ -1,34 +1,57 @@
-export { getTaskCommentsTool } from './get-task-comments';
-export { listPersonalInboxTasksTool } from './list-personal-inbox-tasks';
-export { listBrianInboxPerBeckyTasksTool } from './list-brian-inbox-per-becky-tasks';
-export { listBeckyInboxPerBrianTasksTool } from './list-becky-inbox-per-brian-tasks';
-export { listNextActionsTool } from './list-next-actions';
-export { getBrianOnlyProjectsTool } from './get-brian-only-projects';
-export { getBrianSharedProjectsTool } from './get-brian-shared-projects';
-export { getBeckySharedProjectsTool } from './get-becky-shared-projects';
-export { getInboxProjectsTool } from './get-inbox-projects';
-export { createProjectLabelTool } from './create-project-label';
-export { createTaskCommentTool } from './create-task-comment';
-export { updateTaskTool } from './update-task';
-export { createTaskTool } from './create-task';
-export { moveTaskTool } from './move-task';
-export { getContextLabelsTool } from './get-context-labels';
-export { getTasksWithLabelTool } from './get-tasks-with-label';
-export { completeTaskTool } from './complete-task';
-export { uncompleteTaskTool } from './uncomplete-task';
-export { searchTasksTool } from './search-tasks';
-export { searchTasksUsingAndTool } from './search-tasks-using-and';
-export { searchTasksUsingOrTool } from './search-tasks-using-or';
-export { getTasksDueTodayTool } from './get-tasks-due-today';
-export { getChoresDueTodayTool } from './get-chores-due-today';
-export { getTasksDueTomorrowTool } from './get-tasks-due-tomorrow';
-export { getTasksDueThisWeekTool } from './get-tasks-due-this-week';
-export { getTicklerTasksTool } from './get-tickler-tasks';
-export { listGtdProjectsTool } from './list-gtd-projects';
-export { getWaitingTasksTool } from './get-waiting-tasks';
-export { getRecentMediaTool } from './get-recent-media';
-export { getAreasOfFocusTool } from './get-areas-of-focus';
-export { getShoppingListTool } from './get-shopping-list';
-export { completeBeckyTaskTool } from './complete-becky-task';
-export { listBrianTimeSensitiveTasksTool } from './list-brian-time-sensitive-tasks';
-export { listBeckyTimeSensitiveTasksTool } from './list-becky-time-sensitive-tasks';
+// Task Operations
+export {
+  createTaskTool,
+  updateTaskTool,
+  moveTaskTool,
+  completeTaskTool,
+  uncompleteTaskTool,
+  completeBeckyTaskTool,
+} from './task-operations';
+
+// Task Queries
+export {
+  getTasksDueTodayTool,
+  getTasksDueTomorrowTool,
+  getTasksDueThisWeekTool,
+  getTasksWithLabelTool,
+  getWaitingTasksTool,
+  searchTasksTool,
+  searchTasksUsingAndTool,
+  searchTasksUsingOrTool,
+} from './task-queries';
+
+// Projects
+export {
+  getInboxProjectsTool,
+  getBeckySharedProjectsTool,
+  getBrianSharedProjectsTool,
+  getBrianOnlyProjectsTool,
+  listGtdProjectsTool,
+  createProjectLabelTool,
+} from './projects';
+
+// Workflows Tasks
+export {
+  getChoresDueTodayTool,
+  getShoppingListTool,
+  getTicklerTasksTool,
+  getRecentMediaTool,
+  getAreasOfFocusTool,
+  listNextActionsTool,
+} from './workflows-tasks';
+
+// Personal Tasks
+export {
+  listBeckyTimeSensitiveTasksTool,
+  listBeckyInboxPerBrianTasksTool,
+  listBrianTimeSensitiveTasksTool,
+  listBrianInboxPerBeckyTasksTool,
+  listPersonalInboxTasksTool,
+} from './personal-tasks';
+
+// Comments
+export {
+  getTaskCommentsTool,
+  createTaskCommentTool,
+  getContextLabelsTool,
+} from './comments';
