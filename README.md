@@ -2,6 +2,10 @@
 
 A TypeScript-based **[Model Context Protocol (MCP)](https://en.wikipedia.org/wiki/Model_Context_Protocol) server** that provides [Todoist](https://www.todoist.com/) task management capabilities to AI assistants. This MCP server is built for use with Claude Desktop and [operates over stdio](https://docs.anthropic.com/en/docs/claude-code/mcp#option-1%3A-add-a-local-stdio-server).
 
+<a href="https://glama.ai/mcp/servers/@bkotos/todoist-mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@bkotos/todoist-mcp/badge" alt="Todoist Server MCP server" />
+</a>
+
 **Note:** This MCP server is tailored to my specific workflow with Todoist and may not align with how others use the tool.
 
 ## Getting Started
